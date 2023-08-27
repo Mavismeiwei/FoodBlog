@@ -1,0 +1,21 @@
+{%  extends 'login.html' %}
+
+{% block title %}
+        <title>Vivi_Blog | User Register</title>
+{% endblock %}
+
+{% block main_title %}
+    <a href="/login" >Login</a> |
+    <a href="/register" class="active">Register</a>
+{% endblock %}
+
+{% block form %}
+    <input type="text" v-model="register_form.name" ref="register_form_name" placeholder="Email" class="register_input">
+    <input type="password" v-model="register_form.password" ref="register_form_password" placeholder="Password" class="register_input">
+    <input type="password" v-model="register_form.re_password" ref="register_form_re_password" placeholder="Confirm Password" class="register_input">
+    <div class="validation">
+        <input type="input" v-model="register_form.code" ref="register_form_code" placeholder="Validation Code" class="register_input">
+        <img @click="get_random_code" src="/login/random_code/" alt="">
+    </div>
+    <button @click="register">Register</button>
+{% endblock %}

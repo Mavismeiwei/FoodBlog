@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load my_tag %}
+<head>
+    <meta charset="UTF-8">
+    <title>Vivi_Blog</title>
+
+    <link rel="stylesheet" href="/static/resources/css/reset.css">
+    <link rel="stylesheet" href="/static/resources/css/base.css">
+    {% block css %}
+        <link rel="stylesheet" href="/static/resources/css/index.css">
+    {% endblock %}
+
+    <!-- Import style of ElementUI -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="/static/fontawesome/css/all.min.css">
+    <script src="/static/vue/vue.js"></script>
+
+    <!-- Import Component Library -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+<div id="app">
+    <link rel="stylesheet" :href="'/static/resources/css/theme/' + theme + '.css'">
+    <nav>
+        <div class="left">
+            <a href="/">Home</a>
+            <a href="/news">News</a>
+            <a href="#">Emotion</a>
+            <a href="#">Memory</a>
+            <a href="#">About Us</a>
+            <a href="#">Navigator</a>
+        </div>
+        <div class="right">
+              <img v-show="theme === 'light'" src="/static/resources/img/nav/dark.png" @click="setTheme('dark')" alt="">
+              <img v-show="theme === 'dark'" src="/static/resources/img/nav/light.png" @click="setTheme('light')" alt="">
+
+            {% if request.user.username %}
+            <el-dropdown>
+              <span class="el-dropdown-link">
+                {{ request.user.username }}<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item><a href="">User Center</a></el-dropdown-item>
+                <el-dropdown-item><a href="">User Account</a></el-dropdown-item>
+                <el-dropdown-item><a href="">Post Articles</a></el-dropdown-item>
+                <el-dropdown-item><a href="">Backstage</a></el-dropdown-item>
+                <el-dropdown-item><a href="/logout/">Log Out</a></el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            {% else %}
+                <a href="/login">Login</a>
+                <a href="/register">Register</a>
+            {% endif %}
+
+        </div>
+    </nav>
+
+    {% banner 'index' %}
+
+    <main>
+        {% block main %}
+            <div class="main">
+                <div class="left">
+                    <div class="recommended_articles card">
+                        <div class="title">
+                            <h2>Recommend Articles</h2>
+                            <div class="switch_article_category">
+                                <span :active="this_category === 'breakfast'" @click="switch_article_category('breakfast')">Breakfast</span>
+                                <span :active="this_category === 'lunch'" @click="switch_article_category('lunch')">Lunch</span>
+                            </div>
+                        </div>
+                        <div class="body">
+                            <ul v-show="this_category === 'breakfast'" class="recommend1">
+                                <li>
+                                    <div class="left">
+                                        <div>
+                                            <img src="/static/resources/img/recommended_articles_card/1.jpeg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <h2>Hamburger </h2>
+                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
+                                        <span>3 days ago</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="left">
+                                        <div>
+                                            <img src="/static/resources/img/recommended_articles_card/2.jpeg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <h2>Hamburger </h2>
+                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
+                                        <span>3 days ago</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="left">
+                                        <div>
+                                            <img src="/static/resources/img/recommended_articles_card/3.jpeg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <h2>Hamburger </h2>
+                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
+                                        <span>3 days ago</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="left">
+                                        <div>
+                                            <img src="/static/resources/img/recommended_articles_card/4.jpeg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <h2>Hamburger </h2>
+                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
+                                        <span>3 days ago</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="left">
+                                        <div>
+                                            <img src="/static/resources/img/recommended_articles_card/5.jpeg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <h2>Hamburger </h2>
+                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
+                                        <span>3 days ago</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="left">
+                                        <div>
+                                            <img src="/static/resources/img/recommended_articles_card/6.jpeg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <h2>Hamburger </h2>
+                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
+                                        <span>3 days ago</span>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul v-show="this_category === 'lunch'" class="recommend2">
+                                <li>
+                                    <div class="left">
+                                        <div>
+                                            <img src="/static/resources/img/recommended_articles_card/7.jpeg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <h2>Pizza</h2>
+                                        <p>How to make pizza? How to make hamburgers? How to make hamburgers?</p>
+                                        <span>3 days ago</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="left">
+                                        <div>
+                                            <img src="/static/resources/img/recommended_articles_card/8.jpeg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <h2>Hamburger </h2>
+                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
+                                        <span>3 days ago</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="left">
+                                        <div>
+                                            <img src="/static/resources/img/recommended_articles_card/9.jpeg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <h2>Hamburger </h2>
+                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
+                                        <span>3 days ago</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="left">
+                                        <div>
+                                            <img src="/static/resources/img/recommended_articles_card/10.jpeg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <h2>Hamburger </h2>
+                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
+                                        <span>3 days ago</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="left">
+                                        <div>
+                                            <img src="/static/resources/img/recommended_articles_card/11.jpeg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <h2>Hamburger </h2>
+                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
+                                        <span>3 days ago</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="left">
+                                        <div>
+                                            <img src="/static/resources/img/recommended_articles_card/12.jpeg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <h2>Hamburger </h2>
+                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
+                                        <span>3 days ago</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="hot_topics card">
+                        <div class="title">
+                            <h2>Hot Searches</h2>
+                            <div>
+                                <a href="#">More</a>
+                            </div>
+                        </div>
+                        <div class="body">
+                            Main Area
+                        </div>
+
+                    </div>
+                    <div class="all_articles card">
+                        <div class="title">
+                            <h2>Blog Articles</h2>
+                        </div>
+                        <div class="body">
+                            <ul>
+                                <li>
+                                    <div class="left">
+                                        <div>
+                                            <img src="/static/resources/img/all_articles_card/1.jpeg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <h2><a href="#">Salmon Fish</a></h2>
+                                        <p>Cooking salmon is a delicious and healthy option.
+                                            Here's a simple recipe for baking salmon in the oven:
+                                            Ingredients:
+                                            Salmon fillets or steaks Olive oil Lemon wedges
+                                            Salt and pepper (to taste) Fresh herbs
+                                            (optional, such as dill, parsley, or thyme)</p>
+                                        <div class="article_info">
+                                            <span>
+                                                <i class="fa-regular fa-clock"></i>2023-06-08
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-thumbs-up"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-eye"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-comments"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-star-half-alt"></i>876
+                                            </span>
+                                        </div>
+                                        <a href="">Details</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="left">
+                                        <div>
+                                            <img src="/static/resources/img/all_articles_card/2.jpeg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <h2><a href="#">Roasted Beef</a></h2>
+                                        <p>To make roasted beef, you'll need a cut of beef (such as a rib roast, tenderloin, or top sirloin),
+                                            some basic ingredients, and an oven. Here's a simple recipe to guide you through the process:
+                                            3 to 5 pounds (1.4 to 2.3 kg) of beef roast (choose a cut suitable for roasting)
+                                            2 tablespoons olive oil or melted butter
+                                            3-4 garlic cloves, minced
+                                            1 tablespoon fresh thyme leaves (or 1 teaspoon dried thyme)
+                                            1 tablespoon fresh rosemary leaves (or 1 teaspoon dried rosemary)
+                                            1 teaspoon salt
+                                            1/2 teaspoon black pepper</p>
+                                        <div class="article_info">
+                                            <span>
+                                                <i class="fa-regular fa-clock"></i>2023-06-08
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-thumbs-up"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-eye"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-comments"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-star-half-alt"></i>876
+                                            </span>
+                                        </div>
+                                        <a href="">Details</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="left">
+                                        <div>
+                                            <img src="/static/resources/img/all_articles_card/6.jpeg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <h2><a href="#">Roasted Beef</a></h2>
+                                        <p>To make roasted beef, you'll need a cut of beef (such as a rib roast, tenderloin, or top sirloin),
+                                            some basic ingredients, and an oven. Here's a simple recipe to guide you through the process:
+                                            3 to 5 pounds (1.4 to 2.3 kg) of beef roast (choose a cut suitable for roasting)
+                                            2 tablespoons olive oil or melted butter
+                                            3-4 garlic cloves, minced
+                                            1 tablespoon fresh thyme leaves (or 1 teaspoon dried thyme)
+                                            1 tablespoon fresh rosemary leaves (or 1 teaspoon dried rosemary)
+                                            1 teaspoon salt
+                                            1/2 teaspoon black pepper</p>
+                                        <div class="article_info">
+                                            <span>
+                                                <i class="fa-regular fa-clock"></i>2023-06-08
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-thumbs-up"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-eye"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-comments"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-star-half-alt"></i>876
+                                            </span>
+                                        </div>
+                                        <a href="">Details</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="left">
+                                        <div>
+                                            <img src="/static/resources/img/all_articles_card/3.jpeg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <h2><a href="#">Roasted Beef</a></h2>
+                                        <p>To make roasted beef, you'll need a cut of beef (such as a rib roast, tenderloin, or top sirloin),
+                                            some basic ingredients, and an oven. Here's a simple recipe to guide you through the process:
+                                            3 to 5 pounds (1.4 to 2.3 kg) of beef roast (choose a cut suitable for roasting)
+                                            2 tablespoons olive oil or melted butter
+                                            3-4 garlic cloves, minced
+                                            1 tablespoon fresh thyme leaves (or 1 teaspoon dried thyme)
+                                            1 tablespoon fresh rosemary leaves (or 1 teaspoon dried rosemary)
+                                            1 teaspoon salt
+                                            1/2 teaspoon black pepper</p>
+                                        <div class="article_info">
+                                            <span>
+                                                <i class="fa-regular fa-clock"></i>2023-06-08
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-thumbs-up"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-eye"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-comments"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-star-half-alt"></i>876
+                                            </span>
+                                        </div>
+                                        <a href="">Details</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="left">
+                                        <div>
+                                            <img src="/static/resources/img/all_articles_card/4.jpeg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <h2><a href="#">Roasted Beef</a></h2>
+                                        <p>To make roasted beef, you'll need a cut of beef (such as a rib roast, tenderloin, or top sirloin),
+                                            some basic ingredients, and an oven. Here's a simple recipe to guide you through the process:
+                                            3 to 5 pounds (1.4 to 2.3 kg) of beef roast (choose a cut suitable for roasting)
+                                            2 tablespoons olive oil or melted butter
+                                            3-4 garlic cloves, minced
+                                            1 tablespoon fresh thyme leaves (or 1 teaspoon dried thyme)
+                                            1 tablespoon fresh rosemary leaves (or 1 teaspoon dried rosemary)
+                                            1 teaspoon salt
+                                            1/2 teaspoon black pepper</p>
+                                        <div class="article_info">
+                                            <span>
+                                                <i class="fa-regular fa-clock"></i>2023-06-08
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-thumbs-up"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-eye"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-comments"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-star-half-alt"></i>876
+                                            </span>
+                                        </div>
+                                        <a href="">Details</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="left">
+                                        <div>
+                                            <img src="/static/resources/img/all_articles_card/5.jpeg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <h2><a href="#">Roasted Beef</a></h2>
+                                        <p>To make roasted beef, you'll need a cut of beef (such as a rib roast, tenderloin, or top sirloin),
+                                            some basic ingredients, and an oven. Here's a simple recipe to guide you through the process:
+                                            3 to 5 pounds (1.4 to 2.3 kg) of beef roast (choose a cut suitable for roasting)
+                                            2 tablespoons olive oil or melted butter
+                                            3-4 garlic cloves, minced
+                                            1 tablespoon fresh thyme leaves (or 1 teaspoon dried thyme)
+                                            1 tablespoon fresh rosemary leaves (or 1 teaspoon dried rosemary)
+                                            1 teaspoon salt
+                                            1/2 teaspoon black pepper</p>
+                                        <div class="article_info">
+                                            <span>
+                                                <i class="fa-regular fa-clock"></i>2023-06-08
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-thumbs-up"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-eye"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-comments"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-star-half-alt"></i>876
+                                            </span>
+                                        </div>
+                                        <a href="">Details</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="left">
+                                        <div>
+                                            <img src="/static/resources/img/all_articles_card/7.jpeg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <h2><a href="#">Roasted Beef</a></h2>
+                                        <p>To make roasted beef, you'll need a cut of beef (such as a rib roast, tenderloin, or top sirloin),
+                                            some basic ingredients, and an oven. Here's a simple recipe to guide you through the process:
+                                            3 to 5 pounds (1.4 to 2.3 kg) of beef roast (choose a cut suitable for roasting)
+                                            2 tablespoons olive oil or melted butter
+                                            3-4 garlic cloves, minced
+                                            1 tablespoon fresh thyme leaves (or 1 teaspoon dried thyme)
+                                            1 tablespoon fresh rosemary leaves (or 1 teaspoon dried rosemary)
+                                            1 teaspoon salt
+                                            1/2 teaspoon black pepper</p>
+                                        <div class="article_info">
+                                            <span>
+                                                <i class="fa-regular fa-clock"></i>2023-06-08
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-thumbs-up"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-eye"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-comments"></i>876
+                                            </span>
+                                            <span>
+                                                <i class="fa-regular fa-star-half-alt"></i>876
+                                            </span>
+                                        </div>
+                                        <a href="">Details</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="advertisements card">
+                        <div class="title">
+                            <h2>Advertisements</h2>
+                            <a href="#">Apply</a>
+                        </div>
+                        <div class="body">
+                            Main Area
+                        </div>
+                    </div>
+                    <div class="tags card">
+                        <div class="title">
+                            <h2>Topic Tags</h2>
+                        </div>
+                        <div class="body">
+                            <ul>
+                                <li>Foods</li>
+                                <li>Drinks</li>
+                                <li>Restaurants</li>
+                                <li>MakeUp</li>
+                                <li>Fashion</li>
+                                <li>Beauty</li>
+                                <li>Shopping</li>
+                                <li>Types</li>
+                                <li>Cooking</li>
+                                <li>Sports</li>
+                                <li>Clothes</li>
+                                <li>Jewerly</li>
+                                <li>Relax</li>
+                                <li>Places</li>
+                                <li>Special</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="webInfo card">
+                        <div class="title">
+                            <h2>Website Information</h2>
+                        </div>
+                        <div class="body">
+                            Main Area
+                        </div>
+                    </div>
+                    <div class="links card">
+                        <div class="title">
+                            <h2>Feedback</h2>
+                        </div>
+                        <div class="body">
+                            Main Area
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+    </main>
+
+    <footer>
+        <div class="left">
+            <p class="thank">Thank For</p>
+            <p class="site_info">
+                <span><img src="/static/resources/img/footer/amazon.png" alt=""> AWS Cloud </span>
+                <span><img src="/static/resources/img/footer/certificate.png" alt=""> Certificate </span>
+                <span><img src="/static/resources/img/footer/google.png" alt=""> Google Cloud </span>
+            </p>
+            <p class="version">
+                <span>Version</span>
+                <span>1.0.1</span>
+            </p>
+            <p>Build Time: 2023-7-20</p>
+            <p class="legal">
+                <a href=""><img src="/static/resources/img/footer/alert.png" alt="">Record Number: xxxx</a>
+            </p>
+        </div>
+        <div class="right">
+                <div class="contact">
+                    <div>
+                        <img class="icon" src="/static/resources/img/footer/wechat.png" alt="">
+                        <img class="wechat" src="/static/resources/img/footer/wechat_QR.jpg" alt="">
+                    </div>
+                     <div>
+                         <a href="https://www.linkedin.com/in/meiwei-zhang/">
+                             <img class="icon" src="/static/resources/img/footer/linkedin.png" alt="">
+                         </a>
+                    </div>
+                    <div>
+                         <a href="#">
+                             <img class="icon" src="/static/resources/img/footer/instagram.png" alt="">
+                         </a>
+                    </div>
+                    <div>
+                         <a href="#">
+                             <img class="icon" src="/static/resources/img/footer/twitter.png" alt="">
+                         </a>
+                    </div>
+                    <div>
+                         <a href="#">
+                             <img class="icon" src="/static/resources/img/footer/github.png" alt="">
+                         </a>
+                    </div>
+                </div>
+                <p>
+                    Contact Email: zhang.meiwe@northeastern.edu
+                </p>
+            </div>
+    </footer>
+</div>
+<script>
+    new Vue({
+        el:'#app',
+        delimiters: ["[[", "]]"], // revise vue syntax configuration to adjust to django
+        data:{
+            theme: 'light',  // default theme: light
+            this_category: 'breakfast', // current recommended articles position
+        },
+        created(){
+            this.init_theme()
+        },
+        methods: {
+            // initialize theme
+            init_theme() {
+                // read the storage information
+                let theme = localStorage.getItem('theme')
+                if (theme) { // Consider the first read, set the light theme
+                    this.theme = theme
+                }
+            },
+            // set theme
+            setTheme(themeName) {
+                this.theme = themeName
+                // keep the theme durable
+                localStorage.setItem('theme', themeName)
+            },
+            // set the function to switch the category of recommended articles
+            switch_article_category(categoryName){
+                this.this_category = categoryName
+            }
+        }
+    })
+
+    // home page images window
+    let menu_img = document.querySelectorAll('.dynamic_shuffle')
+    // get the menu length
+    let menu_length = menu_img.length
+    let index = 0;
+    let timer = null;
+    // reset the timer
+    clearInterval(timer)
+    // set img timer
+    timer = setInterval(()=>{
+        index ++
+        if (index == menu_length){
+            index = 0 // traverse at the last picture, initialize to 0
+        }
+        // reset the img style
+        for (let i of menu_img) {
+        i.style.opacity = 0
+    }
+        menu_img[index].style.opacity = 1
+    }, 2000)
+    
+</script>
+
+</body>
+</html>

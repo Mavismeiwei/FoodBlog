@@ -1,0 +1,90 @@
+{% extends 'index.html' %}
+{% block css %}
+    <link rel="stylesheet" href="/static/resources/css/article.css">
+{% endblock %}
+{% block main %}
+    <div class="article">
+        <div class="article_title">
+            <h2>Hamburger</h2>
+            <p>
+                <span>Post Time: <i>2023-05-12</i></span>
+                <span>Author: <i>Vivi</i> </span>
+                <span>Source: <i>Vivi's Blog</i></span>
+            </p>
+            <div>
+                <i title="Tag" class="fas fa-tags"></i>
+                <i>Recipes</i>
+                <i>Diet</i>
+            </div>
+        </div>
+    <div class="article_content">
+        The Recipe of Hamburger
+    </div>
+    <div class="comment_submit">
+        <div class="title">
+            What do you think about this article?
+        </div>
+        <div class="body">
+            <textarea name="" id="" rows="10" placeholder="Write down your feelings..."></textarea>
+            <button class="submit_comment">
+                Comment
+            </button>
+        </div>
+        <div class="footer">
+            <p><span>49</span> people view, <span>18</span> comments</p>
+        </div>
+    </div>
+    <div class="comment_list">
+        <ul>
+            <li>
+                <div class="left">
+                    <img src="/static/resources/img/user/1.jpg">
+                </div>
+                <div class="right">
+                    <h4>Vivi Blog</h4>
+                    <div class="comment_content">
+                        <p>Hello！！</p>
+                        <div>
+                            <img src="/static/resources/img/login/4.svg">
+                            <img src="/static/resources/img/login/5.svg">
+                            <img src="/static/resources/img/login/6.svg">
+                        </div>
+
+                    </div>
+                    <div class="comment_info">
+                        <span>Recent</span>
+                        <div>
+                            <span>Like(0)</span>
+                            <span>Comment(0)</span>
+                            <span class="delete">Delete</span>
+                        </div>
+                    </div>
+
+                    <div class="sub_comment_list">
+                        <div class="sub_comment_item">
+                            <div class="left">
+                                 <img src="/static/resources/img/user/2.jpg">
+                            </div>
+                            <div class="right">
+                                <h4>Fang @ Vivi</h4>
+                                <div class="sub_comment_content">
+                                    Hi！！！！！
+                                </div>
+                                <div class="sub_comment_info">
+                                    <span>5 min ago</span>
+                                    <div>
+                                        <span>Like(0)</span>
+                                        <span>Comment(0)</span>
+                                        <span class="delete">Delete</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    </div>
+
+{% endblock %}
