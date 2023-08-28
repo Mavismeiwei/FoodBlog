@@ -96,50 +96,50 @@ def avatar_delete(instance, **kwargs):  # 函数名随意
 # 文章表
 class Articles(models.Model):
     nid = models.AutoField(primary_key=True)
-    title = models.CharField(verbose_name='标题', max_length=32, null=True, blank=True)
-    abstract = models.CharField(verbose_name='文章简介', max_length=128, null=True, blank=True)
-    content = models.TextField(verbose_name='文章内容', null=True, blank=True)
-    create_date = models.DateTimeField(verbose_name='文章发布日期', auto_now_add=True, null=True)
-    change_date = models.DateTimeField(verbose_name='文章修改日期', auto_now=True, null=True)
+    title = models.CharField(verbose_name='Title', max_length=100, null=True, blank=True)
+    abstract = models.CharField(verbose_name='Introduction', max_length=128, null=True, blank=True)
+    content = models.TextField(verbose_name='Content', null=True, blank=True)
+    create_date = models.DateTimeField(verbose_name='Post Date', auto_now_add=True, null=True)
+    change_date = models.DateTimeField(verbose_name='Revise Date', auto_now=True, null=True)
     status_choice = (
-        (0, '未发布'),
-        (1, '已发布'),
+        (0, 'unpublished'),
+        (1, 'published'),
     )
-    status = models.IntegerField(verbose_name='文章保存状态', choices=status_choice)
-    recommend = models.BooleanField(verbose_name='是否上推荐', default=True)
+    status = models.IntegerField(verbose_name='Save Status', choices=status_choice)
+    recommend = models.BooleanField(verbose_name='Whether to recommend', default=True)
     cover = models.ForeignKey(
         to='Cover',
         to_field='nid',
         on_delete=models.SET_NULL,
-        verbose_name='文章封面', null=True, blank=True
+        verbose_name='Article Cover', null=True, blank=True
     )
-    look_count = models.IntegerField(verbose_name='文章阅读量', default=0)
-    comment_count = models.IntegerField(verbose_name='文章评论量', default=0)
-    digg_count = models.IntegerField(verbose_name='文章点赞量', default=0)
-    collects_count = models.IntegerField(verbose_name='文章收藏数', default=0)
+    look_count = models.IntegerField(verbose_name='Views', default=0)
+    comment_count = models.IntegerField(verbose_name='Comments', default=0)
+    digg_count = models.IntegerField(verbose_name='Like', default=0)
+    collects_count = models.IntegerField(verbose_name='Collections', default=0)
     category_choice = (
-        (1, '前端'),
-        (2, '后端'),
-        (3, '项目相关'),
+        (1, 'Recipes'),
+        (2, 'Health Diet'),
+        (3, 'Relevant Articles'),
     )
-    category = models.IntegerField(verbose_name='文章分类', choices=category_choice, null=True, blank=True)
+    category = models.IntegerField(verbose_name='Classification', choices=category_choice, null=True, blank=True)
     tag = models.ManyToManyField(
         to='Tags',
-        verbose_name='文章标签',
+        verbose_name='Tag',
         blank=True
     )
-    pwd = models.CharField(max_length=32, verbose_name='文章密码', null=True, blank=True)
-    author = models.CharField(max_length=16, verbose_name='作者', null=True, blank=True)
-    source = models.CharField(max_length=32, verbose_name='来源', null=True, blank=True)
+    pwd = models.CharField(max_length=32, verbose_name='Article Password', null=True, blank=True)
+    author = models.CharField(max_length=16, verbose_name='Author', null=True, blank=True)
+    source = models.CharField(max_length=32, verbose_name='Source', null=True, blank=True)
 
-    link = models.URLField(verbose_name='文章链接', null=True, blank=True)
-    word = models.IntegerField(verbose_name='文章字数', default=0)
+    link = models.URLField(verbose_name='Article Link', null=True, blank=True)
+    word = models.IntegerField(verbose_name='Article Word Count', default=0)
 
     def __str__(self):
         return self.title
 
     class Meta:
-        verbose_name_plural = '文章'
+        verbose_name_plural = 'Article'
 
 
 # 项目分类
@@ -177,7 +177,7 @@ class Comment(models.Model):
         verbose_name_plural = '评论'
 
 
-# 文章封面
+# 文章封面 Article Cover
 class Cover(models.Model):
     nid = models.AutoField(primary_key=True)
     url = models.FileField(verbose_name='文章封面地址', upload_to='article_img/')

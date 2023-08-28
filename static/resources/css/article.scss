@@ -1,5 +1,5 @@
 .article{
-  width: 100%;
+  width: 1200px;
 
   .article_title{
     display: flex;
@@ -123,12 +123,19 @@
       >li{
         width: 100%;
         display: flex;
+        margin-bottom: 20px;
 
-        .left{
+         > .left{
           width: 70px;
-          img{
+
+           img{
             width: 50px;
             border-radius: 5px;
+            transition: all 0.3s;
+
+            &:hover{
+              transform: scale(1.1);
+            }
           }
         }
 
@@ -177,14 +184,56 @@
                 margin-right: 0;
               }
             }
-
-            .delete{
-              color: red;
-            }
           }
 
-          .sub_comment_list{
+          .delete{
+              color: red;
+            cursor: pointer;
+            }
 
+          .sub_comment_list{
+            margin-top: 10px;
+
+            > div {
+              display: flex;
+              margin-bottom: 12px;
+
+              .left {
+                width: 60px;
+
+                img {
+                  width: 40px;
+                  border-radius: 5px;
+                  transition: all 0.3s;
+
+                &:hover{
+                  transform: scale(1.1);
+                  }
+                }
+              }
+
+              .right {
+                width: calc(100% - 60px);
+
+                .sub_comment_content{
+                  margin: 5px 0;
+                }
+
+                .sub_comment_info {
+                  display: flex;
+                  justify-content: space-between;
+                  font-size: 14px;
+
+                  > div > span{
+                    cursor: pointer;
+                    margin-right: 4px;
+                    &:last-child{
+                      margin-right: 0;
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

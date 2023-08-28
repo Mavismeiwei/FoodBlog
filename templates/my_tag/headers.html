@@ -1,7 +1,11 @@
-    <header>
-        {% for img in img_list %}
-        <div class="dynamic_shuffle">
-            <img src="{{ img }}" alt="">
-        </div>
-        {% endfor %}
-    </header>
+<header>
+    <div class="title">
+        <h1>Vivi's Food Blog</h1>
+        <p>About the Food Blog: Share More, Know More!</p>
+    </div>
+    {% for img in img_list %}
+    <div class="dynamic_shuffle">
+        <img src="{{ img }}" alt="">
+    </div>
+    {% endfor %}
+</header>

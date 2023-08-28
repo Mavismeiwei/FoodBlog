@@ -1,20 +1,27 @@
 {% extends 'index.html' %}
+{% load my_tag %}
 {% block css %}
     <link rel="stylesheet" href="/static/resources/css/article.css">
 {% endblock %}
+
+{% block banner %}
+    {% banner 'article' article %}
+{% endblock %}
+
 {% block main %}
     <div class="article">
         <div class="article_title">
-            <h2>Hamburger</h2>
+            <h2>{{ article.title }}</h2>
             <p>
-                <span>Post Time: <i>2023-05-12</i></span>
-                <span>Author: <i>Vivi</i> </span>
-                <span>Source: <i>Vivi's Blog</i></span>
+                <span>Post Time: <i>{{ article.create_date|date:'m/d/Y' }}</i></span>
+                <span>Author: <i>{{ article.author }}</i> </span>
+                <span>Source: <i>{{ article.source }}</i></span>
             </p>
             <div>
                 <i title="Tag" class="fas fa-tags"></i>
-                <i>Recipes</i>
-                <i>Diet</i>
+                {% for tag in article.tag.all %}
+                    <i>{{ tag.title }}</i>
+                {% endfor %}
             </div>
         </div>
     <div class="article_content">
@@ -49,13 +56,12 @@
                             <img src="/static/resources/img/login/5.svg">
                             <img src="/static/resources/img/login/6.svg">
                         </div>
-
                     </div>
                     <div class="comment_info">
                         <span>Recent</span>
                         <div>
-                            <span>Like(0)</span>
-                            <span>Comment(0)</span>
+                            <span>Like(8)</span>
+                            <span>Comment(2)</span>
                             <span class="delete">Delete</span>
                         </div>
                     </div>
@@ -73,8 +79,92 @@
                                 <div class="sub_comment_info">
                                     <span>5 min ago</span>
                                     <div>
-                                        <span>Like(0)</span>
-                                        <span>Comment(0)</span>
+                                        <span>Like(3)</span>
+                                        <span>Comment(1)</span>
+                                        <span class="delete">Delete</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sub_comment_item">
+                            <div class="left">
+                                 <img src="/static/resources/img/user/2.jpg">
+                            </div>
+                            <div class="right">
+                                <h4>Fang @ Vivi</h4>
+                                <div class="sub_comment_content">
+                                    Hi！！！！！
+                                </div>
+                                <div class="sub_comment_info">
+                                    <span>5 min ago</span>
+                                    <div>
+                                        <span>Like(3)</span>
+                                        <span>Comment(1)</span>
+                                        <span class="delete">Delete</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="left">
+                    <img src="/static/resources/img/user/1.jpg">
+                </div>
+                <div class="right">
+                    <h4>Vivi Blog</h4>
+                    <div class="comment_content">
+                        <p>Hello！！</p>
+                        <div>
+                            <img src="/static/resources/img/login/4.svg">
+                            <img src="/static/resources/img/login/5.svg">
+                            <img src="/static/resources/img/login/6.svg">
+                        </div>
+                    </div>
+                    <div class="comment_info">
+                        <span>Recent</span>
+                        <div>
+                            <span>Like(8)</span>
+                            <span>Comment(2)</span>
+                            <span class="delete">Delete</span>
+                        </div>
+                    </div>
+
+                    <div class="sub_comment_list">
+                        <div class="sub_comment_item">
+                            <div class="left">
+                                 <img src="/static/resources/img/user/2.jpg">
+                            </div>
+                            <div class="right">
+                                <h4>Fang @ Vivi</h4>
+                                <div class="sub_comment_content">
+                                    Hi！！！！！
+                                </div>
+                                <div class="sub_comment_info">
+                                    <span>5 min ago</span>
+                                    <div>
+                                        <span>Like(3)</span>
+                                        <span>Comment(1)</span>
+                                        <span class="delete">Delete</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sub_comment_item">
+                            <div class="left">
+                                 <img src="/static/resources/img/user/2.jpg">
+                            </div>
+                            <div class="right">
+                                <h4>Fang @ Vivi</h4>
+                                <div class="sub_comment_content">
+                                    Hi！！！！！
+                                </div>
+                                <div class="sub_comment_info">
+                                    <span>5 min ago</span>
+                                    <div>
+                                        <span>Like(3)</span>
+                                        <span>Comment(1)</span>
                                         <span class="delete">Delete</span>
                                     </div>
                                 </div>

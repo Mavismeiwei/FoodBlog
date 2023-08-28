@@ -56,7 +56,9 @@
         </div>
     </nav>
 
-    {% banner 'index' %}
+    {% block banner %}
+        {% banner 'index' %}
+    {% endblock %}
 
     <main>
         {% block main %}

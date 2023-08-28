@@ -18,6 +18,8 @@ Including another URLconf
 from django.urls import path, include, re_path
 from django.contrib import admin
 from app01 import views
+from django.conf import settings
+from django.views.static import serve
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,7 +35,6 @@ urlpatterns = [
     # distribute all requests that start with api to api urls.py
     re_path(r'^api/', include('api.urls')),  # distribute the path
 
-
-    # media configuration
-    # re_path(r'media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    # media configuration: user upload path configuration
+    re_path(r'media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
