@@ -1,5 +1,6 @@
 .article{
   width: 1200px;
+  position: relative;
 
   .article_title{
     display: flex;
@@ -239,6 +240,58 @@
       }
     }
   }
+
+  .slider_bar {
+    position: absolute;
+    width: calc(320px - 40px);
+    background-color: white;
+    border-radius: 5px;
+    top: 0;
+    left: -340px;
+    padding: 20px;
+
+    .title{
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .body{
+      font-size: 16px;
+      p{
+        transition: all 0.3s;
+        cursor: pointer;
+        height: 30px;
+        line-height: 30px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &:hover{
+          background-color: #a6a9b7;
+          color: white;
+        }
+
+        &.H1{
+          padding-left: 3px;
+        }
+        &.H2{
+          padding-left: 15px;
+        }
+        &.H3{
+          padding-left: 20px;
+        }
+        &.H4{
+          font-size: 14px;
+          padding-left: 25px;
+        }
+        &.H5{
+          font-size: 14px;
+          padding-left: 25px;
+        }
+      }
+    }
+ }
 }
 
 h1,h2,h3,h4,h5,h6{
