@@ -1,6 +1,7 @@
 {% extends 'index.html' %}
 {% load my_tag %}
 {% block css %}
+    <link rel="stylesheet" href="/static/editor-md/css/editormd.css"/>
     <link rel="stylesheet" href="/static/resources/css/article.css">
 {% endblock %}
 
@@ -24,8 +25,8 @@
                 {% endfor %}
             </div>
         </div>
-    <div class="article_content">
-        The Recipe of Hamburger
+    <div class="article_content" id="article_content">
+        <textarea style="display: none;">{{ article.content }}</textarea>
     </div>
     <div class="comment_submit">
         <div class="title">
@@ -176,5 +177,20 @@
         </ul>
     </div>
     </div>
+{% endblock %}
 
+{% block js %}
+    <script src="/static/editor-md/lib/marked.min.js"></script>
+    <script src="/static/editor-md/lib/prettify.min.js"></script>
+    <script src="/static/jquery/jquery.min.js"></script>
+    <script src="/static/editor-md/editormd.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            let editor = editormd.markdownToHTML("article_content", {
+                width: "100%",
+                height: "100%",
+                path: "/static/editor-md/lib/",
+            });
+        });
+</script>
 {% endblock %}
