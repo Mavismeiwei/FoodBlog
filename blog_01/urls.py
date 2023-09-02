@@ -30,6 +30,10 @@ urlpatterns = [
     path('register/', views.register),
     path('logout/', views.logout),
 
+    path('backend/', views.backend),  # backend user center
+    path('backend/add_article/', views.add_article),  # backend add article
+
+
     re_path(r'^article/(?P<nid>\d+)/', views.article),  # article detail page
 
     # distribute all requests that start with api to api urls.py

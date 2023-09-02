@@ -1,0 +1,150 @@
+#app {
+  display: flex;
+  margin: 0;
+}
+
+aside {
+  width: 200px;
+  height: 100vh;
+  background-color: #89a886;
+  padding: 0;
+  margin: 0;
+
+  .slogan{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+    img{
+      width: 80%;
+    }
+  }
+  >ul{
+    width: 100%;
+    margin-top: 40px;
+    padding: 0;
+
+    >li{
+      width: 100%;
+      height: 50px;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      transition: all 0.2s;
+
+      a{
+        color: white;
+        text-decoration: none;
+        font-size: 18px;
+      }
+
+      &:hover{
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+}
+
+main {
+  width: calc(100% - 200px);
+  box-sizing: border-box;
+  height: 100vh;
+  background-color: #ffffee;
+  padding: 20px;
+
+  .user_info{
+    width: 100%;
+    display: flex;
+    background-color: #d6eed8;
+    border-radius: 5px;
+
+    .left{
+      width: 20%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img{
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+      }
+    }
+
+    .right{
+      width: 50%;
+      display: flex;
+      flex-wrap: wrap;
+
+      .item{
+        width: 50%;
+        height: 40px;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+
+  .actions{
+    width: 100%;
+    height: 70px;
+    background-color: #d6eed8;
+    margin-top: 20px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .collection_article_all{
+    margin-top: 20px;
+    border-radius: 5px;
+    background-color: #d6eed8;
+
+    .collection_title{
+      text-align: center;
+      font-size: 20px;
+      padding-top: 10px;
+    }
+
+    .article_list{
+      margin-top: 10px;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+
+      .item{
+        box-sizing: border-box;
+        width: 33.33%;
+        display: flex;
+        padding: 20px;
+
+        .left{
+          width: 30%;
+
+          img{
+            width: 100%;
+          }
+        }
+
+        .right{
+          width: 70%;
+          box-sizing: border-box;
+          padding-left: 10px;
+
+          p{
+            display:  -webkit-box;
+            overflow: hidden;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+          }
+        }
+      }
+    }
+  }
+}
+
+h1,h2,h3,h4,h5,h6{
+  margin: 0;
+}

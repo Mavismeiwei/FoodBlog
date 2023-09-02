@@ -30,11 +30,17 @@ def get_random_code(request):
     request.session['valid_code'] = valid_code
     return HttpResponse(data)
 
-
 def register(request):
     return render(request, 'register.html')
-
 
 def logout(request):
     auth.logout(request)
     return redirect('/')
+
+def backend(request):
+    if not request.user.username:  # user name is empty
+        return redirect('/')
+    return render(request, 'backend/backend.html', locals())
+
+def add_article(request):
+    return render(request, 'backend/add_article.html', locals())
