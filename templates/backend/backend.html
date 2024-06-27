@@ -21,9 +21,10 @@
             <li><a href="/backend/">User Center</a></li>
             <li><a href="/backend/edit_avatar/">Edit Avatar</a></li>
             <li><a href="/backend/reset_password/">Update Password</a></li>
-            {% if request.user.is_superuser %}
-                <li><a href="/backend/add_article/">Upload Article</a></li>
-            {% endif %}
+            <li><a href="/backend/add_article/">Upload Article</a></li>
+{#            {% if request.user.is_superuser %}#}
+{#                <li><a href="/backend/add_article/">Upload Article</a></li>#}
+{#            {% endif %}#}
             <li><a href="/logout/">Logout Exit</a></li>
         </ul>
     </aside>
