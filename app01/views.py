@@ -38,7 +38,7 @@ def logout(request):
     return redirect('/')
 
 def backend(request):
-    if not request.user.username:  # user name is empty
+    if not request.user.username:  # username is empty
         return redirect('/')
     return render(request, 'backend/backend.html', locals())
 
@@ -47,6 +47,12 @@ def add_article(request):
     tag_list = Tags.objects.all()
     # 从Covers中获得文章封面
     cover_list = Cover.objects.all()
+    c_l = []
+    for cover in cover_list:
+        c_l.append({
+            "url": cover.url.url,
+            'nid': cover.nid
+        })
     return render(request, 'backend/add_article.html', locals())
 
 def edit_avatar(request):
@@ -54,3 +60,8 @@ def edit_avatar(request):
 
 def reset_password(request):
     return render(request, 'backend/reset_password.html', locals())
+
+def edit_article(request, nid):
+    article_obj = Articles.objects.get(nid=nid)
+
+    return render(request, 'backend/edit_article.html', locals())

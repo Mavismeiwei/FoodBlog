@@ -208,6 +208,13 @@
             // 文章简介
             abstract: ''
         },
+        created(){
+            let img = document.getElementById('cover_img')
+            let cover_list = eval(img.getAttribute('data'))
+            let item = cover_list[Math.floor(Math.random() * cover_list.length)]
+            img.setAttribute('src', item.url)
+            this.cover_id = item.nid.toString()
+        },
         methods:{
             add_handleClose(done) {
                 done()

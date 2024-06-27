@@ -6,9 +6,13 @@
 
 {% block main %}
     <div class="add_article_actions">
-        <el-button type="primary" @click="add_drawer=true">Complete Article Information</el-button>
+        {% block btn %}
+            <el-button type="primary" @click="add_drawer=true">Add Article Information</el-button>
+        {% endblock %}
     </div>
-    <el-drawer
+
+    {% block drawer %}
+        <el-drawer
       style="font-weight:bolder"
       title="Post New Article"
       :visible.sync="add_drawer"
@@ -57,7 +61,7 @@
           </el-collapse-item>
           <el-collapse-item class="article_cover" title="Article Cover" name="4">
               <div class="left">
-                <img id="cover_id" src="/media/article_img/cover1.jpeg" alt="">
+                <img id="cover_img" data="{{ c_l }}" src="/media/article_img/cover1.jpeg" alt="">
               </div>
               <div class="right">
                 <el-select @change="select_cover" v-model="cover_id" placeholder="Please choose the article cover">
@@ -95,9 +99,12 @@
           </div>
       </div>
     </el-drawer>
+    {% endblock %}
 
     <div id="editor">
+    {% block textarea %}
         <textarea style="display: none;"></textarea>
+    {% endblock %}
     </div>
 {% endblock %}
 
