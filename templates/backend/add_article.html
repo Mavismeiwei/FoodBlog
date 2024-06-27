@@ -36,12 +36,13 @@
 
           <el-collapse-item class="category_tags" title="Article Category and Tag" name="3">
             <el-select v-model="category_id" class="category" placeholder="Please choose category">
-                <el-option
-                  v-for="item in category_options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
+                <!-- 从category_list中遍历获得文章所有类别 -->
+                {% for category in category_list %}
+                    <el-option
+                      label="{{ category.1 }}"
+                      value="{{ category.0 }}">
+                    </el-option>
+                {% endfor %}
             </el-select>
             <el-select
                 v-model="tags"

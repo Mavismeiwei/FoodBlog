@@ -119,11 +119,11 @@ class Articles(models.Model):
     collects_count = models.IntegerField(verbose_name='Collections', default=0)
     # 文章分类设置
     category_choice = (
-        (0, 'Recipes'),
-        (1, 'Nutrition'),
-        (2, 'Culinary Travel'),
-        (3, 'Food Reviews'),
-        (4, 'Other'),
+        (1, 'Recipes'),
+        (2, 'Nutrition'),
+        (3, 'Culinary Travel'),
+        (4, 'Food Reviews'),
+        (5, 'Other'),
     )
     category = models.IntegerField(verbose_name='Classification', choices=category_choice, null=True, blank=True)
     tag = models.ManyToManyField(
