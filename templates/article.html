@@ -25,7 +25,12 @@
         </div>
     </div>
         <div class="article_title">
-            <h2>{{ article.title }}</h2>
+            <h2>{{ article.title }}
+            <!-- 后续可修改！！！设置权限 只有超级管理员可以进行文章的编辑修改 -->
+                {% if request.user.is_superuser %}
+                    <a href="/backend/edit_article/{{ article.nid }}/"><i class="fas fa-edit"></i></a>
+                {% endif %}
+            </h2>
             <p>
                 <span>Post Time: <i>{{ article.create_date|date:'m/d/Y' }}</i></span>
                 <span>Author: <i>{{ article.author }}</i> </span>

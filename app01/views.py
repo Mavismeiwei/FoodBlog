@@ -47,6 +47,8 @@ def add_article(request):
     tag_list = Tags.objects.all()
     # 从Covers中获得文章封面
     cover_list = Cover.objects.all()
+    # 拿到所有的文章分类category_list
+    category_list = Articles.category_choice  # 元组
     c_l = []
     for cover in cover_list:
         c_l.append({
@@ -63,5 +65,21 @@ def reset_password(request):
 
 def edit_article(request, nid):
     article_obj = Articles.objects.get(nid=nid)
+    tags = [str(tag.nid) for tag in article_obj.tag.all()]
 
+    tag_list = Tags.objects.all()
+    # 从Covers中获得文章封面
+    cover_list = Cover.objects.all()
+
+    tag_list = Tags.objects.all()
+    # 从Covers中获得文章封面
+    cover_list = Cover.objects.all()
+    c_l = []
+    for cover in cover_list:
+        c_l.append({
+            "url": cover.url.url,
+            'nid': cover.nid
+        })
+    # 拿到所有的文章分类category_list
+    category_list = Articles.category_choice  # 元组
     return render(request, 'backend/edit_article.html', locals())

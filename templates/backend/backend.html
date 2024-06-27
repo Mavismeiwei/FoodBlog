@@ -22,9 +22,10 @@
             <li><a href="/backend/edit_avatar/">Edit Avatar</a></li>
             <li><a href="/backend/reset_password/">Update Password</a></li>
             <li><a href="/backend/add_article/">Upload Article</a></li>
-{#            {% if request.user.is_superuser %}#}
-{#                <li><a href="/backend/add_article/">Upload Article</a></li>#}
-{#            {% endif %}#}
+            <!-- 后续可修改！！！设置权限 只有超级管理员可以进行文章的上传 -->
+            {% if request.user.is_superuser %}
+                <li><a href="/backend/add_article/">Upload Article</a></li>
+            {% endif %}
             <li><a href="/logout/">Logout Exit</a></li>
         </ul>
     </aside>
@@ -210,10 +211,43 @@
         },
         created(){
             let img = document.getElementById('cover_img')
-            let cover_list = eval(img.getAttribute('data'))
-            let item = cover_list[Math.floor(Math.random() * cover_list.length)]
-            img.setAttribute('src', item.url)
-            this.cover_id = item.nid.toString()
+            {#let cover_list = eval(img.getAttribute('data'))#}
+            {#let item = cover_list[Math.floor(Math.random() * cover_list.length)]#}
+            {#img.setAttribute('src', item.url)#}
+            {#this.cover_id = item.nid.toString()#}
+
+            // 获取文章的title abstract并显示在编辑框中
+            let box = document.getElementById('edit_info')
+            this.title = box.getAttribute('data_title')
+            this.abstract = box.getAttribute('data_abstract')
+            // 获取文章的category并显示
+            let category_id = box.getAttribute('data_category')
+            if(category_id!=="None"){
+                this.category_id = category_id
+            }
+            // 获取文章的tags并显示, 返回一个列表 使用eval方法
+            this.tags = eval(box.getAttribute('data_tags'))
+
+            // 获取文章的cover
+            this.cover_id = box.getAttribute('data_cover_id')
+            //  获得当前文档封面的url并显示出来setAttribute
+            let cover_url = box.getAttribute('data_cover_url')
+            img.setAttribute('src', cover_url)
+
+            // 获取文章的pwd并显示(添加判断是否设置了pwd)
+            let pwd = box.getAttribute('data_pwd')
+            if(pwd!=="None"){
+                this.pwd = pwd;
+                this.pwd_active = true
+            }
+
+            // 获取文章是否上推荐recommend, true false进行判断
+            let recommend = box.getAttribute('data_recommend')
+            if(recommend==='True'){
+                this.recommend = true
+            } else {
+                this.recommend = false
+            }
         },
         methods:{
             add_handleClose(done) {

@@ -1,7 +1,16 @@
 {% extends 'backend/add_article.html' %}
 
 {% block btn %}
-    <el-button id="edit_info" data_title="{{ article_obj.title }}" type="warning" @click="add_drawer=true">Edit Article</el-button>
+    <el-button id="edit_info"
+               data_title="{{ article_obj.title }}"
+               data_abstract="{{ article_obj.abstract }}"
+               data_pwd="{{ article_obj.pwd }}"
+               data_category="{{ article_obj.category }}"
+               data_tags="{{ tags }}"
+               data_cover_id="{{ article_obj.cover.nid }}"
+               data_cover_url="{{ article_obj.cover.url.url }}"
+               data_recommend="{{ article_obj.recommend }}"
+               type="warning" @click="add_drawer=true">Edit Article</el-button>
 {% endblock %}
 
 {% block drawer %}
@@ -29,12 +38,13 @@
 
       <el-collapse-item class="category_tags" title="Article Category and Tag" name="3">
         <el-select v-model="category_id" class="category" placeholder="Please choose category">
-            <el-option
-              v-for="item in category_options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
+            <!-- 从category_list中遍历获得文章所有类别 -->
+            {% for category in category_list %}
+                    <el-option
+                      label="{{ category.1 }}"
+                      value="{{ category.0 }}">
+                    </el-option>
+                {% endfor %}
         </el-select>
         <el-select
             v-model="tags"
@@ -54,7 +64,7 @@
       </el-collapse-item>
       <el-collapse-item class="article_cover" title="Article Cover" name="4">
           <div class="left">
-            <img id="cover_id" src="/media/article_img/cover1.jpeg" alt="">
+            <img id="cover_img" src="/media/article_img/cover1.jpeg" alt="">
           </div>
           <div class="right">
             <el-select @change="select_cover" v-model="cover_id" placeholder="Please choose the article cover">
