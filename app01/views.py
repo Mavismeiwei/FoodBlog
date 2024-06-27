@@ -47,6 +47,12 @@ def add_article(request):
     tag_list = Tags.objects.all()
     # 从Covers中获得文章封面
     cover_list = Cover.objects.all()
+    c_l = []
+    for cover in cover_list:
+        c_l.append({
+            "url": cover.url.url,
+            'nid': cover.nid
+        })
     return render(request, 'backend/add_article.html', locals())
 
 def edit_avatar(request):
