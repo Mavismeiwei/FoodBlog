@@ -32,10 +32,12 @@
                 <span>Source: <i>{{ article.source }}</i></span>
             </p>
             <div>
+            {% if article.tag.all %}
                 <i title="Tag" class="fas fa-tags"></i>
                 {% for tag in article.tag.all %}
                     <i>{{ tag.title }}</i>
                 {% endfor %}
+            {% endif %}
             </div>
         </div>
     <div class="article_content" id="article_content">

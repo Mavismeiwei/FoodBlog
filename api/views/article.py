@@ -60,11 +60,15 @@ class ArticleView(View):
 
         data = request.data
         data['status'] = 1
+
         form = AddArticleForm(data)
         if not form.is_valid():
             res['self'], res['msg'] = clean_form(form)
             return JsonResponse(res)
         # 校验通过
+        form.cleaned_data['author'] = 'Mimi'
+        form.cleaned_data['source'] = 'Mimi Food Blog'
+
         article_obj = Articles.objects.create(**form.cleaned_data)
         print(article_obj)
 
