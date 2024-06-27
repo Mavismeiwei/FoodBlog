@@ -59,6 +59,7 @@
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script>
 
+    // axios请求中间件和响应中间件
     axios.interceptors.request.use(request => {
         if (request.method === 'post'){
             let csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value

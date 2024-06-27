@@ -1,1 +1,121 @@
 {% extends 'backend/backend.html' %}
+{% block css %}
+    <link rel="stylesheet" href="/static/editor-md/css/editormd.css"/>
+    <link rel="stylesheet" href="/static/resources/css/backend/add_article.css">
+{% endblock %}
+
+{% block main %}
+    <div class="add_article_actions">
+        <el-button type="primary" @click="add_drawer=true">Complete Article Information</el-button>
+    </div>
+    <el-drawer
+      style="font-weight:bolder"
+      title="Post New Article"
+      :visible.sync="add_drawer"
+      direction="rtl"
+      :before-close="add_handleClose">
+      <div class="add_el_drawer_content">
+        {% csrf_token %}
+        <el-collapse v-model="add_article_activeNames">
+          <el-collapse-item title="Article Title" name="1">
+              <el-input v-model="title" type="text" placeholder="Please input the title of the article"> </el-input>
+          </el-collapse-item>
+          <el-collapse-item title="Article Abstract" name="2">
+              <el-input
+              type="textarea"
+              :rows="6"
+              resize="none"
+              placeholder="Please enter the introduction of the article (Optional)"
+              v-model="abstract">
+            </el-input>
+          </el-collapse-item>
+
+          <el-collapse-item class="category_tags" title="Article Category and Tag" name="3">
+            <el-select v-model="category_id" class="category" placeholder="Please choose category">
+                <el-option
+                  v-for="item in category_options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+            </el-select>
+            <el-select
+                v-model="tags"
+                class="tags"
+                multiple
+                filterable
+                allow-create
+                default-first-option
+                placeholder="Please choose the tag">
+                {% for tag in tag_list %}
+                    <el-option
+                      label="{{ tag.title }}"
+                      value="{{ tag.nid }}">
+                    </el-option>
+                {% endfor %}
+            </el-select>
+          </el-collapse-item>
+          <el-collapse-item class="article_cover" title="Article Cover" name="4">
+              <div class="left">
+                <img id="cover_id" src="/media/article_img/cover1.jpeg" alt="">
+              </div>
+              <div class="right">
+                <el-select @change="select_cover" v-model="cover_id" placeholder="Please choose the article cover">
+                    {% for cover in cover_list %}
+                        <el-option
+                          label="{{cover.url.url}}"
+                          value="{{ cover.nid }}">
+                        </el-option>
+                    {% endfor %}
+                </el-select>
+              </div>
+          </el-collapse-item>
+          <el-collapse-item class="can_choose_" title="Article Optional Settings" name="5">
+                  <el-switch
+                      style="display: block"
+                      v-model="recommend"
+                      active-color="#13ce66"
+                      inactive-color="gray"
+                      active-text="Quick Recommendation"
+                      inactive-text="General">
+                  </el-switch>
+                  <el-switch
+                      v-model="pwd_active"
+                      active-text="Encrypt"
+                      inactive-text="Public">
+                  </el-switch>
+                  <el-input v-show="pwd_active" v-model="pwd" placeholder="Please enter the password"></el-input>
+
+
+          </el-collapse-item>
+        </el-collapse>
+          <div class="article_btn_list">
+              <el-button @click="add_article" type="success">Post Article</el-button>
+
+          </div>
+      </div>
+    </el-drawer>
+
+    <div id="editor">
+        <textarea style="display: none;"></textarea>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/static/editor-md/lib/marked.min.js"></script>
+    <script src="/static/editor-md/lib/prettify.min.js"></script>
+    <script src="/static/jquery/jquery.min.js"></script>
+    <script src="/static/editor-md/editormd.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var editor = editormd("editor", {
+                width: "100%",
+                height: "750",
+                path: "/static/editor-md/lib/",
+                toolbarIcons: function () {
+                    return ["undo", "redo", "|", "bold", "|", "preview", "watch", "image", "|","fullscreen","info"]
+                }
+            })
+        })
+    </script>
+{% endblock %}

@@ -117,10 +117,13 @@ class Articles(models.Model):
     comment_count = models.IntegerField(verbose_name='Comments', default=0)
     digg_count = models.IntegerField(verbose_name='Like', default=0)
     collects_count = models.IntegerField(verbose_name='Collections', default=0)
+    # 文章分类设置
     category_choice = (
-        (1, 'Recipes'),
-        (2, 'Health Diet'),
-        (3, 'Relevant Articles'),
+        (0, 'Recipes'),
+        (1, 'Nutrition'),
+        (2, 'Culinary Travel'),
+        (3, 'Food Reviews'),
+        (4, 'Other'),
     )
     category = models.IntegerField(verbose_name='Classification', choices=category_choice, null=True, blank=True)
     tag = models.ManyToManyField(

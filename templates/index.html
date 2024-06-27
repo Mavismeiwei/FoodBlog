@@ -626,16 +626,20 @@
             init_theme() {
                 // read the storage information
                 let theme = localStorage.getItem('theme')
-                if (theme) { // Consider the first read, set the light theme
-                    this.theme = theme
-                }
+                if (theme && (theme === 'light' || theme === 'dark')) { // Check only for 'light' or 'dark'
+                this.theme = theme
+            } else {
+                this.theme = 'light' // Fallback to default theme if invalid value
+            }
             },
             // set theme
             setTheme(themeName) {
+            if (themeName === 'light' || themeName === 'dark') {
                 this.theme = themeName
                 // keep the theme durable
                 localStorage.setItem('theme', themeName)
-            },
+            }
+        },
             // set the function to switch the category of recommended articles
             switch_article_category(categoryName){
                 this.this_category = categoryName

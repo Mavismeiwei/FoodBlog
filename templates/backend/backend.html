@@ -5,6 +5,9 @@
     <title>User Backend Page</title>
     <link rel="stylesheet" href="/static/resources/css/backend/backend_base.css">
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+    {% block css%}
+    {% endblock %}
 </head>
 <body>
 <div id="app">
@@ -16,144 +19,237 @@
             {# function in normal users #}
             <li><a href="/">Home Page</a></li>
             <li><a href="/backend/">User Center</a></li>
-            <li><a href="/backend/edit_avatar/">Avatar Setting</a></li>
-            <li><a href="/backend/update_password/">Update Password</a></li>
+            <li><a href="/backend/edit_avatar/">Edit Avatar</a></li>
+            <li><a href="/backend/reset_password/">Update Password</a></li>
             {% if request.user.is_superuser %}
                 <li><a href="/backend/add_article/">Upload Article</a></li>
-                <li><a href="">Article Cover</a></li>
-                <li><a href="">Avatar List</a></li>
-                <li><a href="">Backend System</a></li>
             {% endif %}
             <li><a href="/logout/">Logout Exit</a></li>
         </ul>
-
     </aside>
     <main>
-        <div class="user_info">
-            <div class="left">
-                <img src="/static/resources/img/user/1.jpg" alt="">
+         {% block main %}
+            <div class="user_info">
+                <div class="left">
+                    <img src="/static/resources/img/user/1.jpg" alt="">
+                </div>
+                <div class="right">
+                    <div class="item">
+                        <span><b>User Name:</b> Vivi</span>
+                    </div>
+                    <div class="item">
+                        <span><b>Registration Date:</b> 05/23/2023</span>
+                    </div>
+                    <div class="item">
+                        <span><b>Last Time Login:</b> 08/23/2023</span>
+                    </div>
+                    <div class="item">
+                        <span><b>Score:</b> 200</span>
+                    </div>
+                    <div class="item">
+                        <span><b>Email:</b> zhag@163.com</span>
+                    </div>
+                    <div class="item">
+                        <span><b>Phone Number:</b> 88888888</span>
+                    </div>
+                    </div>
             </div>
-            <div class="right">
+            <div class="actions">
                 <div class="item">
-                    <span><b>User Name:</b> Vivi</span>
-                </div>
-                <div class="item">
-                    <span><b>Registration Date:</b> 05/23/2023</span>
-                </div>
-                <div class="item">
-                    <span><b>Last Time Login:</b> 08/23/2023</span>
-                </div>
-                <div class="item">
-                    <span><b>Score:</b> 200</span>
-                </div>
-                <div class="item">
-                    <span><b>Email:</b> zhag@163.com</span>
-                </div>
-                <div class="item">
-                    <span><b>Phone Number:</b> 88888888</span>
-                </div>
-                </div>
-        </div>
-        <div class="actions">
-            <div class="item">
-                 <el-button type="primary">Update Information</el-button>
-            </div>
-             <div class="item">
-                 <el-button type="success">Update Portrait</el-button>
-            </div>
-             <div class="item">
-                 <el-button type="warning">Update Password</el-button>
-            </div>
-             <div class="item">
-                 <el-button type="danger">Logout & Exit</el-button>
-            </div>
-        </div>
-        <div class="collection_article_all">
-            <p class="collection_title"><b>My Collections</b></p>
-            <div class="article_list">
-                <div class="item">
-                    <div class="left">
-                        <img src="/static/resources/img/all_articles_card/5.jpeg" alt="">
-                    </div>
-                    <div class="right">
-                        <h4>Healthy Salad</h4>
-                        <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="left">
-                        <img src="/static/resources/img/all_articles_card/1.jpeg" alt="">
-                    </div>
-                    <div class="right">
-                        <h4>Healthy Salad</h4>
-                        <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="left">
-                        <img src="/static/resources/img/all_articles_card/2.jpeg" alt="">
-                    </div>
-                    <div class="right">
-                        <h4>Healthy Salad</h4>
-                        <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="left">
-                        <img src="/static/resources/img/all_articles_card/3.jpeg" alt="">
-                    </div>
-                    <div class="right">
-                        <h4>Healthy Salad</h4>
-                        <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                    </div>
+                     <el-button type="primary">Update Information</el-button>
                 </div>
                  <div class="item">
-                    <div class="left">
-                        <img src="/static/resources/img/all_articles_card/4.jpeg" alt="">
-                    </div>
-                    <div class="right">
-                        <h4>Healthy Salad</h4>
-                        <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                    </div>
+                     <el-button type="success">Update Portrait</el-button>
                 </div>
                  <div class="item">
-                    <div class="left">
-                        <img src="/static/resources/img/all_articles_card/6.jpeg" alt="">
-                    </div>
-                    <div class="right">
-                        <h4>Healthy Salad</h4>
-                        <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                    </div>
+                     <el-button type="warning">Update Password</el-button>
                 </div>
                  <div class="item">
-                    <div class="left">
-                        <img src="/static/resources/img/all_articles_card/7.jpeg" alt="">
-                    </div>
-                    <div class="right">
-                        <h4>Healthy Salad</h4>
-                        <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                    </div>
+                     <el-button type="danger">Logout & Exit</el-button>
                 </div>
-                 <div class="item">
-                    <div class="left">
-                        <img src="/static/resources/img/all_articles_card/1.jpeg" alt="">
+            </div>
+
+            {% block content %}
+                <div class="collection_article_all">
+                <p class="collection_title"><b>My Collections</b></p>
+                <div class="article_list">
+                    <div class="item">
+                        <div class="left">
+                            <img src="/static/resources/img/all_articles_card/5.jpeg" alt="">
+                        </div>
+                        <div class="right">
+                            <h4>Healthy Salad</h4>
+                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
+                        </div>
                     </div>
-                    <div class="right">
-                        <h4>Healthy Salad</h4>
-                        <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
+                    <div class="item">
+                        <div class="left">
+                            <img src="/static/resources/img/all_articles_card/1.jpeg" alt="">
+                        </div>
+                        <div class="right">
+                            <h4>Healthy Salad</h4>
+                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">
+                            <img src="/static/resources/img/all_articles_card/2.jpeg" alt="">
+                        </div>
+                        <div class="right">
+                            <h4>Healthy Salad</h4>
+                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">
+                            <img src="/static/resources/img/all_articles_card/3.jpeg" alt="">
+                        </div>
+                        <div class="right">
+                            <h4>Healthy Salad</h4>
+                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
+                        </div>
+                    </div>
+                     <div class="item">
+                        <div class="left">
+                            <img src="/static/resources/img/all_articles_card/4.jpeg" alt="">
+                        </div>
+                        <div class="right">
+                            <h4>Healthy Salad</h4>
+                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
+                        </div>
+                    </div>
+                     <div class="item">
+                        <div class="left">
+                            <img src="/static/resources/img/all_articles_card/6.jpeg" alt="">
+                        </div>
+                        <div class="right">
+                            <h4>Healthy Salad</h4>
+                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
+                        </div>
+                    </div>
+                     <div class="item">
+                        <div class="left">
+                            <img src="/static/resources/img/all_articles_card/7.jpeg" alt="">
+                        </div>
+                        <div class="right">
+                            <h4>Healthy Salad</h4>
+                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
+                        </div>
+                    </div>
+                     <div class="item">
+                        <div class="left">
+                            <img src="/static/resources/img/all_articles_card/1.jpeg" alt="">
+                        </div>
+                        <div class="right">
+                            <h4>Healthy Salad</h4>
+                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            {% endblock %}
+
+        {% endblock %}
     </main>
 </div>
 
-
+<script src="/static/axios/axios.min.js"></script>
 <script src="/static/vue/vue.js"></script>
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+{% block js %}
+
+{% endblock %}
 <script>
+    // axios请求中间件和响应中间件
+    axios.interceptors.request.use(request => {
+        if (request.method === 'post'){
+            let csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value
+            request.headers['X-CSRFToken'] = csrftoken
+        }
+        return request
+    })
+
+    // axios response middleware function
+    axios.interceptors.response.use(
+        response => {
+            return response.data
+        })
+
     new Vue({
         el: '#app',
+        data: {
+            // 是否展开添加文章的侧边栏
+            add_drawer: false,
+            // 选中的
+            add_article_activeNames: ['1'],
+            // 文章分类的id
+            category_id: '',
+            // 文章分类
+            category_options: [
+                {value: 0, label: 'Recipes'},
+                {value: 1, label: 'Nutrition'},
+                {value: 2, label: 'Culinary Travel'},
+                {value: 3, label: 'Food Reviews'},
+                {value: 4, label: 'Other'}
+            ],
+            // 选中的文章标签
+            tags: [],
+            // 文章标签Tag列表
+            // 是否推荐文章 默认为false
+            recommend: false,
+            // 是否需要文章密码查看
+            pwd_active: false,
+            pwd: '',
+            // 文章封面id
+            cover_id: '',
+            // 文章标题
+            title: '',
+            // 文章简介
+            abstract: ''
+        },
+        methods:{
+            add_handleClose(done) {
+                done()
+              },
+            // 添加文章的函数
+            add_article() {
+                let data = {
+                    title: this.title,
+                    abstract: this.abstract,
+                    cover_id: this.cover_id,
+                    pwd: this.pwd,
+                    recommend: this.recommend,
+                    tags: this.tags,
+                    category: this.category_id,
+                    content: editor.querySelector('.editormd-markdown-textarea').value
+                }
+
+                axios.post('/api/article/', data).then(res => {
+                    if (res.code){
+                        this.$message.error(res.msg)
+                        return
+                    }
+                    this.$message.success(res.msg)
+                    setTimeout(()=>{
+                        location.href = `/article/${res.data}/`
+                    }, 1000)
+                })
+            },
+
+            // 选择文章封面函数
+            select_cover(val) {
+                setTimeout(() => {
+                    let v = document.querySelector('.article_cover input').value
+                    let cover = document.getElementById('cover_id')
+                    console.log(cover); // 检查 cover 是否为 null
+                    if (cover) {
+                        cover.src = v
+                    } else {
+                        console.error('Element with id cover_img not found');
+                    }
+                }, 1)
+            }
+        }
     })
 </script>
 </body>

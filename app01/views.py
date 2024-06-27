@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from app01.utils.random_code import random_code
 from django.contrib import auth
 from app01.models import UserInfo
-from app01.models import Articles
+from app01.models import Articles, Tags, Cover
 import json
 
 
@@ -43,4 +43,14 @@ def backend(request):
     return render(request, 'backend/backend.html', locals())
 
 def add_article(request):
+    # 从Tags表中获取文章标签Tags
+    tag_list = Tags.objects.all()
+    # 从Covers中获得文章封面
+    cover_list = Cover.objects.all()
     return render(request, 'backend/add_article.html', locals())
+
+def edit_avatar(request):
+    return render(request, 'backend/edit_avatar.html', locals())
+
+def reset_password(request):
+    return render(request, 'backend/reset_password.html', locals())
