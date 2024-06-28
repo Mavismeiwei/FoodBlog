@@ -162,9 +162,9 @@
 
 {% endblock %}
 <script>
-    // axios请求中间件和响应中间件
+    // axios请求中间件和响应中间件 只要不是get请求 都加上csrf token
     axios.interceptors.request.use(request => {
-        if (request.method === 'post'){
+        if (request.method !== 'get'){
             let csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value
             request.headers['X-CSRFToken'] = csrftoken
         }
@@ -211,50 +211,24 @@
         },
         created(){
             let img = document.getElementById('cover_img')
-            {#let cover_list = eval(img.getAttribute('data'))#}
-            {#let item = cover_list[Math.floor(Math.random() * cover_list.length)]#}
-            {#img.setAttribute('src', item.url)#}
-            {#this.cover_id = item.nid.toString()#}
-
-            // 获取文章的title abstract并显示在编辑框中
-            let box = document.getElementById('edit_info')
-            this.title = box.getAttribute('data_title')
-            this.abstract = box.getAttribute('data_abstract')
-            // 获取文章的category并显示
-            let category_id = box.getAttribute('data_category')
-            if(category_id!=="None"){
-                this.category_id = category_id
-            }
-            // 获取文章的tags并显示, 返回一个列表 使用eval方法
-            this.tags = eval(box.getAttribute('data_tags'))
-
-            // 获取文章的cover
-            this.cover_id = box.getAttribute('data_cover_id')
-            //  获得当前文档封面的url并显示出来setAttribute
-            let cover_url = box.getAttribute('data_cover_url')
-            img.setAttribute('src', cover_url)
-
-            // 获取文章的pwd并显示(添加判断是否设置了pwd)
-            let pwd = box.getAttribute('data_pwd')
-            if(pwd!=="None"){
-                this.pwd = pwd;
-                this.pwd_active = true
-            }
-
-            // 获取文章是否上推荐recommend, true false进行判断
-            let recommend = box.getAttribute('data_recommend')
-            if(recommend==='True'){
-                this.recommend = true
+            let path = location.pathname
+            let index = path.indexOf('add_article')  // 根据返回的index值进行判断
+            if (index !== -1){
+                // 成功找到 添加文章初始化函数 随机封面
+                this.init_add_article(img)
             } else {
-                this.recommend = false
+                // 不成功 则进行编辑文章操作 文章初始化函数
+                this.init_edit_article(img)
             }
         },
+
         methods:{
             add_handleClose(done) {
                 done()
               },
-            // 添加文章的函数
-            add_article() {
+
+            // 添加文章和编辑文章的公共函数
+            add_edit_article(){
                 let data = {
                     title: this.title,
                     abstract: this.abstract,
@@ -265,9 +239,12 @@
                     category: this.category_id,
                     content: editor.querySelector('.editormd-markdown-textarea').value
                 }
+                return data
+            },
 
-                axios.post('/api/article/', data).then(res => {
-                    if (res.code){
+            // 添加文章和编辑文章的回掉函数
+            add_edit_article_callback(res){
+                if (res.code){
                         this.$message.error(res.msg)
                         return
                     }
@@ -275,14 +252,29 @@
                     setTimeout(()=>{
                         location.href = `/article/${res.data}/`
                     }, 1000)
+            },
+
+            // 添加文章的函数 - POST请求
+            add_article() {
+                let data = this.add_edit_article()
+                axios.post('/api/article/', data).then(res => {
+                    this.add_edit_article_callback(res)
                 })
+            },
+
+            //添加文章的初始化
+            init_add_article(img){
+                let cover_list = eval(img.getAttribute('data'))
+                let item = cover_list[Math.floor(Math.random() * cover_list.length)]
+                img.setAttribute('src', item.url)
+                this.cover_id = item.nid.toString()
             },
 
             // 选择文章封面函数
             select_cover(val) {
                 setTimeout(() => {
                     let v = document.querySelector('.article_cover input').value
-                    let cover = document.getElementById('cover_id')
+                    let cover = document.getElementById('cover_img')
                     console.log(cover); // 检查 cover 是否为 null
                     if (cover) {
                         cover.src = v
@@ -290,6 +282,49 @@
                         console.error('Element with id cover_img not found');
                     }
                 }, 1)
+            },
+
+            // 编辑文章的函数 - PUT请求
+            edit_article(nid) {
+                let data = this.add_edit_article()
+                axios.put(`/api/article/${nid}/`, data).then(res => {
+                    this.add_edit_article_callback(res)
+                })
+            },
+
+            // 编辑文章的初始化
+            init_edit_article(img){
+                                // 获取文章的title abstract并显示在编辑框中
+                let box = document.getElementById('edit_info')
+                this.title = box.getAttribute('data_title')
+                this.abstract = box.getAttribute('data_abstract')
+                // 获取文章的category并显示
+                let category_id = box.getAttribute('data_category')
+                if(category_id!=="None"){
+                    this.category_id = category_id
+                }
+                // 获取文章的tags并显示, 返回一个列表 使用eval方法
+                this.tags = eval(box.getAttribute('data_tags'))
+
+                // 获取文章的cover
+                this.cover_id = box.getAttribute('data_cover_id')
+                //  获得当前文档封面的url并显示出来setAttribute
+                let cover_url = box.getAttribute('data_cover_url')
+                img.setAttribute('src', cover_url)
+
+                // 获取文章的pwd并显示(添加判断是否设置了pwd)
+                let pwd = box.getAttribute('data_pwd')
+                if(pwd!=="None"){
+                    this.pwd = pwd;
+                    this.pwd_active = true
+                }
+                 // 获取文章是否上推荐recommend, true false进行判断
+                let recommend = box.getAttribute('data_recommend')
+                if(recommend==='True'){
+                    this.recommend = true
+                } else {
+                    this.recommend = false
+                }
             }
         }
     })
