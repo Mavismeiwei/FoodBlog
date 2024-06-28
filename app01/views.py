@@ -9,7 +9,12 @@ import json
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html', {"request": request})
+    article_list = Articles.objects.filter(status=1).order_by('-change_date')  # status为1 说明文章已发布
+    recipes_list = article_list.filter(category=1)[:6]  # 获取不同category的文章
+    nutrition_list = article_list.filter(category=2)[:6]
+    culinary_list = article_list.filter(category=3)[:6]
+    food_reviews_list = article_list.filter(category=4)[:6]
+    return render(request, 'index.html', locals())
 
 def article(request, nid):
     article_query = Articles.objects.filter(nid=nid)
