@@ -5,6 +5,7 @@ from django.contrib import auth
 from app01.models import UserInfo
 from app01.models import Articles, Tags, Cover
 import json
+from app01.utils.sub_comment import sub_comment_list
 
 
 # Create your views here.
@@ -21,6 +22,8 @@ def article(request, nid):
     if not article_query:
         return redirect('/')   # if article not exist, return homepage
     article = article_query.first()
+    comment_list = sub_comment_list(nid)  # 通过文章nid得到comment_list
+
     return render(request, 'article.html', locals())
 
 def news(request):

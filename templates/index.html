@@ -12,12 +12,12 @@
     {% endblock %}
 
     <!-- Import style of ElementUI -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="/static/elementui/theme-chalk/index.css">
     <link rel="stylesheet" href="/static/fontawesome/css/all.min.css">
     <script src="/static/vue/vue.js"></script>
 
     <!-- Import Component Library -->
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="/static/elementui/index.js"></script>
 </head>
 <body>
 <div id="app">
@@ -139,8 +139,6 @@
                                     </div>
                                 </li>
                                 {% endfor %}
-
-
                             </ul>
                         </div>
                     </div>
@@ -303,16 +301,30 @@
             </div>
     </footer>
 </div>
-{% block js %}
+<script src="/static/axios/axios.min.js"></script>
 
-{% endblock %}
 <script>
+    // axios请求中间件和响应中间件
+    axios.interceptors.request.use(request => {
+        if (request.method === 'post'){
+            let csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value
+            request.headers['X-CSRFToken'] = csrftoken
+        }
+        return request
+        })
+    // axios response middleware function
+    axios.interceptors.response.use(
+        response => {
+            return response.data
+        })
+
     new Vue({
         el:'#app',
         delimiters: ["[[", "]]"], // revise vue syntax configuration to adjust to django
         data:{
             theme: 'light',  // default theme: light
             this_category: 'recipe', // current recommended articles position
+            comment_content: '', // 评论内容
         },
         created(){
             this.init_theme()
@@ -339,6 +351,27 @@
             // set the function to switch the category of recommended articles
             switch_article_category(categoryName){
                 this.this_category = categoryName
+            },
+
+            // 发布评论
+            add_comment(nid){
+
+                console.log(this.comment_content, nid)
+
+                axios.post(`/api/article/comment/${nid}/`, { content: this.comment_content })
+                    .then(res => {
+                    if (res.code){
+                        if (res.self){
+                            this.$refs[`comment_${res.self}`].focus();
+                        }
+                        this.$message.error(res.msg)
+                        return
+                    }
+                    this.$message.success(res.msg)
+                        setTimeout(() => {
+                            location.reload()
+                        }, 500)
+                })
             }
         }
     })
