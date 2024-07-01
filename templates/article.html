@@ -10,20 +10,19 @@
 {% endblock %}
 
 {% block main %}
-
     <div class="article">
-    <div class="slider_bar">
-        <div class="title">
-            Article Directory
+        <div class="slider_bar">
+            <div class="title">
+                Article Directory
+            </div>
+            <div class="body">
+                <p class="H1">How to make hamburger at home? How to make hamburger at home? How to make hamburger at home?</p>
+                <p class="H2">Let's eat some healthy salads!</p>
+                <p class="H3">h3 title</p>
+                <p class="H4">h4 title</p>
+                <p class="H5">h5 title</p>
+            </div>
         </div>
-        <div class="body">
-            <p class="H1">How to make hamburger at home? How to make hamburger at home? How to make hamburger at home?</p>
-            <p class="H2">Let's eat some healthy salads!</p>
-            <p class="H3">h3 title</p>
-            <p class="H4">h4 title</p>
-            <p class="H5">h5 title</p>
-        </div>
-    </div>
         <div class="article_title">
             <h2>{{ article.title }}
             <!-- 后续可修改！！！设置权限 只有超级管理员可以进行文章的编辑修改 -->
@@ -37,165 +36,80 @@
                 <span>Source: <i>{{ article.source }}</i></span>
             </p>
             <div>
-            {% if article.tag.all %}
-                <i title="Tag" class="fas fa-tags"></i>
-                {% for tag in article.tag.all %}
-                    <i>{{ tag.title }}</i>
-                {% endfor %}
-            {% endif %}
+                {% if article.tag.all %}
+                    <i title="Tag" class="fas fa-tags"></i>
+                    {% for tag in article.tag.all %}
+                        <i>{{ tag.title }}</i>
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
-    <div class="article_content" id="article_content">
-        <textarea style="display: none;">{{ article.content }}</textarea>
-    </div>
-    <div class="comment_submit">
-        <div class="title">
-            What do you think about this article?
+        <div class="article_content" id="article_content">
+            <textarea style="display: none;">{{ article.content }}</textarea>
         </div>
-        <div class="body">
-            <textarea name="" id="" rows="10" placeholder="Write down your feelings..."></textarea>
-            <button class="submit_comment">
-                Comment
-            </button>
+        <div class="comment_submit">
+            <div class="title">
+                What do you think about this article?
+            </div>
+            {% csrf_token %}
+            <div class="body">
+                <textarea name="" id="" ref="comment_content" rows="10" v-model="comment_content" placeholder="Write down your feelings..."></textarea>
+                <button class="submit_comment" @click="add_comment({{ article.nid }})">
+                    Comment
+                </button>
+            </div>
+            <div class="footer">
+                <p><span>49</span> people view, <span>18</span> comments</p>
+            </div>
         </div>
-        <div class="footer">
-            <p><span>49</span> people view, <span>18</span> comments</p>
+        <div class="comment_list">
+            <ul>
+                {% for comment in comment_list %}
+                    <li>
+                        <div class="left">
+                            <img src="{{ comment.user.avatar.url.url }}">
+                        </div>
+                        <div class="right">
+                            <h4>{{ comment.user.username }}</h4>
+                            <div class="comment_content">
+                                {{ comment.content }}
+                            </div>
+                            <div class="comment_info">
+                                <span>{{ comment.create_time }}</span>
+                                <div>
+                                    <span>Like({{ comment.digg_count }})</span>
+                                    <span>Comment({{ comment.comment_count }})</span>
+                                    <span class="delete">Delete</span>
+                                </div>
+                            </div>
+                            <div class="sub_comment_list">
+                                {% for sub in comment.sub_comment %}
+                                    <div class="sub_comment_item">
+                                        <div class="left">
+                                            <img src="{{ sub.user.avatar.url.url }}">
+                                        </div>
+                                        <div class="right">
+                                            <h4>{{ sub.user.username }} @ {{ sub.parent_comment.user.username }}</h4>
+                                            <div class="sub_comment_content">
+                                                {{ sub.content }}
+                                            </div>
+                                            <div class="sub_comment_info">
+                                                <span>{{ sub.create_time }}</span>
+                                                <div>
+                                                    <span>Like({{ sub.digg_count }})</span>
+                                                    <span>回复</span>
+                                                    <span class="delete">Delete</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div> <!-- 添加的关闭 div 标签 -->
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
-    </div>
-    <div class="comment_list">
-        <ul>
-            <li>
-                <div class="left">
-                    <img src="/static/resources/img/user/1.jpg">
-                </div>
-                <div class="right">
-                    <h4>Vivi Blog</h4>
-                    <div class="comment_content">
-                        <p>Hello！！</p>
-                        <div>
-                            <img src="/static/resources/img/login/4.svg">
-                            <img src="/static/resources/img/login/5.svg">
-                            <img src="/static/resources/img/login/6.svg">
-                        </div>
-                    </div>
-                    <div class="comment_info">
-                        <span>Recent</span>
-                        <div>
-                            <span>Like(8)</span>
-                            <span>Comment(2)</span>
-                            <span class="delete">Delete</span>
-                        </div>
-                    </div>
-
-                    <div class="sub_comment_list">
-                        <div class="sub_comment_item">
-                            <div class="left">
-                                 <img src="/static/resources/img/user/2.jpg">
-                            </div>
-                            <div class="right">
-                                <h4>Fang @ Vivi</h4>
-                                <div class="sub_comment_content">
-                                    Hi！！！！！
-                                </div>
-                                <div class="sub_comment_info">
-                                    <span>5 min ago</span>
-                                    <div>
-                                        <span>Like(3)</span>
-                                        <span>Comment(1)</span>
-                                        <span class="delete">Delete</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="sub_comment_item">
-                            <div class="left">
-                                 <img src="/static/resources/img/user/2.jpg">
-                            </div>
-                            <div class="right">
-                                <h4>Fang @ Vivi</h4>
-                                <div class="sub_comment_content">
-                                    Hi！！！！！
-                                </div>
-                                <div class="sub_comment_info">
-                                    <span>5 min ago</span>
-                                    <div>
-                                        <span>Like(3)</span>
-                                        <span>Comment(1)</span>
-                                        <span class="delete">Delete</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="left">
-                    <img src="/static/resources/img/user/1.jpg">
-                </div>
-                <div class="right">
-                    <h4>Vivi Blog</h4>
-                    <div class="comment_content">
-                        <p>Hello！！</p>
-                        <div>
-                            <img src="/static/resources/img/login/4.svg">
-                            <img src="/static/resources/img/login/5.svg">
-                            <img src="/static/resources/img/login/6.svg">
-                        </div>
-                    </div>
-                    <div class="comment_info">
-                        <span>Recent</span>
-                        <div>
-                            <span>Like(8)</span>
-                            <span>Comment(2)</span>
-                            <span class="delete">Delete</span>
-                        </div>
-                    </div>
-
-                    <div class="sub_comment_list">
-                        <div class="sub_comment_item">
-                            <div class="left">
-                                 <img src="/static/resources/img/user/2.jpg">
-                            </div>
-                            <div class="right">
-                                <h4>Fang @ Vivi</h4>
-                                <div class="sub_comment_content">
-                                    Hi！！！！！
-                                </div>
-                                <div class="sub_comment_info">
-                                    <span>5 min ago</span>
-                                    <div>
-                                        <span>Like(3)</span>
-                                        <span>Comment(1)</span>
-                                        <span class="delete">Delete</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="sub_comment_item">
-                            <div class="left">
-                                 <img src="/static/resources/img/user/2.jpg">
-                            </div>
-                            <div class="right">
-                                <h4>Fang @ Vivi</h4>
-                                <div class="sub_comment_content">
-                                    Hi！！！！！
-                                </div>
-                                <div class="sub_comment_info">
-                                    <span>5 min ago</span>
-                                    <div>
-                                        <span>Like(3)</span>
-                                        <span>Comment(1)</span>
-                                        <span class="delete">Delete</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </div>
     </div>
 {% endblock %}
 
@@ -212,5 +126,5 @@
                 path: "/static/editor-md/lib/",
             });
         });
-</script>
+    </script>
 {% endblock %}
