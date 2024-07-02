@@ -78,7 +78,7 @@
                                 <span>{{ comment.create_time }}</span>
                                 <div>
                                     <span>Like({{ comment.digg_count }})</span>
-                                    <span>Comment({{ comment.comment_count }})</span>
+                                    <span @click="show_sub_comment_list($event, '{{ comment.user.username }}', '{{ comment.nid }}')">Comment({{ comment.comment_count }})</span>
                                     <span class="delete">Delete</span>
                                 </div>
                             </div>
@@ -97,13 +97,19 @@
                                                 <span>{{ sub.create_time }}</span>
                                                 <div>
                                                     <span>Like({{ sub.digg_count }})</span>
-                                                    <span>回复</span>
+                                                    <span @click="sub_comment_set_placeholder($event, '{{ sub.user.username }}', '{{ sub.nid }}')">Comment</span>
                                                     <span class="delete">Delete</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 {% endfor %}
+
+                                <div class="sub_comment_textarea">
+                                    <textarea name="" id="" rows="6" ref="sub_comment_content" placeholder="@Mimi">
+                                    </textarea>
+                                    <button @click="add_sub_comment($event, '{{ article.nid }}')">Reply</button>
+                                </div>
                             </div>
                         </div> <!-- 添加的关闭 div 标签 -->
                     </li>

@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/static/elementui/theme-chalk/index.css">
     <link rel="stylesheet" href="/static/fontawesome/css/all.min.css">
     <script src="/static/vue/vue.js"></script>
+    <script src="/static/jquery/jquery.min.js"></script>
 
     <!-- Import Component Library -->
     <script src="/static/elementui/index.js"></script>
@@ -355,9 +356,6 @@
 
             // 发布评论
             add_comment(nid){
-
-                console.log(this.comment_content, nid)
-
                 axios.post(`/api/article/comment/${nid}/`, { content: this.comment_content })
                     .then(res => {
                     if (res.code){
@@ -372,7 +370,52 @@
                             location.reload()
                         }, 500)
                 })
+            },
+
+            // 被评论人的用户名写到placeholder
+            set_sub_placeholder(div, username, cid){
+                 $(div).find('textarea').attr('placeholder', `@${username}`)
+                 $(div).find('textarea').attr('cid', cid)
+            },
+
+            // 展示子评论列表
+            show_sub_comment_list(e, username, cid){
+                let div = $(e.target).parent().parent().next()
+                $(div).slideToggle()
+                // div 是点回复的div
+                this.set_sub_placeholder(div, username, cid)
+
+            },
+
+            // 子评论回复显示 获取当前子评论
+            sub_comment_set_placeholder(e, username, cid){
+                let div = $(e.target).parents('.sub_comment_list')
+                this.set_sub_placeholder(div, username, cid)
+            },
+
+
+            // 发布子评论
+            add_sub_comment(e, nid){
+                // nid: 文章id  cid：评论id
+
+                axios.post(`/api/article/comment/${nid}/`, {
+                    content: $(e.target).prev().val(),
+                    pid: $(e.target).prev().attr('cid')
+                }).then(res => {
+                    if (res.code){
+                        if (res.self){
+                            this.$refs[`sub_comment_${res.self}`].focus();
+                        }
+                        this.$message.error(res.msg)
+                        return
+                    }
+                    this.$message.success(res.msg)
+                        setTimeout(() => {
+                            location.reload()
+                        }, 500)
+                })
             }
+
         }
     })
 

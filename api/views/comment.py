@@ -26,11 +26,20 @@ class CommentView(View):
             res['self'] = 'content'
             return JsonResponse(res)
 
-        # 文章评论校验成功
-        Comment.objects.create(
-            content=content,
-            user=request.user,
-            article_id=nid
-        )
+        pid = data.get('pid')
+        if pid:  # pid 不为空 说明是子评论
+            Comment.objects.create(
+                content=content,
+                user=request.user,
+                article_id=nid,
+                parent_comment_id=pid
+            )
+        else:
+            # 文章评论校验成功
+            Comment.objects.create(
+                content=content,
+                user=request.user,
+                article_id=nid
+            )
         res['code'] = 0
         return JsonResponse(res)

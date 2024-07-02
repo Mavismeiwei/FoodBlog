@@ -195,6 +195,7 @@
 
           .sub_comment_list{
             margin-top: 10px;
+            display: none;
 
             > div {
               display: flex;
@@ -234,6 +235,39 @@
                     }
                   }
                 }
+              }
+            }
+
+            .sub_comment_textarea {
+              width: 100%;
+              margin-bottom: 10px;
+              position: relative;
+
+              > textarea {
+                resize: none;
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #f0eeee;
+                border-radius: 5px;
+                background-color: #f0f2f5;
+
+                &:focus {
+                  border: none;
+                  outline: none;
+                }
+              }
+              button {
+                position: absolute;
+                right: 20px;
+                bottom: 20px;
+                width: 80px;
+                height: 30px;
+                border-radius: 10px;
+                background-color: #0e7e70;
+                color: white;
+                border: none;
+                cursor: pointer;
+
               }
             }
           }
