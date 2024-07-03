@@ -23,7 +23,7 @@
 <body>
 <div id="app">
     <link rel="stylesheet" :href="'/static/resources/css/theme/' + theme + '.css'">
-    <nav>
+    <nav class="show nav_bg">
         <div class="left">
             <a href="/">Home</a>
             <a href="/news">News</a>
@@ -307,7 +307,7 @@
 <script>
     // axios请求中间件和响应中间件
     axios.interceptors.request.use(request => {
-        if (request.method === 'post'){
+        if (request.method !== 'get'){
             let csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value
             request.headers['X-CSRFToken'] = csrftoken
         }
@@ -384,7 +384,6 @@
                 $(div).slideToggle()
                 // div 是点回复的div
                 this.set_sub_placeholder(div, username, cid)
-
             },
 
             // 子评论回复显示 获取当前子评论
@@ -392,7 +391,6 @@
                 let div = $(e.target).parents('.sub_comment_list')
                 this.set_sub_placeholder(div, username, cid)
             },
-
 
             // 发布子评论
             add_sub_comment(e, nid){
@@ -414,8 +412,46 @@
                             location.reload()
                         }, 500)
                 })
-            }
+            },
 
+            // 删除子评论
+            delete_sub_comment(nid, aid, root_comment_id){
+                  this.$confirm('Are you sure to delete this comment?', 'Reminder', {
+                  confirmButtonText: 'Yes',
+                  cancelButtonText: 'Cancel',
+                  type: 'warning'
+                }).then(() => {
+                     axios.delete(`/api/article/comment/${nid}/`, {data: {
+                         aid, pid: root_comment_id
+                         }}).then(res=>{
+                    if (res.code) {  // 删除状态不成功时要对用户进行提示
+                        this.$message.error(res.msg)
+                        return
+                    }
+                    this.$message.success(res.msg)
+                    setTimeout(() => {
+                        location.reload()
+                    }, 500)
+                })
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: 'Delete Canceled.'
+                  });
+                });
+            },
+
+            // 评论点赞
+            comment_digg(e, nid){
+                axios.post(`/api/comment/digg/${nid}/`).then(res=>{
+                    if (res.code) {
+                        this.$message.error(res.msg)
+                        return
+                    }
+                    e.target.innerHTML = `Like(${res.data})`
+                    this.$message.success(res.msg)
+                })
+            }
         }
     })
 
@@ -430,7 +466,7 @@
     // set img timer
     timer = setInterval(()=>{
         index ++
-        if (index == menu_length){
+        if (index === menu_length){
             index = 0 // traverse at the last picture, initialize to 0
         }
         // reset the img style
@@ -439,7 +475,18 @@
     }
         menu_img[index].style.opacity = 1
     }, 2000)
-    
+
+    // navbar动态导航条 下滑到一定高度固定
+    let nav = document.querySelector('.nav_bg')
+    window.onscroll = function(){
+        let top = document.documentElement.scrollTop
+        if (top >= 200){
+            nav.classList.add('show')
+        } else {
+            nav.classList.remove('show')
+        }
+    }
+
 </script>
 
 </body>

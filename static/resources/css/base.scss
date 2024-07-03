@@ -10,6 +10,7 @@ nav {
   position: fixed;
   top: 0;
   left: 0;
+  transition: all 0.3s;
 
   .left{
     width: 60%;
@@ -41,11 +42,23 @@ nav {
   }
   a{
     //color: var(--nav_color);
-    color: white;
     margin-right: 20px;
     &:last-child{
       margin-right: 0;
     }
+  }
+}
+
+nav.show{
+  background-color: white;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+
+  a {
+    color: #333333;
+  }
+
+  .el-dropdown{
+    color: #333333;
   }
 }
 
@@ -82,8 +95,7 @@ header {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    transition: all 1s;
-
+    transition: all 0.5s;
     opacity: 0;
     &:first-child{
       opacity: 1;

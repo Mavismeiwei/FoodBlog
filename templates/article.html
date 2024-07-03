@@ -59,7 +59,7 @@
                 </button>
             </div>
             <div class="footer">
-                <p><span>49</span> people view, <span>18</span> comments</p>
+                <p><span>{{ article.look_count }}</span> people view, <span>{{ article.comment_count }}</span> comments</p>
             </div>
         </div>
         <div class="comment_list">
@@ -77,9 +77,11 @@
                             <div class="comment_info">
                                 <span>{{ comment.create_time }}</span>
                                 <div>
-                                    <span>Like({{ comment.digg_count }})</span>
+                                    <span @click="comment_digg($event, '{{ comment.nid }}')">Like({{ comment.digg_count }})</span>
                                     <span @click="show_sub_comment_list($event, '{{ comment.user.username }}', '{{ comment.nid }}')">Comment({{ comment.comment_count }})</span>
-                                    <span class="delete">Delete</span>
+                                    {% if comment.user == request.user or request.user.is_superuser %}
+                                        <span class="delete" @click="delete_sub_comment('{{ comment.nid }}', '{{ article.nid }}', null)">Delete</span>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="sub_comment_list">
@@ -96,9 +98,11 @@
                                             <div class="sub_comment_info">
                                                 <span>{{ sub.create_time }}</span>
                                                 <div>
-                                                    <span>Like({{ sub.digg_count }})</span>
+                                                    <span @click="comment_digg($event, '{{ sub.nid }}')">Like({{ sub.digg_count }})</span>
                                                     <span @click="sub_comment_set_placeholder($event, '{{ sub.user.username }}', '{{ sub.nid }}')">Comment</span>
-                                                    <span class="delete">Delete</span>
+                                                    {% if sub.user == request.user or request.user.is_superuser%} <!-- 如果评论人和当前user一致或着是管理员 才会显示delete按钮 -->
+                                                        <span class="delete" @click="delete_sub_comment('{{ sub.nid }}', '{{ article.nid }}', '{{ comment.nid }}')">Delete</span>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>

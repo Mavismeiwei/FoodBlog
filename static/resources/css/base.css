@@ -9,6 +9,7 @@ nav {
   position: fixed;
   top: 0;
   left: 0;
+  transition: all 0.3s;
 }
 nav .left {
   width: 60%;
@@ -35,11 +36,21 @@ nav .right .el-dropdown .el-icon-arrow-down {
   margin-left: 30px;
 }
 nav a {
-  color: white;
   margin-right: 20px;
 }
 nav a:last-child {
   margin-right: 0;
+}
+
+nav.show {
+  background-color: white;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+nav.show a {
+  color: #333333;
+}
+nav.show .el-dropdown {
+  color: #333333;
 }
 
 header {
@@ -72,7 +83,7 @@ header > .dynamic_shuffle {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  transition: all 1s;
+  transition: all 0.5s;
   opacity: 0;
 }
 header > .dynamic_shuffle:first-child {
