@@ -23,6 +23,19 @@
                 <p class="H5">h5 title</p>
             </div>
         </div>
+        <div class="article_actions">
+            <div class="item">
+                <i class="fas fa-thumbs-up" @click="article_digg($event, '{{ article.nid }}')"></i>
+                <span>{{ article.digg_count }}</span>
+            </div>
+            <div class="item">
+                <i class="fas fa-star" @click="article_collects($event, '{{ article.nid }}')"></i>
+                <span>{{ article.collects_count }}></span>
+            </div>
+            <div class="item">
+                <i class="fa fa-angle-double-up"></i>
+            </div>
+        </div>
         <div class="article_title">
             <h2>{{ article.title }}
             <!-- 后续可修改！！！设置权限 只有超级管理员可以进行文章的编辑修改 -->
