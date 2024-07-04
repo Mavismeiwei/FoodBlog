@@ -23,7 +23,7 @@
 <body>
 <div id="app">
     <link rel="stylesheet" :href="'/static/resources/css/theme/' + theme + '.css'">
-    <nav class="show nav_bg">
+    <nav class="nav_bg">
         <div class="left">
             <a href="/">Home</a>
             <a href="/news">News</a>
@@ -451,6 +451,53 @@
                     e.target.innerHTML = `Like(${res.data})`
                     this.$message.success(res.msg)
                 })
+            },
+
+            // 文章点赞
+            article_digg(e, nid){
+                let dom = e.target
+                dom.classList.add('show')
+                axios.post(`/api/article/digg/${nid}/`).then(res => {
+                    if (res.code) {
+                        this.$message.error(res.msg)
+                        return
+                    }
+                    $(dom).next().text(res.data)
+                    this.$message.success(res.msg)
+                })
+
+                let timer = null
+                clearTimeout(timer)
+                timer = setTimeout(()=>{
+                    dom.classList.remove('show')
+                }, 1000)
+            },
+
+            // 文章收藏
+            article_collects(e, nid){
+                let dom = e.target
+                axios.post(`/api/article/collects/${nid}/`).then(res => {
+                    if (res.code) {
+                        this.$message.error(res.msg)
+                        return
+                    }
+                    this.$message.success(res.msg)  // 不管取消收藏还是收藏都要显示提示信息msg
+                     $(dom).next().text(res.data)   // 都要修改并显示收藏数
+                    // 收藏
+                    if(res.isCollects){
+                        dom.classList.add('show')
+                        return
+                    }
+                    // 取消收藏
+                    dom.classList.remove('show')
+                })
+            },
+
+            // 回到顶部
+            go_to_top(){
+                $('html,body').animate({
+                    scrollTop: 0
+                }, 1000)
             }
         }
     })

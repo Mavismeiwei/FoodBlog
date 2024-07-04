@@ -6,6 +6,7 @@ from app01.models import Tags, Articles, Cover
 from django import forms
 from api.views.login import clean_form
 import random
+from django.db.models import F
 
 # 添加文章或编辑文章的验证
 class AddArticleForm(forms.Form):
@@ -125,3 +126,55 @@ class ArticleView(View):
         res['code'] = 0
         return JsonResponse(res)
 
+# 文章点赞
+class ArticleDiggView(View):
+    def post(self, request, nid):
+        # nid 评论id
+        res = {
+            'msg': 'Article Like successfully',
+            'code': 412,
+            "data": 0,  # 当前评论点赞数量
+        }
+
+        comment_query = Articles.objects.filter(nid=nid)
+        comment_query.update(digg_count=F('digg_count') + 1)
+
+        digg_count = comment_query.first().digg_count
+
+        res['code'] = 0
+        res['data'] = digg_count
+        return JsonResponse(res)
+
+# 文章收藏
+class ArticleCollectsView(View):
+    def post(self, request, nid):
+        # 判断登录
+        res = {
+            'msg': 'Article Collect successfully',
+            'code': 412,
+            "isCollects": True,  # 用data去判断当前文章收藏状态
+            "data": 0  # 默认收藏数为0
+        }
+
+        if not request.user.username:  # 检查用户是否登录
+            res['msg'] = 'Please login first'
+            return JsonResponse(res)
+
+        # 再次点击收藏按钮变为取消收藏: 判断用户是否已收藏文章
+        flag = request.user.collects.filter(nid=nid)
+        num = 1
+        res['code'] = 0
+        if flag:  # flag不为空说明已收藏
+            res['msg'] = 'Cancel collection successfully'
+            res['isCollects'] = False  # 取消收藏修改收藏状态
+            request.user.collects.remove(nid)
+            num = -1  # 取消收藏的话num为-1
+            pass
+        else:
+            request.user.collects.add(nid)
+
+        article_query = Articles.objects.filter(nid=nid)
+        article_query.update(collects_count=F('collects_count') + num)  # 更新收藏文章数
+        collects_count = article_query.first().collects_count
+        res["data"] = collects_count
+        return JsonResponse(res)
