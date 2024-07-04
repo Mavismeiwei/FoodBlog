@@ -23,7 +23,7 @@
 <body>
 <div id="app">
     <link rel="stylesheet" :href="'/static/resources/css/theme/' + theme + '.css'">
-    <nav class="show nav_bg">
+    <nav class="nav_bg">
         <div class="left">
             <a href="/">Home</a>
             <a href="/news">News</a>
@@ -491,6 +491,13 @@
                     // 取消收藏
                     dom.classList.remove('show')
                 })
+            },
+
+            // 回到顶部
+            go_to_top(){
+                $('html,body').animate({
+                    scrollTop: 0
+                }, 1000)
             }
         }
     })
