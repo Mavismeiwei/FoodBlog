@@ -302,8 +302,11 @@
             </div>
     </footer>
 </div>
-<script src="/static/axios/axios.min.js"></script>
 
+{% block js %}
+{% endblock %}
+
+<script src="/static/axios/axios.min.js"></script>
 <script>
     // axios请求中间件和响应中间件
     axios.interceptors.request.use(request => {
@@ -326,9 +329,22 @@
             theme: 'light',  // default theme: light
             this_category: 'recipe', // current recommended articles position
             comment_content: '', // 评论内容
+            isShowSlider: false,  // 是否显示文章悬浮目录
+            slide_list: [],  // 文章悬浮目录list
+            slide_text: 'Show Catalog',  //文章目录
         },
         created(){
             this.init_theme()
+
+            // 判断是否为文章详情页的slider
+            let path = location.pathname
+            if (path.indexOf('article') !== -1){
+                this.init_slider()
+            }
+
+            setTimeout(() => {
+                this.get_sidebar()
+            }, 200)
         },
         methods: {
             // initialize theme
@@ -498,7 +514,71 @@
                 $('html,body').animate({
                     scrollTop: 0
                 }, 1000)
-            }
+            },
+
+            // 初始化悬浮目录
+            init_slider(){
+                let flag = localStorage.getItem('isShowSlider')
+                if (flag){
+                    flag = eval(flag)
+                    if (flag){
+                        this.isShowSlider = true
+                        this.$nextTick(() => {
+                            this.sliderChange(true)
+                        })
+                    }
+                    return
+                }
+            },
+
+            // 是否显示文章悬浮目录
+            sliderChange(val){
+                let dom = this.$refs.slider
+                // 持久化存储 存储悬浮目录开始的默认状态为不显示目录
+                localStorage.setItem('isShowSlider', val)
+                if (val){
+                    dom.classList.add('show')
+                    this.slide_text = 'Hide Catalog'
+                    return
+                }
+                dom.classList.remove('show')
+                this.slide_text = 'Show Catalog'
+            },
+
+            // 获取文章的结构信息
+            get_sidebar(){
+                let content = $('#article_content')
+                let h_list = content.children('h1,h2,h3,h4')
+                let lis = []
+                for (let i = 0; i < h_list.length; i++) {
+                    let c = h_list[i].innerText
+                    let tagName = h_list[i].tagName
+                    let tagId = h_list[i].id
+                    let ele = {
+                        tagName,
+                        c,
+                        pos: '#' + tagId
+                    }
+                    lis.push(ele)
+                }
+                lis.push({
+                    tagName: 'H1',
+                    c: 'Comment something!',
+                    pos: '.comment_submit'
+                })
+                this.slide_list = lis
+            },
+
+            // 悬浮目录跳转
+            go_side_bar(selector, e){
+                $('.slider_bar .body>p').css('color', '')  // 默认设置颜色
+                e.target.style.color = '#ff9800'  // 点击后的颜色
+
+                let box = $(selector)
+                let pos = box.offset()
+                pos.top = pos.top - 80
+                $('html,body').animate({scrollTop: pos.top}, 600)
+            },
         }
     })
 
@@ -525,6 +605,19 @@
 
     // navbar动态导航条 下滑到一定高度固定
     let nav = document.querySelector('.nav_bg')
+
+    // 判断是文章详情页还是homepage
+    let path = location.pathname
+
+    // 悬浮目录的滑动固定
+    let slider;
+    slider = document.querySelector('.slider_bar')
+    let top1 = 0;
+
+    if (path.indexOf('article') !== -1){
+        top1 = $(slider).offset().top - 80 // 获得当前高度 -80 为开始浮动的位置
+    }
+
     window.onscroll = function(){
         let top = document.documentElement.scrollTop
         if (top >= 200){
@@ -532,6 +625,16 @@
         } else {
             nav.classList.remove('show')
         }
+
+        // 当slider存在时 即当前页面为文章详情页时 进行下拉固定
+        if (slider) {
+            if (top >= top1) {
+            slider.classList.add('fixed')
+        } else {
+            slider.classList.remove('fixed')
+        }
+        }
+
     }
 
 </script>

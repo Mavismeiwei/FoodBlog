@@ -155,10 +155,11 @@
     </main>
 </div>
 
-{% block js %}
 <script src="/static/axios/axios.min.js"></script>
 <script src="/static/vue/vue.js"></script>
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+{% block js %}
+
 {% endblock %}
 <script>
     // axios请求中间件和响应中间件 只要不是get请求 都加上csrf token
