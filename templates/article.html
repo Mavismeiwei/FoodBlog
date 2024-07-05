@@ -10,19 +10,23 @@
 {% endblock %}
 
 {% block main %}
-    <div class="article">
-        <div class="slider_bar">
+    <div class="slider_bar" ref="slider">
             <div class="title">
-                Article Directory
+                <span><i class="fa-solid fa-folder-tree" style="color:grey"></i><span></span>[[ slide_text ]]</span>
+                <el-switch
+                      v-model="isShowSlider"
+                      active-color="#13ce66"
+                      inactive-color="#ff4949"
+                      @change="sliderChange">
+                </el-switch>
             </div>
             <div class="body">
-                <p class="H1">How to make hamburger at home? How to make hamburger at home? How to make hamburger at home?</p>
-                <p class="H2">Let's eat some healthy salads!</p>
-                <p class="H3">h3 title</p>
-                <p class="H4">h4 title</p>
-                <p class="H5">h5 title</p>
+                <p :tagName="item.tagName" @click="go_side_bar(item.pos, $event)" v-for="(item, index) in slide_list" :key="index">
+                    [[ item.c ]]
+                </p>
             </div>
         </div>
+    <div class="article">
         <div class="article_actions">
             <div class="item" title="Article_Like">
                 <i class="fas fa-thumbs-up" @click="article_digg($event, '{{ article.nid }}')"></i>
@@ -149,5 +153,5 @@
                 path: "/static/editor-md/lib/",
             });
         });
-    </script>
+</script>
 {% endblock %}
