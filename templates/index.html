@@ -145,8 +145,11 @@
                     </div>
 
                     <div class="hot_topics card">
+                        <div id="con">
+
+                        </div>
                         <div class="title">
-                            <h2>Hot Searches</h2>
+                            <h2 id="pos">Hot Searches</h2>
                             <div>
                                 <a href="#">More</a>
                             </div>
@@ -161,7 +164,7 @@
                             <h2>Blog Articles</h2>
                         </div>
                         <div class="body">
-                            <ul>
+                            <ul class="article_content">
                                 {% for article in article_list %}
                                     <li>
                                     <div class="left">
@@ -193,6 +196,9 @@
                                     </div>
                                 </li>
                                 {% endfor %}
+                            </ul>
+                            <ul class="pager">
+                                {{ pager.page_html|safe }}
                             </ul>
                         </div>
                     </div>

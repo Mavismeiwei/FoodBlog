@@ -6,7 +6,7 @@ from app01.models import UserInfo
 from app01.models import Articles, Tags, Cover
 import json
 from app01.utils.sub_comment import sub_comment_list
-
+from app01.utils.pagination import Pagination
 
 # Create your views here.
 def index(request):
@@ -15,6 +15,19 @@ def index(request):
     nutrition_list = article_list.filter(category=2)[:6]
     culinary_list = article_list.filter(category=3)[:6]
     food_reviews_list = article_list.filter(category=4)[:6]
+
+    # 使用分页器
+    query_params = request.GET.copy()
+    pager = Pagination(
+        current_page=request.GET.get('page'),
+        all_count=article_list.count(),
+        base_url=request.path_info,
+        query_params=query_params,
+        per_page=5,
+        pager_page_count=7,
+    )
+    article_list = article_list[pager.start:pager.end]
+
     return render(request, 'index.html', locals())
 
 def article(request, nid):
