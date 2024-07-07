@@ -5,8 +5,9 @@ from django.contrib import auth
 from app01.models import UserInfo
 from app01.models import Articles, Tags, Cover
 import json
+from django.db.models import F
 from app01.utils.sub_comment import sub_comment_list
-
+from app01.utils.pagination import Pagination
 
 # Create your views here.
 def index(request):
@@ -15,10 +16,24 @@ def index(request):
     nutrition_list = article_list.filter(category=2)[:6]
     culinary_list = article_list.filter(category=3)[:6]
     food_reviews_list = article_list.filter(category=4)[:6]
+
+    # 使用分页器
+    query_params = request.GET.copy()
+    pager = Pagination(
+        current_page=request.GET.get('page'),
+        all_count=article_list.count(),
+        base_url=request.path_info,
+        query_params=query_params,
+        per_page=5,
+        pager_page_count=7,
+    )
+    article_list = article_list[pager.start:pager.end]
+
     return render(request, 'index.html', locals())
 
 def article(request, nid):
     article_query = Articles.objects.filter(nid=nid)
+    article_query.update(look_count=F('look_count') + 1)  # 更新浏览数量 每访问一次就+1
     if not article_query:
         return redirect('/')   # if article not exist, return homepage
     article = article_query.first()
@@ -28,6 +43,42 @@ def article(request, nid):
 
 def news(request):
     return render(request, 'news.html')
+
+# 搜索视图
+def search(request):
+    search_key = request.GET.get('key', '')  # 搜索参数
+    order = request.GET.get('order', '')  # 过滤器筛排序
+    tag = request.GET.get('tag', '')  # 按照标签排序
+    word = request.GET.getlist('word')  # 字数多少排序参数
+
+    query_params = request.GET.copy()
+    article_list = Articles.objects.filter(title__contains=search_key)
+
+    # 判断word参数是否为空
+    if len(word) == 2:
+        article_list = article_list.filter(word__range=word)
+    # 文章标签
+    if tag:
+        article_list = article_list.filter(tag__title=tag)
+
+    if order:  # order存在 说明点击过滤词 最多点赞/收藏/评论
+        try:
+            article_list = article_list.order_by(order)
+        except Exception:
+            pass
+
+    # 使用分页器
+    pager = Pagination(
+        current_page=request.GET.get('page'),
+        all_count=article_list.count(),
+        base_url=request.path_info,
+        query_params=query_params,
+        per_page=10,
+        pager_page_count=7,
+    )
+    article_list = article_list[pager.start:pager.end]
+
+    return render(request, 'search.html', locals())
 
 def login(request):
     return render(request, 'login.html')
