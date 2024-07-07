@@ -25,11 +25,17 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
     path('news/', views.news),
+
+    # 搜索
+    path('search/', views.search),
+
+    # 登录注册
     path('login/', views.login),
     path('login/random_code/', views.get_random_code),
     path('register/', views.register),
     path('logout/', views.logout),
 
+    # 后台路由
     path('backend/', views.backend),  # backend user center
     path('backend/add_article/', views.add_article),  # backend add article
     path('backend/edit_avatar/', views.edit_avatar),  # backend edit avatar

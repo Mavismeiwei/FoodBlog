@@ -31,6 +31,12 @@
             <a href="#">Memory</a>
             <a href="#">About Us</a>
             <a href="#">Navigator</a>
+
+            <div class="search">
+                <input @keydown.enter="search" type="text" v-model="search_key" class="search_box"placeholder="Search Something...">
+                <button @click="search"><i class="fa fa-search"></i></button>
+            </div>
+
         </div>
         <div class="right">
               <img v-show="theme === 'light'" src="/static/resources/img/nav/dark.png" @click="setTheme('dark')" alt="">
@@ -309,8 +315,6 @@
     </footer>
 </div>
 
-{% block js %}
-{% endblock %}
 
 <script src="/static/axios/axios.min.js"></script>
 <script>
@@ -338,6 +342,7 @@
             isShowSlider: false,  // 是否显示文章悬浮目录
             slide_list: [],  // 文章悬浮目录list
             slide_text: 'Show Catalog',  //文章目录
+            search_key: '',  // 搜索key
         },
         created(){
             this.init_theme()
@@ -346,6 +351,10 @@
             let path = location.pathname
             if (path.indexOf('article') !== -1){
                 this.init_slider()
+            }
+            // 判断当前页是否是搜索页面
+            if (path.indexOf('search') !== -1){
+                this.init_search_key()
             }
 
             setTimeout(() => {
@@ -585,8 +594,37 @@
                 pos.top = pos.top - 80
                 $('html,body').animate({scrollTop: pos.top}, 600)
             },
+
+            // 搜索框伸缩动效
+            search(){
+                let box = document.querySelector('.search')
+
+                if (!box.classList.contains('show_search')) {
+                    box.classList.add('show_search')
+                    return
+                }
+                if (!this.search_key){
+                    box.classList.remove('show_search')
+                    return;
+                }
+                // 打开搜索标签页
+                window.open('/search/?key='+this.search_key, name='_blank')
+            },
+
+            // 初始化搜索词
+            init_search_key(){
+                let dom = document.querySelector('.search_key_input')
+                let key = dom.getAttribute('data')
+                this.search_key = key
+            },
+
         }
     })
+
+</script>
+
+{% block js %}
+    <script>
 
     // home page images window
     let menu_img = document.querySelectorAll('.dynamic_shuffle')
@@ -619,11 +657,9 @@
     let slider;
     slider = document.querySelector('.slider_bar')
     let top1 = 0;
-
     if (path.indexOf('article') !== -1){
         top1 = $(slider).offset().top - 80 // 获得当前高度 -80 为开始浮动的位置
     }
-
     window.onscroll = function(){
         let top = document.documentElement.scrollTop
         if (top >= 200){
@@ -643,7 +679,11 @@
 
     }
 
-</script>
+    </script>
+{% endblock %}
+
+{% block article_js %}
+{% endblock %}
 
 </body>
 </html>

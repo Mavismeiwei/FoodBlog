@@ -1,39 +1,3 @@
-//.pager {
-//  list-style: none;
-//  width: 100%;
-//  display: flex;
-//  justify-content: center;
-//
-//  >li {
-//    display: inline-flex;
-//    width: 30px;
-//    height: 30px;
-//    background-color: #808595;
-//    border-radius: 5px;
-//    justify-content: center;
-//    align-items: center;
-//    transition: all 0.3s;
-//    padding: 0 10px;
-//    margin-right: 10px;
-//
-//    &:last-child{
-//      margin-right: 0;
-//    }
-//
-//    a {
-//
-//    }
-//  }
-//
-//   > li.active{
-//    background-color: #0e7e70;
-//
-//     a {
-//      color: white;
-//    }
-//  }
-//}
-
 ul.pager {
     list-style: none;
     width: 100%;
