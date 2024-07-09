@@ -36,10 +36,15 @@ nav .right .el-dropdown .el-icon-arrow-down {
   margin-left: 30px;
 }
 nav a {
+  color: white !important;
+  font-weight: bold !important;
   margin-right: 20px;
 }
 nav a:last-child {
   margin-right: 0;
+}
+nav a.active {
+  color: #ff9800 !important;
 }
 
 nav.show {
@@ -47,7 +52,10 @@ nav.show {
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 }
 nav.show a {
-  color: #333333;
+  color: #333333 !important;
+}
+nav.show a.active {
+  color: #ff9800;
 }
 nav.show .el-dropdown {
   color: #333333;

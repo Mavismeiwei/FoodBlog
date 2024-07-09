@@ -24,13 +24,8 @@
 <div id="app">
     <link rel="stylesheet" :href="'/static/resources/css/theme/' + theme + '.css'">
     <nav class="nav_bg">
-        <div class="left">
-            <a href="/">Home</a>
-            <a href="/news">News</a>
-            <a href="#">Emotion</a>
-            <a href="#">Memory</a>
-            <a href="#">About Us</a>
-            <a href="#">Navigator</a>
+        <div class="left" id="dynamic_nav">
+            {% dynamic_navigation request%}
 
             <div class="search">
                 <input @keydown.enter="search" type="text" v-model="search_key" class="search_box"placeholder="Search Something...">

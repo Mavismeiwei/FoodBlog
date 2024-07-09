@@ -72,7 +72,9 @@ class Pagination:
         if self.current_page < self.current_count:
             self.query_params['page'] = self.current_page + 1
             page_list.append(f'<li class="next_page"><a href="{self.base_url}?{self.query_encode}#{self.position}">Next</a></li>')
-
+        # 如果页面为1则不显示分页器
+        if len(page_list) == 1:
+            page_list = []
         return ''.join(page_list)  # 转化为字符串以给前端进行调用
 
     # 编码的方法

@@ -63,3 +63,23 @@ def generate_order_html(request, key):
         query_params=query_params
     )
     return mark_safe(order.order_html())
+
+# 动态导航
+@register.simple_tag
+def dynamic_navigation(request):
+    path = request.path_info
+    path_dict = {
+        '/': 'Home',
+        '/news': 'News',
+        '/moods': 'Moods',
+        '/memory': 'Memory',
+        '/about': 'About',
+        '/sites': 'Sites'
+    }
+    nav_list = []
+    for k, v in path_dict.items():
+        if k == path:
+            nav_list.append(f'<a href="{k}" class="active">{v}</a>')
+            continue
+        nav_list.append(f'<a href="{k}">{v}</a>')
+    return mark_safe(''.join(nav_list))
