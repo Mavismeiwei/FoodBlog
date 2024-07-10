@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
     path('news/', views.news),
+    path('moods/', views.moods),
 
     # 搜索
     path('search/', views.search),

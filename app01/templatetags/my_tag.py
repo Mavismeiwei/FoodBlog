@@ -83,3 +83,17 @@ def dynamic_navigation(request):
             continue
         nav_list.append(f'<a href="{k}">{v}</a>')
     return mark_safe(''.join(nav_list))
+
+# 发布心情配图
+@register.simple_tag
+def generate_drawing(drawing: str):
+    if not drawing:
+        return ''
+    drawing = drawing.replace('；', ';').replace('\n', ';')
+    drawing_list = drawing.split(';')
+    html_s = ''
+    for i in drawing_list:
+        html_s += f'<img src="{i}" alt="">'
+
+    return mark_safe(html_s)
+

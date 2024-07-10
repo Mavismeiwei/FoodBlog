@@ -63,6 +63,7 @@
     {% endblock %}
 
     <main>
+    {% csrf_token %}
         {% block main %}
             <div class="main">
                 <div class="left">
@@ -211,7 +212,21 @@
                             <a href="#">Apply</a>
                         </div>
                         <div class="body">
-                            Main Area
+                            <div>
+                                <a href="https://www.healthyfood.com/" target="_blank">
+                                    <img src="https://media.healthyfood.com/wp-content/uploads/2024/06/HFG-IMAGES-600-x-450-px-32.png" alt="">
+                                </a>
+                            </div>
+                            <div>
+                                <a href="https://hernexxchapter.org/blog/2022/05/19/make-time-to-enjoy-a-healthy-meal-with-others-this-national-mediterranean-diet-month/?gad_source=1&gclid=CjwKCAjw4ri0BhAvEiwA8oo6F5mrED49c2p25NnPzBeOSdVVJcnR4Rvi0nhPFZgZWbCsTca83VzH3RoC1j4QAvD_BwE" target="_blank">
+                                    <img src="https://hernexxchapter.org/wp-content/uploads/2022/05/Make-Time-to-Enjoy-a-Healthy-Meal-with-Others-This-National-Mediterranean-Diet-Month.png" alt="">
+                                </a>
+                            </div>
+                            <div>
+                                <a href="https://mavismeiwei.github.io/meiwei_portfolio/" target="_blank">
+                                    <img src="https://cdn-icons-png.flaticon.com/256/4471/4471007.png" alt="">
+                                </a>
+                            </div>
                         </div>
                     </div>
                     <div class="tags card">
@@ -334,10 +349,24 @@
             theme: 'light',  // default theme: light
             this_category: 'recipe', // current recommended articles position
             comment_content: '', // 评论内容
+
             isShowSlider: false,  // 是否显示文章悬浮目录
             slide_list: [],  // 文章悬浮目录list
             slide_text: 'Show Catalog',  //文章目录
+
             search_key: '',  // 搜索key
+
+            news_list: [],  // 新闻热搜list
+            recipes_list: [],  // 新闻热搜list
+
+            mood_dialogVisible: false, //发布心情
+
+            mood_add: {
+                name: '',
+                avatar_id: null,
+                content: '',
+                drawing: '',
+            }
         },
         created(){
             this.init_theme()
@@ -613,6 +642,43 @@
                 this.search_key = key
             },
 
+            // 获取热搜数据
+            get_new_data(id, name){
+                axios.post('https://api.codelife.cc/api/top/list', {id}).then(
+                    console.log(res)
+                )
+            },
+
+            // 测试获取食谱
+            get_recipe(type){
+                const appid = '9efdb599';
+                const appKey = 'ae630ec4854aba74003222d9eed06631';
+                axios.get(`https://api.edamam.com/api/recipes/v2?q=${type}&app_key=${appKey}&_cont=CHcVQBtNNQphDmgVQntAEX4BYUtyBwsGRmJCAmQQa1V7DQYVX3dDC2Mba11xVwcPQmVHVzYbMgZ0BlVUSmwSCzcRN11wABFqX3cWQT1OcV9xBE4%3D&type=public&app_id=${appid}`).then(res =>{
+                    this.recipes_list = res.hits.slice(0, 15).map(hit => hit.recipe);
+                })
+            },
+
+            // 心情页面回复折叠
+            mood_show_comment_list(e){
+                let div = $(e.target).parent().parent().next()
+                div.slideToggle()
+            },
+
+            // 发布心情
+            mood_add_method(){
+                axios.post('/api/moods/', this.mood_add).then(res=>{
+                   //校验不成功code不为0时
+                    if (res.code){
+                        this.$message.error(res.msg)
+                        this.$refs[`mood_add__${res.self}`].focus()
+                        return
+                    }
+                    this.$message.success(res.msg)
+                    setTimeout(()=>{
+                        location.reload()
+                    }, 1000)
+                })
+            },
         }
     })
 

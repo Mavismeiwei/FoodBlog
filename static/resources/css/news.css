@@ -1,0 +1,85 @@
+.main {
+  width: 1200px;
+}
+.main .news_content {
+  display: flex;
+  min-height: 800px;
+  background-color: white;
+  border-radius: 5px;
+}
+.main .news_content .left {
+  width: 30%;
+  border-right: 1px solid #f0eeee;
+}
+.main .news_content .left ul {
+  padding: 0;
+  margin-top: 20px;
+}
+.main .news_content .left ul img {
+  height: 25px;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+.main .news_content .left ul li {
+  color: #333333;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding-left: 30%;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.main .news_content .left ul li[active=true] {
+  background-color: #3a8ee6;
+  color: white;
+}
+.main .news_content .right {
+  width: 80%;
+  padding: 20px;
+}
+.main .news_content .right .title {
+  display: flex;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f0eeee;
+}
+.main .news_content .right .title img {
+  width: 35px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.main .news_content .right .title h2 {
+  font-size: 20px;
+}
+.main .news_content .right .body {
+  margin-top: 10px;
+}
+.main .news_content .right .body ul {
+  list-style: none;
+}
+.main .news_content .right .body ul li {
+  height: 30px;
+  align-items: center;
+  display: flex;
+}
+.main .news_content .right .body ul li .index {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  color: white;
+  background: #ff9800;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+}
+.main .news_content .right .body ul li a {
+  width: 77%;
+}
+.main .news_content .right .body ul li .num {
+  width: 20%;
+  display: flex;
+  justify-content: right;
+}
+
+/*# sourceMappingURL=news.css.map */

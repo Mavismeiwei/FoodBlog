@@ -20,6 +20,8 @@ class AddArticleForm(forms.Form):
     recommend = forms.BooleanField(required=False)
     status = forms.IntegerField(required=False)
 
+    word = forms.BooleanField(required=False)  # 文章字数
+
     # 全局钩子主要检验category和pwd
     def clean(self):
         category = self.cleaned_data['category']
