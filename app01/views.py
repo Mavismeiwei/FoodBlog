@@ -2,8 +2,8 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.http import JsonResponse
 from app01.utils.random_code import random_code
 from django.contrib import auth
-from app01.models import UserInfo
-from app01.models import Articles, Tags, Cover
+from app01.models import UserInfo, Moods
+from app01.models import Articles, Tags, Cover, Avatars
 import json
 from django.db.models import F
 from app01.utils.sub_comment import sub_comment_list
@@ -43,6 +43,12 @@ def article(request, nid):
 
 def news(request):
     return render(request, 'news.html')
+
+def moods(request):
+    # 查询所有的头像
+    avatar_list = Avatars.objects.all()
+    mood_list = Moods.objects.all()
+    return render(request, 'moods.html', locals())
 
 # 搜索视图
 def search(request):

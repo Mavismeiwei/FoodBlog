@@ -40,12 +40,18 @@ nav {
     }
 
   }
+
   a{
-    //color: var(--nav_color);
+    color: white !important;
+    font-weight: bold !important;
     margin-right: 20px;
     &:last-child{
       margin-right: 0;
     }
+  }
+
+  a.active{
+    color: #ff9800 !important;
   }
 }
 
@@ -54,7 +60,11 @@ nav.show{
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 
   a {
-    color: #333333;
+    color: #333333 !important;
+  }
+
+  a.active{
+    color: #ff9800;
   }
 
   .el-dropdown{

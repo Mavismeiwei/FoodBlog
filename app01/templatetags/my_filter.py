@@ -12,3 +12,10 @@ def is_user_collects(article, request):
     if article in request.user.collects.all():  # 文章收藏的话 return True
         return 'show'  # 已收藏的话那就返回show这个class
     return ''  # 否则返回空
+
+# 判断搜索页面是否搜索到了文章内容
+@register.filter
+def is_article_list(article_list):
+    if len(article_list):
+        return 'search_content'
+    return 'no_content'

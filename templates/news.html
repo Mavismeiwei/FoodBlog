@@ -1,5 +1,48 @@
 {% extends 'index.html' %}
+{% block css %}
+    <link rel="stylesheet" href="/static/resources/css/news.css">
 
+{% endblock %}
 {% block main %}
-    News Page
+    <div class="main">
+    {% csrf_token %}
+        <div class="news_content">
+            <div class="left">
+                <ul>
+                    <li active="true" @click="get_new_data()"><img src="/static/resources/img/recommended_articles_card/2.jpeg">Recipes</li>
+                    <li><img src="/static/resources/img/recommended_articles_card/1.jpeg"></li>
+                </ul>
+            </div>
+
+            <div class="right">
+                <div class="title">
+                    <img src="/static/resources/img/recommended_articles_card/3.jpeg">
+                    <h2>Recipes · Hot Search</h2>
+                </div>
+                <div class="body">
+                    <ul>
+                        <li v-for="item in news_list" :key="item.index"><span class="index">[[ strMeal ]]</span> <a :href="item.link" target="_blank"> [[ item.title ]]</a> <span class="num">[[item.hotValue]]</span></li>
+{#                        <li class="wow fadeInUp"><span class="index">2</span> <a href="" target="_blank"> link 2</a> <span class="num">2.3M</span></li>#}
+{#                        <li class="wow fadeInUp"><span class="index">3 </span> <a href="" target="_blank"> link 3</a> <span class="num">1.7M</span></li>#}
+                    </ul>
+                    <div>
+                       <h1>Test</h1>
+                        <button @click="get_recipe('Salad')">Get Salad Recipe</button>
+                        <button @click="get_recipe('Soup')">Get Soup Recipe</button>
+                        <button @click="get_recipe('Cake')">Get Cake Recipe</button>
+
+                        <ul>
+                            <li v-for="recipe in recipes_list" :key="recipe.url">
+                                <h3>{{ recipe.label }}</h3>
+                                <img :src="recipe.image" alt="Recipe Image">
+                                <a :href="recipe.url" target="_blank">View Recipe</a>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 {% endblock %}

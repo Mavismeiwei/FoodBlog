@@ -1,6 +1,6 @@
 {% extends 'index.html' %}
-{% load my_tag %}
-{% block banner %}
+{% load my_tag  my_filter %}
+{% block banner%}
 
 {% endblock %}
 
@@ -34,7 +34,7 @@
                 {% generate_order_html request 'tag' %}
             </ul>
         </div>
-        <ul class="search_content">
+        <ul class="{{ article_list|is_article_list  }}">
             {% for article in article_list %}
                  <li>
                 <a href="/article/{{ article.nid }}/" target="_blank" class="img">

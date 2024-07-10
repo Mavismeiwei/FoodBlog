@@ -1,0 +1,100 @@
+{% extends 'index.html' %}
+{% load my_tag my_filter %}
+
+{% block css %}
+    <link rel="stylesheet" href="/static/resources/css/moods.css">
+{% endblock %}
+{% block main %}
+    <div class="main">
+        <el-dialog
+          title="Post Mood"
+          :visible.sync="mood_dialogVisible"
+          width="50%">
+          <div class="add_mood_content body">
+              <div>
+                  <label for="mood_add_name">Username</label>
+                  <el-input ref="mood_add__name" id="mood_add_name" v-model="mood_add.name" placeholder="Please enter your username"></el-input>
+              </div>
+              <div>
+                  <label for="">Avatar</label>
+                    <ul class="avatar_list">
+                        {% for avatar in avatar_list %}
+                            <li>
+                                <el-radio v-model="mood_add.avatar_id" :label="{{ avatar.nid }}">
+                                    <img src="{{ avatar.url.url }}">
+                                </el-radio>
+                            </li>
+                        {% endfor %}
+                    </ul>
+              </div>
+              <div>
+                  <label for="mood_add_content">Mood Content</label>
+                  <el-input ref="mood_add__content" id="mood_add_content" v-model="mood_add.content"  type="textarea" :rows="4" placeholder="Please enter your content"></el-input>
+              </div>
+              <div>
+                  <label for="mood_add_drawing">Images</label>
+                  <el-input id="mood_add_drawing" v-model="mood_add.drawing" type="textarea" :rows="4" placeholder="Add images; Multiple images please use ';' to divide. "></el-input>
+              </div>
+
+          </div>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="mood_dialogVisible = false">Cancel</el-button>
+            <el-button type="primary" @click="mood_add_method">Post</el-button>
+          </span>
+        </el-dialog>
+        <el-button @click="mood_dialogVisible = true" class="add_mood">Post Moods</el-button>
+        {% for mood in mood_list %}
+          <div class="mood">
+            <div class="left">
+                <img src="{{ mood.avatar.url.url }}">
+            </div>
+            <div class="right">
+                <h3 class="name">{{ mood.name }}</h3>
+                <p class="content">{{ mood.content }}</p>
+                <div class="drawing">
+                    {% generate_drawing mood.drawing%}
+                </div>
+                <div class="info">
+                    <span class="date">
+                        {{ mood.create_date }}
+                    </span>
+                    <span class="three">
+                        <span>Like ({{ mood.digg_count }})</span>
+                        <span @click="mood_show_comment_list($event)">Comment ({{ mood.comment_count }})</span>
+                        <span class="delete">Delete</span>
+                    </span>
+            </div>
+
+            <ul class="sub_comment_list">
+                <li>
+                    <div class="left">
+                         <img src="/static/resources/img/user/1.jpg">
+                    </div>
+                    <div class="right">
+                        <h4 class="name">Mimi</h4>
+                        <p class="content">Reply you:</p>
+                        <div class="info">
+                            <span class="date">
+                                5 hours ago
+                            </span>
+                            <span class="three">
+                                <span>Like (3)</span>
+                                <span class="delete">Delete</span>
+                            </span>
+                        </div>
+                    </div>
+                </li>
+                <el-button type="primary" class="rep_mood" plain>Reply this mood</el-button>
+            </ul>
+
+        </div>
+
+    </div>
+        {% endfor %}
+
+
+
+
+    </div>
+
+{% endblock %}

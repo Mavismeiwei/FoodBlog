@@ -241,6 +241,33 @@ ul.pager > li.active a {
 #app .main .right {
   width: 30%;
 }
+#app .main .right .advertisements > .body {
+  padding: 0;
+  background: none;
+}
+#app .main .right .advertisements > .body > div {
+  width: 94%;
+  padding: 10px;
+  background-color: white;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+#app .main .right .advertisements > .body > div:first-child {
+  border-radius: 0 0 5px 5px;
+}
+#app .main .right .advertisements > .body > div > a {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+}
+#app .main .right .advertisements > .body > div > a img {
+  width: 100%;
+  transition: all 0.3s;
+}
+#app .main .right .advertisements > .body > div > a img:hover {
+  transform: scale(1.1);
+}
 #app .main .right .tags > .body {
   position: relative;
 }

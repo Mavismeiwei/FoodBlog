@@ -1,3 +1,6 @@
+main{
+    min-height: 0;
+}
 .main {
     width: 1100px;
     margin-top: 80px;
@@ -151,6 +154,13 @@
                 }
             }
         }
+    }
+
+    .no_content {
+         width: 30%;
+        height: 300px;
+        background: url("/static/resources/img/search/no_content.svg") no-repeat center;
+        background-size: contain;
     }
 }
 

@@ -63,3 +63,37 @@ def generate_order_html(request, key):
         query_params=query_params
     )
     return mark_safe(order.order_html())
+
+# 动态导航
+@register.simple_tag
+def dynamic_navigation(request):
+    path = request.path_info
+    path_dict = {
+        '/': 'Home',
+        '/news': 'News',
+        '/moods': 'Moods',
+        '/memory': 'Memory',
+        '/about': 'About',
+        '/sites': 'Sites'
+    }
+    nav_list = []
+    for k, v in path_dict.items():
+        if k == path:
+            nav_list.append(f'<a href="{k}" class="active">{v}</a>')
+            continue
+        nav_list.append(f'<a href="{k}">{v}</a>')
+    return mark_safe(''.join(nav_list))
+
+# 发布心情配图
+@register.simple_tag
+def generate_drawing(drawing: str):
+    if not drawing:
+        return ''
+    drawing = drawing.replace('；', ';').replace('\n', ';')
+    drawing_list = drawing.split(';')
+    html_s = ''
+    for i in drawing_list:
+        html_s += f'<img src="{i}" alt="">'
+
+    return mark_safe(html_s)
+
