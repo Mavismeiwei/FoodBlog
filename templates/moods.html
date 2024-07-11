@@ -52,11 +52,25 @@
                 <h3 class="name">{{ mood.name }}</h3>
                 <p class="content">{{ mood.content }}</p>
                 <div class="drawing">
-                    {% generate_drawing mood.drawing%}
+                    {% generate_drawing mood.drawing %}
                 </div>
                 <div class="info">
                     <span class="date">
+                        {% with mood.addr|json_loads as addr %}
                         {{ mood.create_date }}
+                            <img class="addr_img" src="/static/resources/img/user/location.png">
+                            <i class="addr_info">
+                            {% if addr.ct == "中国" %}
+                                {% if addr.prov == "内网" %}
+                                    中国-内网
+                                {% else %}
+                                    {{ addr.prov }}-{{ addr.city }}
+                                {% endif %}
+                            {% else %}
+                                {{ addr.ct }}
+                            {% endif %}
+                            </i>
+                    {% endwith %}
                     </span>
                     <span class="three">
                         <span>Like ({{ mood.digg_count }})</span>

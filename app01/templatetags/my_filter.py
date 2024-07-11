@@ -1,5 +1,5 @@
 from django import template
-
+import json
 # 注册
 register = template.Library()
 
@@ -19,3 +19,11 @@ def is_article_list(article_list):
     if len(article_list):
         return 'search_content'
     return 'no_content'
+
+# IP地址过滤器
+@register.filter
+def json_loads(value):
+    try:
+        return json.loads(value)
+    except (ValueError, TypeError):
+        return {}

@@ -60,6 +60,13 @@
         display: flex;
         justify-content: space-between;
 
+        .addr_img{
+          height: 15px;
+        }
+
+        .addr_info {
+          color: #0e7e70;
+        }
 
         >.three > span{
           cursor: pointer;

@@ -44,11 +44,18 @@
   height: 130px;
   border-radius: 5px;
   margin-right: 10px;
+  margin-bottom: 10px;
 }
 .main .mood > .right .info {
   font-size: 14px;
   display: flex;
   justify-content: space-between;
+}
+.main .mood > .right .info .addr_img {
+  height: 15px;
+}
+.main .mood > .right .info .addr_info {
+  color: #0e7e70;
 }
 .main .mood > .right .info > .three > span {
   cursor: pointer;
