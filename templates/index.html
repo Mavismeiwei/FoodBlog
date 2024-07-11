@@ -371,6 +371,14 @@
             // 发布心情的图片list
              mood_show_drawing: [],
 
+            // 回复心情
+             mood_comment_dialogVisible: false,
+
+            mood_add_comment: {
+                name: '',
+                content: '',
+            }
+
         },
         created(){
             this.init_theme()
@@ -708,6 +716,62 @@
                   });
                 });
             },
+
+            // 打开回复心情的弹窗
+            mood_comment_dialogVisible_show(nid){
+                this.mood_comment_dialogVisible = true
+                this.mood_comment_add_method.nid = nid;
+            },
+
+            // 评论心情
+            mood_comment_add_method(){
+                let nid = this.mood_comment_add_method.nid
+
+                axios.post(`/api/mood_comments/${nid}/`, this.mood_add_comment).then(res=>{
+                    if (res.code){
+                        this.$message.error(res.msg)
+                        this.$refs[`mood_comment_add__${res.self}`].focus()
+                        return
+                    }
+                    this.$message.success(res.msg)
+                    setTimeout(()=>{
+                        location.reload()
+                    }, 1000)
+                })
+            },
+
+            // 删除心情评论
+            mood_sub_comment_delete(nid, mood_id, e){
+                this.$confirm('Are you sure to delete this comment?', 'Remind', {
+                  confirmButtonText: 'Yes',
+                  cancelButtonText: 'Cancel',
+                  type: 'warning'
+                }).then(() => {
+                    // nid是评论的id, mood_id是心情id
+                    axios.delete(`/api/mood_comments/${nid}`, {
+                        data: {
+                            mood_id,
+                        }
+                    }).then(res=>{
+                        if (res.code){
+                            this.$message.error(res.msg)
+                            return
+                        }
+                        this.$message.success(res.msg)
+                        setTimeout(()=>{
+                            let div = $(e.target).parents('.mood').find('.mood_comment_num').text(`Comment (${res.data})`)
+                            console.log(div)
+                            $(e.target).parents('li').remove()
+                        }, 500)
+                        })
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: 'Canceled successfully.'
+                  });
+                });
+            },
+
         },
         watch: {
             'mood_add.drawing'(newVal, oldVal) {

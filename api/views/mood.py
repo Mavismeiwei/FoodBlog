@@ -55,7 +55,7 @@ class MoodsView(View):
         res['code'] = 0
         return JsonResponse(res)
 
-    # 删除心情
+    # 删除心情评论
     def delete(self, request, nid):
         res = {
             'msg': 'Mood deleted successfully.',
@@ -71,4 +71,57 @@ class MoodsView(View):
 
         mood_query.delete()
         res['code'] = 0
+        return JsonResponse(res)
+
+class MoodCommentsView(View):
+    def post(self, request, nid):
+        res = {
+            'msg': 'Reply Mood Succeed!',
+            'code': 412,
+            'self': None,
+        }
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            res['msg'] = 'Invalid JSON data'
+            return JsonResponse(res)
+
+        form = AddMoodsForm(data)
+        if not form.is_valid():
+            res['self'], res['msg'] = clean_form(form)
+            return JsonResponse(res)
+
+        ip = get_ip(request)
+        addr = get_addr_info(ip)
+        form.cleaned_data['ip'] = ip
+        form.cleaned_data['addr'] = json.dumps(addr, ensure_ascii=False)  # 转换为JSON字符串
+
+        form.cleaned_data['mood_id'] = nid
+        form.cleaned_data.pop('drawing', None)
+        MoodComment.objects.create(**form.cleaned_data)
+
+        Moods.objects.filter(nid=nid).update(comment_count=F('comment_count') + 1)  # 心情评论数+1
+        res['code'] = 0
+        return JsonResponse(res)
+
+    def delete(self, request, nid):
+        res = {
+            'msg': 'Mood comment deleted successfully.',
+            'code': 412,
+            'data': 0
+        }
+        if not request.user.is_superuser:
+            res['msg'] = 'Only admin can delete the mood.'
+            return JsonResponse(res)
+        mood_id = request.data.get('mood_id')
+        MoodComment.objects.filter(nid=nid).delete()
+
+        # 删除心情评论操作前进行查询
+        mood_query = Moods.objects.filter(nid=mood_id)
+        mood_query.update(comment_count=F('comment_count') - 1)
+
+        res['data'] = mood_query.first().comment_count
+
+        res['code'] = 0
+
         return JsonResponse(res)

@@ -14,5 +14,6 @@ urlpatterns = [
 
     path('moods/', mood.MoodsView.as_view()),  # 发布心情
     re_path('moods/(?P<nid>\d+)/', mood.MoodsView.as_view()),  # 删除心情
+    re_path('mood_comments/(?P<nid>\d+)/', mood.MoodCommentsView.as_view()),  # 发布心情评论
 
 ]
