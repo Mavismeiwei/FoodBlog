@@ -33,8 +33,11 @@
               </div>
               <div>
                   <label for="mood_add_drawing">Images</label>
-                  <el-input id="mood_add_drawing" v-model="mood_add.drawing" type="textarea" :rows="4" placeholder="Add images; Multiple images please use ';' to divide. "></el-input>
+                  <el-input id="mood_add_drawing" v-model="mood_add.drawing" type="textarea" :rows="4" placeholder="Add images; Multiple images please click 'enter' to divide. "></el-input>
               </div>
+               <div class="show_drawing" v-show="mood_show_drawing">
+                     <img v-for="(item, index) in mood_show_drawing" :src="item" :key="index" alt="">
+                </div>
 
           </div>
           <span slot="footer" class="dialog-footer">

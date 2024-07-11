@@ -366,7 +366,11 @@
                 avatar_id: null,
                 content: '',
                 drawing: '',
-            }
+            },
+
+            // 发布心情的图片list
+             mood_show_drawing: [],
+
         },
         created(){
             this.init_theme()
@@ -703,9 +707,12 @@
                     message: 'Canceled successfully.'
                   });
                 });
+            },
+        },
+        watch: {
+            'mood_add.drawing'(newVal, oldVal) {
+                this.mood_show_drawing = newVal.split('\n')  // 使用回车来上传多张图片
             }
-
-
         }
     })
 

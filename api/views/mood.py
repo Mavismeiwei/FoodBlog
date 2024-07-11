@@ -34,7 +34,11 @@ class MoodsView(View):
             'code': 412,
             'self': None,
         }
-        data = request.data
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            res['msg'] = 'Invalid JSON data'
+            return JsonResponse(res)
 
         form = AddMoodsForm(data)
         if not form.is_valid():
