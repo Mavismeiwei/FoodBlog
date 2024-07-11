@@ -75,7 +75,9 @@
                     <span class="three">
                         <span>Like ({{ mood.digg_count }})</span>
                         <span @click="mood_show_comment_list($event)">Comment ({{ mood.comment_count }})</span>
-                        <span class="delete">Delete</span>
+                        {% if request.user.is_superuser %}
+                            <span @click="mood_delete('{{ mood.nid }}', $event)" class="delete">Delete</span>
+                        {% endif %}
                     </span>
             </div>
 
@@ -93,7 +95,9 @@
                             </span>
                             <span class="three">
                                 <span>Like (3)</span>
-                                <span class="delete">Delete</span>
+                                {% if request.user.is_superuser %}
+                                    <span class="delete">Delete</span>
+                                {% endif %}
                             </span>
                         </div>
                     </div>

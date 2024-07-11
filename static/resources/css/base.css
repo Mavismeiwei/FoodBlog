@@ -44,7 +44,7 @@ nav a:last-child {
   margin-right: 0;
 }
 nav a.active {
-  color: #ff9800 !important;
+  color: #ff9800;
 }
 
 nav.show {
@@ -52,7 +52,7 @@ nav.show {
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 }
 nav.show a {
-  color: #333333 !important;
+  color: #333333;
 }
 nav.show a.active {
   color: #ff9800;

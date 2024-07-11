@@ -26,6 +26,8 @@ class AddMoodsForm(forms.Form):
         return avatar_id
 
 class MoodsView(View):
+
+    # 添加心情
     def post(self, request):
         res = {
             'msg': 'Post Mood Succeed!',
@@ -46,5 +48,23 @@ class MoodsView(View):
 
         Moods.objects.create(**form.cleaned_data)
 
+        res['code'] = 0
+        return JsonResponse(res)
+
+    # 删除心情
+    def delete(self, request, nid):
+        res = {
+            'msg': 'Mood deleted successfully.',
+            'code': 412,
+        }
+        if not request.user.is_superuser:
+            res['msg'] = 'Only admin can delete the mood.'
+            return JsonResponse(res)
+        mood_query = Moods.objects.filter(nid=nid)
+        if not mood_query:
+            res['msg'] = 'This mood is not exist.'
+            return JsonResponse(res)
+
+        mood_query.delete()
         res['code'] = 0
         return JsonResponse(res)

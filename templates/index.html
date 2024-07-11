@@ -679,6 +679,33 @@
                     }, 1000)
                 })
             },
+
+            // 删除心情
+            mood_delete(nid, e){
+              this.$confirm('Are you sure to delete this mood?', 'Remind', {
+                  confirmButtonText: 'Yes',
+                  cancelButtonText: 'Cancel',
+                  type: 'warning'
+                }).then(() => {
+                    axios.delete(`/api/moods/${nid}`).then(res=>{
+                        if (res.code){
+                            this.$message.error(res.msg)
+                            return
+                        }
+                        this.$message.success(res.msg)
+                        setTimeout(()=>{
+                            $(e.target).parents('.mood').remove()
+                        }, 500)
+                        })
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: 'Canceled successfully.'
+                  });
+                });
+            }
+
+
         }
     })
 
