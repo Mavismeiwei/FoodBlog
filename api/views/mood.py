@@ -25,8 +25,18 @@ class AddMoodsForm(forms.Form):
         avatar_id = random.choice(avatar_list)
         return avatar_id
 
-class MoodsView(View):
+def mood_digg(model_obj, nid):
+    res = {
+        'msg': 'Thanks for your like!',
+        'code': 412,
+    }
+    mood_query = model_obj.objects.filter(nid=nid)
+    mood_query.update(digg_count=F('digg_count') + 1)
+    res['data'] = mood_query.first().digg_count
+    res['code'] = 0
+    return JsonResponse(res)
 
+class MoodsView(View):
     # 添加心情
     def post(self, request):
         res = {
@@ -55,7 +65,7 @@ class MoodsView(View):
         res['code'] = 0
         return JsonResponse(res)
 
-    # 删除心情评论
+    # 删除心情
     def delete(self, request, nid):
         res = {
             'msg': 'Mood deleted successfully.',
@@ -73,7 +83,12 @@ class MoodsView(View):
         res['code'] = 0
         return JsonResponse(res)
 
+    # 心情点赞
+    def put(self, request, nid):
+        return mood_digg(Moods, nid)
+
 class MoodCommentsView(View):
+    # 发布心情评论
     def post(self, request, nid):
         res = {
             'msg': 'Reply Mood Succeed!',
@@ -104,6 +119,7 @@ class MoodCommentsView(View):
         res['code'] = 0
         return JsonResponse(res)
 
+    # 删除心情评论
     def delete(self, request, nid):
         res = {
             'msg': 'Mood comment deleted successfully.',
@@ -125,3 +141,7 @@ class MoodCommentsView(View):
         res['code'] = 0
 
         return JsonResponse(res)
+
+    # 心情评论点赞
+    def put(self, request, nid):
+        return mood_digg(MoodComment, nid)

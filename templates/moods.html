@@ -4,6 +4,12 @@
 {% block css %}
     <link rel="stylesheet" href="/static/resources/css/moods.css">
 {% endblock %}
+{% block search %}
+    <div class="search">
+        <input @keydown.enter="search('', '_self')" type="text" v-model="search_key" class="search_box"placeholder="Search Something...">
+        <button @click="search()"><i class="fa fa-search"></i></button>
+    </div>
+{% endblock %}
 {% block main %}
     <div class="main">
         <el-dialog
@@ -65,7 +71,7 @@
             <el-button type="primary" @click="mood_comment_add_method">Reply</el-button>
           </span>
         </el-dialog>
-        <el-button @click="mood_dialogVisible = true" class="add_mood">Post Moods</el-button>
+        <el-button id="pos" @click="mood_dialogVisible = true" class="add_mood">Post Moods</el-button>
         {% for mood in mood_list %}
           <div class="mood">
             <div class="left">
@@ -80,7 +86,7 @@
                 <div class="info">
                     <span class="date">
                         {% with mood.addr|json_loads as addr %}
-                        {{ mood.create_date }}
+                        {{ mood.create_date|date_format }}
                             <img class="addr_img" src="/static/resources/img/user/location.png">
                             <i class="addr_info">
                             {% if addr.ct == "中国" %}
@@ -96,7 +102,7 @@
                     {% endwith %}
                     </span>
                     <span class="three">
-                        <span>Like ({{ mood.digg_count }})</span>
+                        <span @click="mood_digg('moods', '{{ mood.nid }}', $event)">Like ({{ mood.digg_count }})</span>
                         <span @click="mood_show_comment_list($event)" class="mood_comment_num">Comment ({{ mood.comment_count }})</span>
                         {% if request.user.is_superuser %}
                             <span @click="mood_delete('{{ mood.nid }}', $event)" class="delete">Delete</span>
@@ -115,12 +121,12 @@
                         <p class="content">{{ comment.content }}</p>
                         <div class="info">
                             <span class="date">
-                                {{ comment.create_date }}
+                                {{ comment.create_date|date_format }}
                             </span>
 {#                            <img class="addr_img" src="/static/resources/img/user/location.png">#}
 {#                            <i class="addr_info">{{ mood.addr.prov }}-{{ mood.addr.city }}</i>#}
                             <span class="three">
-                                <span>Like ({{ comment.digg_count }})</span>
+                                <span @click="mood_digg('mood_comments', '{{ comment.nid }}', $event)">Like ({{ comment.digg_count }})</span>
                                 {% if request.user.is_superuser %}
                                     <span class="delete" @click="mood_sub_comment_delete('{{ comment.nid }}', '{{ mood.nid }}', $event)">Delete</span>
                                 {% endif %}
@@ -129,14 +135,15 @@
                     </div>
                 </li>
                 {% endfor %}
-
                 <el-button type="primary" @click="mood_comment_dialogVisible_show('{{ mood.nid }}')" class="rep_mood" plain>Reply this mood</el-button>
             </ul>
-
         </div>
-
     </div>
         {% endfor %}
+
+        <ul class="pager">
+            {{ pager.page_html|safe }}
+        </ul>
 
     </div>
 

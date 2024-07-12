@@ -26,7 +26,6 @@ ul.pager > li a {
   font-weight: bold;
   justify-content: center;
   align-items: center;
-  padding: 0 10px;
 }
 ul.pager > li:hover {
   background-color: #21a998 !important;

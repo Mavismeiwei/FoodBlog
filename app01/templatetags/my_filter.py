@@ -1,5 +1,8 @@
+import datetime
+
 from django import template
 import json
+import pendulum
 # 注册
 register = template.Library()
 
@@ -27,3 +30,11 @@ def json_loads(value):
         return json.loads(value)
     except (ValueError, TypeError):
         return {}
+
+# 时间格式化处理
+@register.filter
+def date_format(date: datetime.datetime):
+    pendulum.set_locale('en')  # 语言设置为英文
+    tz = pendulum.now().tz
+    time_difference = pendulum.parse(date.strftime('%Y-%m-%d %H:%M:%S'), tz=tz).diff_for_humans()
+    return time_difference
