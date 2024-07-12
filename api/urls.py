@@ -1,5 +1,5 @@
 from django.urls import path, re_path
-from api.views import login, article, comment, mood
+from api.views import login, article, comment, mood, user
 
 urlpatterns = [
     path('login/', login.LoginView.as_view()),  # 登录
@@ -16,4 +16,5 @@ urlpatterns = [
     re_path('moods/(?P<nid>\d+)/', mood.MoodsView.as_view()),  # 删除心情
     re_path('mood_comments/(?P<nid>\d+)/', mood.MoodCommentsView.as_view()),  # 发布心情评论
 
+    path('edit_password/', user.EditPasswordView.as_view()),  # 用户修改密码
 ]

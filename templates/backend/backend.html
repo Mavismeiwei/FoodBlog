@@ -20,8 +20,8 @@
             <li><a href="/">Home Page</a></li>
             <li><a href="/backend/">User Center</a></li>
             <li><a href="/backend/edit_avatar/">Edit Avatar</a></li>
-            <li><a href="/backend/reset_password/">Update Password</a></li>
-            <li><a href="/backend/add_article/">Upload Article</a></li>
+
+{#            <li><a href="/backend/add_article/">Upload Article</a></li>#}
             <!-- 后续可修改！！！设置权限 只有超级管理员可以进行文章的上传 -->
             {% if request.user.is_superuser %}
                 <li><a href="/backend/add_article/">Upload Article</a></li>
@@ -57,17 +57,41 @@
                     </div>
             </div>
             <div class="actions">
+            {% csrf_token %}
                 <div class="item">
                      <el-button type="primary">Update Information</el-button>
                 </div>
                  <div class="item">
-                     <el-button type="success">Update Portrait</el-button>
+                     <el-button type="success">Update Avatar</el-button>
+                </div>
+                <el-dialog
+                  title="Update Password"
+                  :visible.sync="edit_password_dialogVisible"
+                  width="30%">
+                  <div class="edit_info">
+                      <div>
+                          <label for="edit_password_old_pwd">Previous Password</label>
+                        <el-input type="password" id="edit_password_old_pwd" v-model="edit_password.old_pwd" placeholder="Please enter your previous password."></el-input>
+                      </div>
+                      <div>
+                          <label for="edit_password_pwd">New Password</label>
+                        <el-input type="password" id="edit_password_pwd" v-model="edit_password.pwd" placeholder="Please enter your new password."></el-input>
+                      </div>
+                      <div>
+                          <label for="edit_password_re_pwd">Confirm Password</label>
+                        <el-input type="password" id="edit_password_re_pwd" v-model="edit_password.re_pwd" placeholder="Please confirm your new password."></el-input>
+                      </div>
+                  </div>
+                  <span slot="footer" class="dialog-footer">
+                    <el-button @click="edit_password_dialogVisible = false">Cancel</el-button>
+                    <el-button type="primary" @click="edit_password_method">Update</el-button>
+                  </span>
+                </el-dialog>
+                 <div class="item">
+                     <el-button @click="edit_password_dialogVisible = true" type="warning">Update Password</el-button>
                 </div>
                  <div class="item">
-                     <el-button type="warning">Update Password</el-button>
-                </div>
-                 <div class="item">
-                     <el-button type="danger">Logout & Exit</el-button>
+                     <el-button  href="/logout/" type="danger">Logout & Exit</el-button>
                 </div>
             </div>
 
@@ -157,6 +181,7 @@
 
 <script src="/static/axios/axios.min.js"></script>
 <script src="/static/vue/vue.js"></script>
+<script src="/static/jquery/jquery.min.js"></script>
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 {% block js %}
 
@@ -207,18 +232,33 @@
             // 文章标题
             title: '',
             // 文章简介
-            abstract: ''
+            abstract: '',
+
+            // 修改密码的弹窗
+            edit_password_dialogVisible: false,
+            // 修改密码
+            edit_password:{
+                old_pwd: '',
+                pwd: '',
+                re_pwd: '',
+            }
+
+
         },
         created(){
             let img = document.getElementById('cover_img')
+
+            let path_dict = {
+                "add_article": this.init_add_article,
+                "edit_article": this.init_edit_article,
+            }
             let path = location.pathname
-            let index = path.indexOf('add_article')  // 根据返回的index值进行判断
-            if (index !== -1){
-                // 成功找到 添加文章初始化函数 随机封面
-                this.init_add_article(img)
-            } else {
-                // 不成功 则进行编辑文章操作 文章初始化函数
-                this.init_edit_article(img)
+            for (const key in path_dict) {
+                 let index = path.indexOf(key)  // 根据返回的index值进行判断
+                if (index !== -1){
+                    path_dict[key](img)
+                    break
+                }
             }
         },
 
@@ -325,6 +365,18 @@
                 } else {
                     this.recommend = false
                 }
+            },
+
+            // 修改密码
+            edit_password_method(){
+                 axios.post('/api/edit_password/', this.edit_password).then(res=>{
+                    if (res.code){
+                        this.$message.error(res.msg)
+                        $(`#edit_password_${res.self}`)[0].focus()
+                        return
+                    }
+                    this.$message.success(res.msg)
+                })
             }
         }
     })

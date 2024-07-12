@@ -153,8 +153,8 @@ def edit_avatar(request):
     return render(request, 'backend/edit_avatar.html', locals())
 
 # 重置密码页
-def reset_password(request):
-    return render(request, 'backend/reset_password.html', locals())
+def edit_password(request):
+    return render(request, 'backend/edit_password.html', locals())
 
 def edit_article(request, nid):
     article_obj = Articles.objects.get(nid=nid)
