@@ -1,5 +1,5 @@
 import datetime
-
+from app01.models import Tags, Avatars, Cover
 from django import template
 import json
 import pendulum
@@ -38,3 +38,18 @@ def date_format(date: datetime.datetime):
     tz = pendulum.now().tz
     time_difference = pendulum.parse(date.strftime('%Y-%m-%d %H:%M:%S'), tz=tz).diff_for_humans()
     return time_difference
+
+# 头像使用总和
+@register.filter
+def to_calculate_avatar(avatar: Avatars):
+    count = avatar.moodcomment_set.count() + avatar.moods_set.count() + avatar.userinfo_set.count()
+    if count:
+        return ''
+    return 'no_avatar'
+
+@register.filter
+def to_calculate_cover(cover: Cover):
+    count = cover.articles_set.count()
+    if count:
+        return ''
+    return 'no_cover'
