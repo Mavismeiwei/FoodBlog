@@ -128,6 +128,7 @@ def logout(request):
 
 # 后台用户界面
 def backend(request):
+    avatar_list = Avatars.objects.all()
     if not request.user.username:  # username is empty
         return redirect('/')
     return render(request, 'backend/backend.html', locals())
@@ -148,8 +149,22 @@ def add_article(request):
         })
     return render(request, 'backend/add_article.html', locals())
 
-# 后台文章编辑页
+# 后台头像修改
 def edit_avatar(request):
+    user = request.user
+    sign_status = user.sign_status
+    # 获取所有的头像
+    avatar_list = Avatars.objects.all()
+
+    if sign_status == 0:
+        # 如果是用户名密码注册
+        avatar_id = request.user.avatar.nid
+    else:
+        # 第三方登录
+        avatar_url = request.user.avatar_url
+        for i in avatar_list:
+            if i.url.url == avatar_url:
+                avatar_id = i.nid
     return render(request, 'backend/edit_avatar.html', locals())
 
 # 重置密码页

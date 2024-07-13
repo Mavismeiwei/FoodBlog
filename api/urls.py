@@ -17,4 +17,5 @@ urlpatterns = [
     re_path('mood_comments/(?P<nid>\d+)/', mood.MoodCommentsView.as_view()),  # 发布心情评论
 
     path('edit_password/', user.EditPasswordView.as_view()),  # 用户修改密码
+    path('edit_avatar/', user.EditAvatarView.as_view()),  # 修改头像
 ]

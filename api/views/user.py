@@ -1,7 +1,7 @@
 from django.views import View
 from django.http import JsonResponse
 from django.contrib import auth
-
+from app01.models import Avatars
 from api.views.login import clean_form
 from django import forms
 
@@ -51,4 +51,32 @@ class EditPasswordView(View):
 
         res['code'] = 0
 
+        return JsonResponse(res)
+
+
+# 用户修改头像
+class EditAvatarView(View):
+    def put(self, request):
+        res = {
+            'msg': 'Avatar update successfully',
+            'code': 414,
+            'data': None
+        }
+        avatar_id = request.data.get('avatar_id')
+
+        # 判断用户的登录状态来源
+        user = request.user
+        sign_status = user.sign_status
+        avatar = Avatars.objects.get(nid=avatar_id)
+
+        if sign_status == 0:
+            # 用户名密码注册
+            user.avatar_id = avatar_id
+        else:
+            # 用户登录来源于第三方登录等等
+            avatar_url = avatar.url.url
+            user.avatar_url = avatar_url
+        user.save()
+        res['data'] = avatar.url.url
+        res['code'] = 0
         return JsonResponse(res)

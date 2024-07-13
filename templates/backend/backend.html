@@ -10,10 +10,11 @@
     {% endblock %}
 </head>
 <body>
+
 <div id="app">
     <aside>
     <div class="slogan">
-        <img src="/static/resources/img/backend/logo.jpeg" alt="">
+        <img src="{{ request.user.avatar.url.url }}" alt="">
     </div>
         <ul>
             {# function in normal users #}
@@ -33,27 +34,34 @@
          {% block main %}
             <div class="user_info">
                 <div class="left">
-                    <img src="/static/resources/img/user/1.jpg" alt="">
+                    <img src="{{ request.user.avatar.url.url }}" alt="">
                 </div>
                 <div class="right">
                     <div class="item">
-                        <span><b>User Name:</b> Vivi</span>
+                        <span><b>User Name: </b>{{ request.user.username }}</span>
                     </div>
                     <div class="item">
-                        <span><b>Registration Date:</b> 05/23/2023</span>
+                        <span><b>Registration Date: </b>{{ request.user.date_joined }}</span>
                     </div>
                     <div class="item">
-                        <span><b>Last Time Login:</b> 08/23/2023</span>
+                        <span><b>Last Time Login: </b>{{ request.user.last_login}}</span>
                     </div>
                     <div class="item">
-                        <span><b>Score:</b> 200</span>
+                        <span><b>Source Channel: </b>{{ request.user.get_sign_status_display }}</span>
                     </div>
                     <div class="item">
-                        <span><b>Email:</b> zhag@163.com</span>
+                        <span><b>Email: </b>
+
+                        {% if request.user.email %}
+                            {{ request.user.email }}
+
+                            {% else %}
+                                <a href="javascript:void (0);">Bind Email</a>
+                        {% endif %}
+
+                        </span>
                     </div>
-                    <div class="item">
-                        <span><b>Phone Number:</b> 88888888</span>
-                    </div>
+                        <span><b>Account Status: </b>{{ request.user.get_account_status_display }}</span>
                     </div>
             </div>
             <div class="actions">
@@ -179,6 +187,7 @@
     </main>
 </div>
 
+
 <script src="/static/axios/axios.min.js"></script>
 <script src="/static/vue/vue.js"></script>
 <script src="/static/jquery/jquery.min.js"></script>
@@ -241,7 +250,10 @@
                 old_pwd: '',
                 pwd: '',
                 re_pwd: '',
-            }
+            },
+
+            // 修改头像id
+            edit_avatar_id: '',
 
 
         },
@@ -251,6 +263,7 @@
             let path_dict = {
                 "add_article": this.init_add_article,
                 "edit_article": this.init_edit_article,
+                "edit_avatar": this.init_edit_avatar,  // avatar初始化 头像选择按钮初始化
             }
             let path = location.pathname
             for (const key in path_dict) {
@@ -377,6 +390,29 @@
                     }
                     this.$message.success(res.msg)
                 })
+            },
+
+            // 修改头像
+            edit_avatar_method(){
+
+                axios.put('/api/edit_avatar/', {
+
+                    avatar_id: this.edit_avatar_id,
+
+                }).then(res=>{
+                   if(res.code){
+                       this.$message.error(res.msg)
+                       return
+                   }
+                   this.$message.success(res.msg)
+                   $('.user_info img').attr('src', res.data)
+                })
+            },
+
+            // 初始化修改头像
+                init_edit_avatar(img){
+                let nid = eval($('.avatar_list').attr('avatar_nid'))
+                this.edit_avatar_id = nid
             }
         }
     })
