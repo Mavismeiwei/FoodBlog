@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-{% load my_tag %}
+{% load my_tag my_filter%}
 <head>
     <meta charset="UTF-8">
     <title>Vivi_Blog</title>
@@ -27,10 +27,12 @@
         <div class="left" id="dynamic_nav">
             {% dynamic_navigation request%}
 
-            <div class="search">
-                <input @keydown.enter="search" type="text" v-model="search_key" class="search_box"placeholder="Search Something...">
-                <button @click="search"><i class="fa fa-search"></i></button>
-            </div>
+            {% block search %}
+                <div class="search">
+                    <input @keydown.enter="search()" type="text" v-model="search_key" class="search_box"placeholder="Search Something...">
+                    <button @click="search()"><i class="fa fa-search"></i></button>
+                </div>
+            {% endblock %}
 
         </div>
         <div class="right">
@@ -89,7 +91,7 @@
                                     <div class="right">
                                         <h2><a href="/article/{{ recipe.nid }}" >{{ recipe.title }}</a></h2>
                                         <p>{{ recipe.abstract }}</p>
-                                        <span>{{ recipe.create_date }}</span>
+                                        <span>{{ recipe.create_date|date_format }}</span>
                                     </div>
                                 </li>
                                 {% endfor %}
@@ -105,7 +107,7 @@
                                     <div class="right">
                                         <h2><a href="/article/{{ nutrition.nid }}" >{{ nutrition.title }}</a></h2>
                                         <p>{{ nutrition.abstract }}</p>
-                                        <span>{{ nutrition.create_date }}</span>
+                                        <span>{{ nutrition.create_date|date_format }}</span>
                                     </div>
                                 </li>
                                 {% endfor %}
@@ -121,7 +123,7 @@
                                     <div class="right">
                                         <h2><a href="/article/{{ culinary.nid }}" >{{ culinary.title }}</a></h2>
                                         <p>{{ culinary.abstract }}</p>
-                                        <span>{{ culinary.create_date }}</span>
+                                        <span>{{ culinary.create_date|date_format }}</span>
                                     </div>
                                 </li>
                                 {% endfor %}
@@ -138,7 +140,7 @@
                                     <div class="right">
                                         <h2><a href="/article/{{ review.nid }}" >{{ review.title }}</a></h2>
                                         <p>{{ review.abstract }}</p>
-                                        <span>{{ review.create_date }}</span>
+                                        <span>{{ review.create_date|date_format }}</span>
                                     </div>
                                 </li>
                                 {% endfor %}
@@ -366,7 +368,19 @@
                 avatar_id: null,
                 content: '',
                 drawing: '',
+            },
+
+            // 发布心情的图片list
+             mood_show_drawing: [],
+
+            // 回复心情
+             mood_comment_dialogVisible: false,
+
+            mood_add_comment: {
+                name: '',
+                content: '',
             }
+
         },
         created(){
             this.init_theme()
@@ -619,8 +633,8 @@
                 $('html,body').animate({scrollTop: pos.top}, 600)
             },
 
-            // 搜索框伸缩动效
-            search(){
+            // 搜索方法 继承问题
+            search(path='/search/', target='_blank'){
                 let box = document.querySelector('.search')
 
                 if (!box.classList.contains('show_search')) {
@@ -632,7 +646,7 @@
                     return;
                 }
                 // 打开搜索标签页
-                window.open('/search/?key='+this.search_key, name='_blank')
+                window.open(path + '?key=' + this.search_key, name=target)
             },
 
             // 初始化搜索词
@@ -649,7 +663,7 @@
                 )
             },
 
-            // 测试获取食谱
+            // 测试获取食谱 ---- 后续完善！！！！
             get_recipe(type){
                 const appid = '9efdb599';
                 const appKey = 'ae630ec4854aba74003222d9eed06631';
@@ -679,6 +693,105 @@
                     }, 1000)
                 })
             },
+
+            // 删除心情
+            mood_delete(nid, e){
+              this.$confirm('Are you sure to delete this mood?', 'Remind', {
+                  confirmButtonText: 'Yes',
+                  cancelButtonText: 'Cancel',
+                  type: 'warning'
+                }).then(() => {
+                    axios.delete(`/api/moods/${nid}`).then(res=>{
+                        if (res.code){
+                            this.$message.error(res.msg)
+                            return
+                        }
+                        this.$message.success(res.msg)
+                        setTimeout(()=>{
+                            $(e.target).parents('.mood').remove()
+                        }, 500)
+                        })
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: 'Canceled successfully.'
+                  });
+                });
+            },
+
+            // 打开回复心情的弹窗
+            mood_comment_dialogVisible_show(nid){
+                this.mood_comment_dialogVisible = true
+                this.mood_comment_add_method.nid = nid;
+            },
+
+            // 评论心情
+            mood_comment_add_method(){
+                let nid = this.mood_comment_add_method.nid
+
+                axios.post(`/api/mood_comments/${nid}/`, this.mood_add_comment).then(res=>{
+                    if (res.code){
+                        this.$message.error(res.msg)
+                        this.$refs[`mood_comment_add__${res.self}`].focus()
+                        return
+                    }
+                    this.$message.success(res.msg)
+                    setTimeout(()=>{
+                        location.reload()
+                    }, 1000)
+                })
+            },
+
+            // 删除心情评论
+            mood_sub_comment_delete(nid, mood_id, e){
+                this.$confirm('Are you sure to delete this comment?', 'Remind', {
+                  confirmButtonText: 'Yes',
+                  cancelButtonText: 'Cancel',
+                  type: 'warning'
+                }).then(() => {
+                    // nid是评论的id, mood_id是心情id
+                    axios.delete(`/api/mood_comments/${nid}`, {
+                        data: {
+                            mood_id,
+                        }
+                    }).then(res=>{
+                        if (res.code){
+                            this.$message.error(res.msg)
+                            return
+                        }
+                        this.$message.success(res.msg)
+                        setTimeout(()=>{
+                            let div = $(e.target).parents('.mood').find('.mood_comment_num').text(`Comment (${res.data})`)
+                            console.log(div)
+                            $(e.target).parents('li').remove()
+                        }, 300)
+                        })
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: 'Canceled successfully.'
+                  });
+                });
+            },
+
+            // 心情点赞和心情评论点赞
+            mood_digg(path, nid, e){
+                axios.put(`/api/${path}/${nid}/`).then(res => {
+                    if (res.code) {
+                        this.$message.error(res.msg)
+                        return
+                    }
+                    this.$message.success(res.msg)
+                    $(e.target).text(`Like (${res.data})`)
+                })
+            },
+
+        },
+
+        watch: {
+            'mood_add.drawing'(newVal, oldVal) {
+                this.mood_show_drawing = newVal.split('\n')  // 使用回车来上传多张图片
+            }
         }
     })
 

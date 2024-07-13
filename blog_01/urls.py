@@ -40,7 +40,7 @@ urlpatterns = [
     path('backend/', views.backend),  # backend user center
     path('backend/add_article/', views.add_article),  # backend add article
     path('backend/edit_avatar/', views.edit_avatar),  # backend edit avatar
-    path('backend/reset_password/', views.reset_password),  # backend update password
+    path('backend/edit_password/', views.edit_password),  # backend update password
     re_path(r'^backend/edit_article/(?P<nid>\d+)/', views.edit_article),  # 文章编辑
 
     re_path(r'^article/(?P<nid>\d+)/', views.article),  # article detail page
