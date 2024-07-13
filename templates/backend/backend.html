@@ -26,11 +26,15 @@
             <!-- 后续可修改！！！设置权限 只有超级管理员可以进行文章的上传 -->
             {% if request.user.is_superuser %}
                 <li><a href="/backend/add_article/">Upload Article</a></li>
+                <li><a href="/backend/avatar_list/">Avatar List</a></li>
+                <li><a href="/backend/cover_list/">Article Cover</a></li>
+                <li><a href="/admin/">Admin System</a></li>
             {% endif %}
             <li><a href="/logout/">Logout Exit</a></li>
         </ul>
     </aside>
     <main>
+        {% csrf_token %}
          {% block main %}
             <div class="user_info">
                 <div class="left">
@@ -255,6 +259,8 @@
             // 修改头像id
             edit_avatar_id: '',
 
+            // 头像上传时要给element ui添加请求头
+            avatar_list_headers: {},
 
         },
         created(){
@@ -413,7 +419,47 @@
                 init_edit_avatar(img){
                 let nid = eval($('.avatar_list').attr('avatar_nid'))
                 this.edit_avatar_id = nid
-            }
+            },
+
+            // 上传头像
+            avatar_list_upload(){
+                console.log(1)
+                let csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value
+                this.avatar_list_headers['X-CSRFToken'] = csrftoken
+            },
+
+            // 上传头像成功事件
+            avatar_list_success(res){
+                if (!res.code){
+                    return
+                }
+                this.$message.error(res.msg)
+            },
+
+            // 头像删除事件
+            avatar_list_delete(nid){
+                this.$confirm('Are you sure to delete this avatar?', 'Reminder', {
+                  confirmButtonText: 'Delete',
+                  cancelButtonText: 'Cancel',
+                  type: 'warning'
+                }).then(() => {
+                  axios.delete(`/api/upload/avatar/${nid}/`).then(res =>{
+                  if (res.code){
+                      this.$message.error(res.msg)
+                      return
+                  }
+                  this.$message.success(res.msg)
+                  }
+                  )
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: 'Delete Cancel.'
+                  });
+                });
+
+            },
+
         }
     })
 </script>

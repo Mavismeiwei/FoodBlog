@@ -1,6 +1,6 @@
 from django import template
-
-from app01.models import Tags
+import re
+from app01.models import Tags, Avatars
 from app01.utils.search import Search
 from django.utils.safestring import mark_safe
 
@@ -96,4 +96,3 @@ def generate_drawing(drawing: str):
         html_s += f'<img src="{i}" alt="">'
 
     return mark_safe(html_s)
-

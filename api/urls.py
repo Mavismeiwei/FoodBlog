@@ -1,5 +1,5 @@
 from django.urls import path, re_path
-from api.views import login, article, comment, mood, user
+from api.views import login, article, comment, mood, user, file
 
 urlpatterns = [
     path('login/', login.LoginView.as_view()),  # 登录
@@ -18,4 +18,7 @@ urlpatterns = [
 
     path('edit_password/', user.EditPasswordView.as_view()),  # 用户修改密码
     path('edit_avatar/', user.EditAvatarView.as_view()),  # 修改头像
+
+    path('upload/avatar/', file.AvatarView.as_view()),  # 后台上传头像
+    re_path(r'upload/avatar/(?P<nid>\d+)/', file.AvatarView.as_view()),  # 后台删除头像
 ]
