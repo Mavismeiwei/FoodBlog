@@ -21,4 +21,7 @@ urlpatterns = [
 
     path('upload/avatar/', file.AvatarView.as_view()),  # 后台上传头像
     re_path(r'upload/avatar/(?P<nid>\d+)/', file.AvatarView.as_view()),  # 后台删除头像
+
+    path('upload/cover/', file.CoverView.as_view()),  # 后台上传文章封面
+    re_path(r'upload/cover/(?P<nid>\d+)/', file.CoverView.as_view()),  # 后台删除文章封面
 ]

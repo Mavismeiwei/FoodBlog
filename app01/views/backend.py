@@ -76,4 +76,5 @@ def avatar_list(request):
 
 # 文章封面
 def cover_list(request):
+    cover_query = Cover.objects.all()
     return render(request, 'backend/cover_list.html', locals())

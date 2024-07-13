@@ -10,7 +10,7 @@
     {% for avatar in avatar_query %}
         <li class="{{ avatar|to_calculate_avatar }}">
         <div class="delete_icon">
-            <i class="el-icon-delete-solid" @click="avatar_list_delete('{{ avatar.nid }}')"></i>
+            <i class="el-icon-delete-solid" @click="avatar_cover_delete('{{ avatar.nid }}', 'avatar')"></i>
         </div>
             <img src="{{ avatar.url.url }}">
         </li>
@@ -24,7 +24,7 @@
       :before-upload="avatar_list_upload"
       :headers="avatar_list_headers"
       list-type="picture">
-      <el-button type="warning" plain >Upload Avatar</el-button>
-      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+      <el-button type="warning" plain >Click to upload</el-button>
+      <div slot="tip" class="el-upload__tip">jpg/png files with a size less than 500kb</div>
     </el-upload>
 {% endblock %}

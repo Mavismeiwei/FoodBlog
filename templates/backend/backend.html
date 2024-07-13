@@ -436,14 +436,14 @@
                 this.$message.error(res.msg)
             },
 
-            // 头像删除事件
-            avatar_list_delete(nid){
+            // 头像和文章封面删除事件
+            avatar_cover_delete(nid, url){
                 this.$confirm('Are you sure to delete this avatar?', 'Reminder', {
                   confirmButtonText: 'Delete',
                   cancelButtonText: 'Cancel',
                   type: 'warning'
                 }).then(() => {
-                  axios.delete(`/api/upload/avatar/${nid}/`).then(res =>{
+                  axios.delete(`/api/upload/${url}/${nid}/`).then(res =>{
                   if (res.code){
                       this.$message.error(res.msg)
                       return

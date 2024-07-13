@@ -1,5 +1,5 @@
 import datetime
-from app01.models import Tags, Avatars
+from app01.models import Tags, Avatars, Cover
 from django import template
 import json
 import pendulum
@@ -46,3 +46,10 @@ def to_calculate_avatar(avatar: Avatars):
     if count:
         return ''
     return 'no_avatar'
+
+@register.filter
+def to_calculate_cover(cover: Cover):
+    count = cover.articles_set.count()
+    if count:
+        return ''
+    return 'no_cover'
