@@ -171,6 +171,9 @@
                             <ul class="article_content">
                                 {% for article in article_list %}
                                     <li>
+                                    <div class="category_flag" len="{{ article.get_category_display|length }}" type="{{ article.get_category_display }}">
+                                        {{ article.get_category_display }}
+                                    </div>
                                     <div class="left">
                                         <div>
                                             <img src="{{ article.cover.url.url }}" alt="">
@@ -219,15 +222,28 @@
                                     <img src="https://media.healthyfood.com/wp-content/uploads/2024/06/HFG-IMAGES-600-x-450-px-32.png" alt="">
                                 </a>
                             </div>
-                            <div>
-                                <a href="https://hernexxchapter.org/blog/2022/05/19/make-time-to-enjoy-a-healthy-meal-with-others-this-national-mediterranean-diet-month/?gad_source=1&gclid=CjwKCAjw4ri0BhAvEiwA8oo6F5mrED49c2p25NnPzBeOSdVVJcnR4Rvi0nhPFZgZWbCsTca83VzH3RoC1j4QAvD_BwE" target="_blank">
-                                    <img src="https://hernexxchapter.org/wp-content/uploads/2022/05/Make-Time-to-Enjoy-a-Healthy-Meal-with-Others-This-National-Mediterranean-Diet-Month.png" alt="">
-                                </a>
-                            </div>
-                            <div>
-                                <a href="https://mavismeiwei.github.io/meiwei_portfolio/" target="_blank">
-                                    <img src="https://cdn-icons-png.flaticon.com/256/4471/4471007.png" alt="">
-                                </a>
+{#                            <div>#}
+{#                                <a href="https://hernexxchapter.org/blog/2022/05/19/make-time-to-enjoy-a-healthy-meal-with-others-this-national-mediterranean-diet-month/?gad_source=1&gclid=CjwKCAjw4ri0BhAvEiwA8oo6F5mrED49c2p25NnPzBeOSdVVJcnR4Rvi0nhPFZgZWbCsTca83VzH3RoC1j4QAvD_BwE" target="_blank">#}
+{#                                    <img src="https://hernexxchapter.org/wp-content/uploads/2022/05/Make-Time-to-Enjoy-a-Healthy-Meal-with-Others-This-National-Mediterranean-Diet-Month.png" alt="">#}
+{#                                </a>#}
+{#                            </div>#}
+
+                            <div class="my_card">
+                                <div class="title">
+                                    <h3>About Me</h3>
+                                    <h4>MY PROFILE</h4>
+                                </div>
+                                <div class="intro_me">
+                                    <a target="_blank" href="https://mavismeiwei.github.io/meiwei_portfolio/"><img id="intro_img" src="https://cdn-icons-png.flaticon.com/256/4471/4471007.png"></a>
+                                </div>
+                                <div class="footer">
+                                    <p>NAME <span>Mimi's Food Blog</span></p>
+                                    <p>JOB <span>Fullstack Developer</span></p>
+                                    <p>ADDR <span>Boston, US</span></p>
+                                    <p>WEB <a target="_blank" href="https://mavismeiwei.github.io/meiwei_portfolio/">www.meiwei-zhang.cn</a>
+                                </p>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -237,21 +253,7 @@
                         </div>
                         <div class="body">
                             <ul>
-                                <li>Foods</li>
-                                <li>Drinks</li>
-                                <li>Restaurants</li>
-                                <li>MakeUp</li>
-                                <li>Fashion</li>
-                                <li>Beauty</li>
-                                <li>Shopping</li>
-                                <li>Types</li>
-                                <li>Cooking</li>
-                                <li>Sports</li>
-                                <li>Clothes</li>
-                                <li>Jewerly</li>
-                                <li>Relax</li>
-                                <li>Places</li>
-                                <li>Special</li>
+                                {% generate_tag_html %}
                             </ul>
                         </div>
                     </div>

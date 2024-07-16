@@ -157,3 +157,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Create third table
 AUTH_USER_MODEL = "app01.UserInfo"
+
+# 网站信息
+SITE_TITLE = "Mimi's Food Blog"
+# SITE_BEIAN = '湘ICP备10001000100号'
+SITE_INFO = {
+    'name': 'Mimi',
+    'job': 'FUll Stack Engineer',
+    'address': 'Boston, US',
+    'link': 'https://mavismeiwei.github.io/meiwei_portfolio/',
+    'date': '2023-7-29'  # 建站日期
+}

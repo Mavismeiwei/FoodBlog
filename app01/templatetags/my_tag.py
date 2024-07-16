@@ -84,6 +84,18 @@ def dynamic_navigation(request):
         nav_list.append(f'<a href="{k}">{v}</a>')
     return mark_safe(''.join(nav_list))
 
+# 主页生成云标签
+@register.simple_tag
+def generate_tag_html():
+    tag_list = Tags.objects.all()[:15]
+    tag_html = []
+    for tag in tag_list:
+        if tag.articles_set.all():
+            tag_html.append(f'<li>{tag.title} <i>{tag.articles_set.count()}</i></li>')
+        else:
+            tag_html.append(f'<li>{tag.title}</li>')
+    return mark_safe(''.join(tag_html))
+
 # 发布心情配图
 @register.simple_tag
 def generate_drawing(drawing: str):

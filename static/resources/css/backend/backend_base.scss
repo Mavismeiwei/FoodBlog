@@ -6,7 +6,7 @@
 aside {
   width: 200px;
   height: 100vh;
-  background-color: #b2bec3;
+  background-color: #b5c5da;
   padding: 0;
   margin: 0;
 
@@ -21,18 +21,20 @@ aside {
     }
   }
 
-  > ul {
+  > #dynamic_menu {
     width: 100%;
     margin-top: 40px;
     padding: 0;
 
-    > li {
+    > a {
+      text-decoration-line: none;
       width: 100%;
       height: 50px;
       justify-content: center;
       align-items: center;
       display: flex;
       transition: all 0.2s;
+      color: white;
 
       a {
         color: white;
@@ -41,6 +43,10 @@ aside {
       }
 
       &:hover {
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+
+      &.active {
         background-color: rgba(0, 0, 0, 0.2);
       }
     }
@@ -53,6 +59,7 @@ main {
   height: 100vh;
   background-color: #ffffff;
   padding: 20px;
+  overflow-x: auto;
 
   .user_info {
     width: 100%;

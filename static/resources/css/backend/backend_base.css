@@ -6,7 +6,7 @@
 aside {
   width: 200px;
   height: 100vh;
-  background-color: #b2bec3;
+  background-color: #b5c5da;
   padding: 0;
   margin: 0;
 }
@@ -19,25 +19,30 @@ aside .slogan {
 aside .slogan img {
   width: 80%;
 }
-aside > ul {
+aside > #dynamic_menu {
   width: 100%;
   margin-top: 40px;
   padding: 0;
 }
-aside > ul > li {
+aside > #dynamic_menu > a {
+  text-decoration-line: none;
   width: 100%;
   height: 50px;
   justify-content: center;
   align-items: center;
   display: flex;
   transition: all 0.2s;
+  color: white;
 }
-aside > ul > li a {
+aside > #dynamic_menu > a a {
   color: white;
   text-decoration: none;
   font-size: 18px;
 }
-aside > ul > li:hover {
+aside > #dynamic_menu > a:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+aside > #dynamic_menu > a.active {
   background-color: rgba(0, 0, 0, 0.2);
 }
 

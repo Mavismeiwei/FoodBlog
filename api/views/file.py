@@ -49,6 +49,9 @@ class AvatarView(View):
 
         # 使用models.py中定义好的删除头像方法
         avatar_query = Avatars.objects.filter(nid=nid)
+        if not avatar_query:
+            res['msg'] = 'Avatar has been deleted!'
+            return JsonResponse(res)
         avatar_delete(avatar_query.first())
         avatar_query.delete()
 
@@ -99,6 +102,9 @@ class CoverView(View):
 
             # 使用models.py中定义好的删除头像方法
             cover_query = Cover.objects.filter(nid=nid)
+            if not cover_query:
+                res['msg'] = 'Cover has been deleted!'
+                return JsonResponse(res)
             cover_delete(cover_query.first())
             cover_query.delete()
 

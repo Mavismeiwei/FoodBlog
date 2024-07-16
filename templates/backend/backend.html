@@ -16,22 +16,22 @@
     <div class="slogan">
         <img src="{{ request.user.avatar.url.url }}" alt="">
     </div>
-        <ul>
+        <div id="dynamic_menu">
             {# function in normal users #}
-            <li><a href="/">Home Page</a></li>
-            <li><a href="/backend/">User Center</a></li>
-            <li><a href="/backend/edit_avatar/">Edit Avatar</a></li>
+            <a href="/">Home Page</a>
+            <a href="/backend/">User Center</a>
+            <a href="/backend/edit_avatar/">Edit Avatar</a>
 
 {#            <li><a href="/backend/add_article/">Upload Article</a></li>#}
             <!-- 后续可修改！！！设置权限 只有超级管理员可以进行文章的上传 -->
             {% if request.user.is_superuser %}
-                <li><a href="/backend/add_article/">Upload Article</a></li>
-                <li><a href="/backend/avatar_list/">Avatar List</a></li>
-                <li><a href="/backend/cover_list/">Article Cover</a></li>
-                <li><a href="/admin/">Admin System</a></li>
+                <a href="/backend/add_article/">Upload Article</a>
+                <a href="/backend/avatar_list/">Avatar List</a>
+                <a href="/backend/cover_list/">Article Cover</a>
+                <a href="/admin/">Admin System</a>
             {% endif %}
-            <li><a href="/logout/">Logout Exit</a></li>
-        </ul>
+            <a href="/logout/">Logout Exit</a>
+        </div>
     </aside>
     <main>
         {% csrf_token %}
@@ -270,6 +270,8 @@
                 "add_article": this.init_add_article,
                 "edit_article": this.init_edit_article,
                 "edit_avatar": this.init_edit_avatar,  // avatar初始化 头像选择按钮初始化
+                "cover_list": this.init_cover_list,  // cover list高度初始化
+                "avatar_list": this.init_avatar_list,  // avatar list高度初始化
             }
             let path = location.pathname
             for (const key in path_dict) {
@@ -277,6 +279,18 @@
                 if (index !== -1){
                     path_dict[key](img)
                     break
+                }
+            }
+        },
+        mounted(){
+            // 动态导航的a标签 父级、添加一个ref=“dynamic_menu”
+            let dynamic_menu = document.getElementById('dynamic_menu')
+            let a_list = dynamic_menu.querySelectorAll('a')
+            let path = location.pathname
+            for (const a of a_list) {
+                let a_href = a.getAttribute('href')
+                if (a_href == path || a_href + '/' === path) {
+                a.classList.add('active')
                 }
             }
         },
@@ -437,7 +451,7 @@
             },
 
             // 头像和文章封面删除事件
-            avatar_cover_delete(nid, url){
+            avatar_cover_delete(nid, url, e){
                 this.$confirm('Are you sure to delete this avatar?', 'Reminder', {
                   confirmButtonText: 'Delete',
                   cancelButtonText: 'Cancel',
@@ -449,6 +463,7 @@
                       return
                   }
                   this.$message.success(res.msg)
+                  $(e.target).parent().parent().remove()
                   }
                   )
                 }).catch(() => {
@@ -460,6 +475,27 @@
 
             },
 
+            // 后台cover_list文章封面初始化
+            init_cover_list(img){
+                setTimeout(() => {
+                let h = document.querySelector('.cover_list').offsetHeight
+                if (h > 500) {
+                    h = 500
+                }
+                document.querySelector('.el-scrollbar').style.height = h + 'px'
+                }, 1)
+            },
+
+            // 后台avatar_list高估初始化
+            init_avatar_list(img){
+                setTimeout(() => {
+                let h = document.querySelector('.avatar_list').offsetHeight
+                if (h > 500) {
+                    h = 500
+                }
+                document.querySelector('.el-scrollbar').style.height = h + 'px'
+                }, 1)
+            },
         }
     })
 </script>
