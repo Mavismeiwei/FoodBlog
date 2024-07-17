@@ -1,3 +1,5 @@
+import time
+
 from django.views import View
 from django.http import JsonResponse
 from django.contrib import auth
@@ -78,5 +80,76 @@ class EditAvatarView(View):
             user.avatar_url = avatar_url
         user.save()
         res['data'] = avatar.url.url
+        res['code'] = 0
+        return JsonResponse(res)
+
+# 用户信息修改验证
+class EditUserInfoForm(forms.Form):
+    email = forms.EmailField(error_messages={'required': 'Please enter email', "invalid": 'Please enter valid email.'})
+    pwd = forms.CharField(error_messages={'required': 'Please enter password.'})
+    code = forms.CharField(error_messages={'required': 'Please enter validation code.'})
+
+    # 重写init方法
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+
+    # 邮箱校验
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        # 判断是否和self里面的邮箱相同
+        if email == self.request.session.get('valid_email_obj')['email']:
+            return email
+        self.add_error('email', 'Email Validation Failed!')
+
+    # 密码校验
+    def clean_pwd(self):
+        pwd = self.cleaned_data['pwd']
+        user = auth.authenticate(username=self.request.user.username, password=pwd)
+        if user:
+            return pwd
+        self.add_error('pwd', 'Password Validation Failed!')
+
+    # 验证码校验
+    def clean_code(self):
+        code = self.cleaned_data['code']
+        if code == self.request.session.get('valid_email_obj')['code']:
+            return code
+        self.add_error('code', 'Code Validation Failed!')
+
+
+# 用户完善信息
+class EditUserInfoView(View):
+    def put(self, request):
+        res = {
+            'code': 332,
+            'msg': 'Information updated successfully!',
+            'self': None,
+        }
+
+        # 校验验证码时间部分
+        # 如果验证码不存在 提示用户先获取
+        valid_email_obj = request.session.get('valid_email_obj')
+        if not valid_email_obj:
+            res['msg'] = "Please get validation code first!"
+            return JsonResponse(res)
+
+        time_stamp = valid_email_obj['time_stamp']
+        now = time.time()
+        # 如果获取验证码时间超过5min 验证码失效
+        if (now - time_stamp) > 300:
+            res['msg'] = 'The verification code has expired. Please request a new one.'
+            return JsonResponse(res)
+
+        form = EditUserInfoForm(request.data, request=request)
+        if not form.is_valid():
+            res['self'], res['msg'] = clean_form(form)
+            return JsonResponse(res)
+
+        # 绑定信息
+        user = request.user
+        user.email = form.cleaned_data['email']
+        user.save()
+
         res['code'] = 0
         return JsonResponse(res)

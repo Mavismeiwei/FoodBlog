@@ -60,7 +60,7 @@
                             {{ request.user.email }}
 
                             {% else %}
-                                <a href="javascript:void (0);">Bind Email</a>
+                                <a href="javascript:void (0);" @click="perfect_information_dialogVisible=true">Bind Email</a>
                         {% endif %}
 
                         </span>
@@ -70,11 +70,41 @@
             </div>
             <div class="actions">
             {% csrf_token %}
+                <el-dialog
+                  title="Update Information"
+                  :visible.sync="perfect_information_dialogVisible"
+                  width="30%">
+                  <div class="edit_info">
+                      <div>
+                          <label for="">Email</label>
+                        <el-input id="" v-model="perfect_information.email" placeholder="Please enter your email."></el-input>
+                      </div>
+                      <div >
+                          <label for="">Validation Code</label>
+                          <div class="send_email">
+                             <el-input class="validation_input" id="" v-model="perfect_information.code" placeholder="Please enter validation code."></el-input>
+                             <el-button @click="send_email" :disabled="perfect_information_email_disable">Send Code</el-button>
+                          </div>
+
+                      </div>
+                      <div>
+                          <label for="">Password</label>
+                        <el-input type="password" id="" v-model="perfect_information.pwd" placeholder="Please enter your password."></el-input>
+                      </div>
+                      <p>
+                         You can login with your email and password after binding email with your account.
+                      </p>
+                  </div>
+                  <span slot="footer" class="dialog-footer">
+                    <el-button @click="perfect_information_dialogVisible = false">Cancel</el-button>
+                    <el-button type="primary" :disabled="perfect_information_method_disable" @click="perfect_information_method">Update</el-button>
+                  </span>
+                </el-dialog>
                 <div class="item">
-                     <el-button type="primary">Update Information</el-button>
+                     <el-button type="primary" @click="perfect_information_dialogVisible=true">Update Information</el-button>
                 </div>
                  <div class="item">
-                     <el-button type="success">Update Avatar</el-button>
+                     <el-button type="success"><a href="/backend/edit_avatar/" style="color: white; text-decoration: none">Update Avatar</a></el-button>
                 </div>
                 <el-dialog
                   title="Update Password"
@@ -261,6 +291,15 @@
 
             // 头像上传时要给element ui添加请求头
             avatar_list_headers: {},
+
+            perfect_information_dialogVisible: false,
+            perfect_information:{
+                email: '',
+                pwd: '',
+                code: '',  // 验证码
+            },
+            perfect_information_email_disable: false,
+            perfect_information_method_disable: true,
 
         },
         created(){
@@ -496,6 +535,44 @@
                 document.querySelector('.el-scrollbar').style.height = h + 'px'
                 }, 1)
             },
+
+            // 邮箱发送绑定验证码
+            send_email(){
+                axios.post('/api/send_email/', this.perfect_information).then(res=>{
+                if (res.code){
+                    this.$message.error(res.msg)
+                    return
+                }
+                this.$message.success(res.msg)
+                let num = 60
+                let span = document.querySelector('.send_email .el-button span')
+                this.perfect_information_email_disable = true   // 发送验证码按钮禁用设置
+                this.perfect_information_method_disable = false
+                let timer = null
+                timer = setInterval(() => {
+                    span.innerHTML = num + 'S'
+                    if (num === 1) {
+                        span.innerHTML = 'Send Code'
+                        this.perfect_information_email_disable = false
+                        clearInterval(timer)
+                    }
+                    num --
+                }, 1000)
+                })
+            },
+
+            // 完善信息方法
+            perfect_information_method(){
+                axios.put('/api/perfect_information/', this.perfect_information).then(res =>{
+                    if (res.code){
+                        this.$message.error(res.msg)
+                        return
+                    }
+                    this.$message.success(res.msg)
+                    this.perfect_information_dialogVisible = false
+                })
+            }
+
         }
     })
 </script>

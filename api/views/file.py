@@ -1,8 +1,10 @@
 from django.views import View
 from django.http import JsonResponse
-from app01.models import Avatars, Cover
+from app01.models import Avatars, Cover, UserInfo
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from app01.models import avatar_delete, cover_delete
+from django.core.handlers.wsgi import WSGIRequest
+from django.db.models import Q
 
 class AvatarView(View):
     def post(self, request):
@@ -52,7 +54,17 @@ class AvatarView(View):
         if not avatar_query:
             res['msg'] = 'Avatar has been deleted!'
             return JsonResponse(res)
-        avatar_delete(avatar_query.first())
+
+        # 判断图片是否有人在使用
+        obj: Avatars = avatar_query.first()
+
+        userquery = UserInfo.objects.filter(Q(sign_status=1) | Q(sign_status=2))
+        for user in userquery:
+            if obj.url.url == user.avatar_url:
+                res['msg'] = 'This avatar is being used by user.'
+                return JsonResponse(res)
+
+        avatar_delete(obj)
         avatar_query.delete()
 
         res['code'] = 0

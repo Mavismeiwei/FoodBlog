@@ -52,6 +52,7 @@ main {
   height: 100vh;
   background-color: #ffffff;
   padding: 20px;
+  overflow-x: auto;
 }
 main .user_info {
   width: 100%;
@@ -133,6 +134,15 @@ main .collection_article_all .article_list .item .right p {
 
 .edit_info > div {
   margin-bottom: 10px;
+}
+.edit_info .send_email {
+  display: flex;
+}
+.edit_info .send_email .el-button {
+  width: 150px;
+}
+.edit_info .send_email .validation_input {
+  margin-right: 10px;
 }
 
 h1, h2, h3, h4, h5, h6 {
