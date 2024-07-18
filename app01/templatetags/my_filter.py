@@ -1,4 +1,7 @@
 import datetime
+
+from django.utils.safestring import mark_safe
+
 from app01.models import Tags, Avatars, Cover
 from django import template
 import json
@@ -53,3 +56,12 @@ def to_calculate_cover(cover: Cover):
     if count:
         return ''
     return 'no_cover'
+
+# 获得tag
+@register.filter
+def get_tags(tag_list):
+    return mark_safe(''.join([f"<i>{i.title}</i>" for i in tag_list]))
+
+@register.filter
+def get_coll_nid(lis):
+    return [i.nid for i in lis]

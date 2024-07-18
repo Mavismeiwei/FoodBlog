@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load my_filter my_tag %}
 <head>
     <meta charset="UTF-8">
     <title>User Backend Page</title>
@@ -19,7 +20,7 @@
         <div id="dynamic_menu">
             {# function in normal users #}
             <a href="/">Home Page</a>
-            <a href="/backend/">User Center</a>
+            <a href="/backend/">My Collections</a>
             <a href="/backend/edit_avatar/">Edit Avatar</a>
 
 {#            <li><a href="/backend/add_article/">Upload Article</a></li>#}
@@ -138,83 +139,53 @@
             </div>
 
             {% block content %}
-                <div class="collection_article_all">
-                <p class="collection_title"><b>My Collections</b></p>
-                <div class="article_list">
-                    <div class="item">
-                        <div class="left">
-                            <img src="/static/resources/img/all_articles_card/5.jpeg" alt="">
-                        </div>
-                        <div class="right">
-                            <h4>Healthy Salad</h4>
-                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="left">
-                            <img src="/static/resources/img/all_articles_card/1.jpeg" alt="">
-                        </div>
-                        <div class="right">
-                            <h4>Healthy Salad</h4>
-                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="left">
-                            <img src="/static/resources/img/all_articles_card/2.jpeg" alt="">
-                        </div>
-                        <div class="right">
-                            <h4>Healthy Salad</h4>
-                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="left">
-                            <img src="/static/resources/img/all_articles_card/3.jpeg" alt="">
-                        </div>
-                        <div class="right">
-                            <h4>Healthy Salad</h4>
-                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                        </div>
-                    </div>
-                     <div class="item">
-                        <div class="left">
-                            <img src="/static/resources/img/all_articles_card/4.jpeg" alt="">
-                        </div>
-                        <div class="right">
-                            <h4>Healthy Salad</h4>
-                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                        </div>
-                    </div>
-                     <div class="item">
-                        <div class="left">
-                            <img src="/static/resources/img/all_articles_card/6.jpeg" alt="">
-                        </div>
-                        <div class="right">
-                            <h4>Healthy Salad</h4>
-                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                        </div>
-                    </div>
-                     <div class="item">
-                        <div class="left">
-                            <img src="/static/resources/img/all_articles_card/7.jpeg" alt="">
-                        </div>
-                        <div class="right">
-                            <h4>Healthy Salad</h4>
-                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                        </div>
-                    </div>
-                     <div class="item">
-                        <div class="left">
-                            <img src="/static/resources/img/all_articles_card/1.jpeg" alt="">
-                        </div>
-                        <div class="right">
-                            <h4>Healthy Salad</h4>
-                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+              {% if collects_query.count %}
+                    <form method="post" action="/api/cancel_collection/" class="collection_article_all">
+                                        {% csrf_token %}
+                                        <p class="collection_title"><b>My Collections</b></p>
+{#                                        <p>Collect {{ collects_query.count }} articles in total, you select [[ select_list.length ]] articles.</p>#}
+                                        <table class="collection_table">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <input type="checkbox" @click="select_all" data="{{ collects_query|get_coll_nid }}">
+                                                    </th>
+                                                    <th>Title</th>
+                                                    <th>Category</th>
+                                                    <th>Tag</th>
+                                                    <th>View</th>
+                                                    <th>Collect</th>
+                                                    <th>Post Date</th>
+
+                                                </tr>
+
+                                            </thead>
+                                            <tbody>
+                                                {% for col in collects_query %}
+                                                    <tr>
+                                                        <td class="select"><input v-model="select_list" type="checkbox" name="nid" value="{{ col.nid }}"></td>
+                                                        <td>{{ col.title }}</td>
+                                                        <td>{{ col.get_category_display }}</td>
+                                                        <td class="tags">{{ col.tag.all|get_tags }}</td>
+                                                        <td>{{ col.look_count }}</td>
+                                                        <td>{{ col.collects_count }}</td>
+                                                        <td>{{ col.create_date | date_format }}</td>
+
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        <!--未选中文章的话取消收藏按钮不会出现 -->
+                                        <input v-show="select_list.length" type="submit" class="cancel_btn" value="Cancel Collection">
+                                </form>
+
+              {% else %}
+                    <h2 class="collection_reminder">You haven't collected anything.</br>
+                    Go to the home page to collect now!</h2>
+
+              {% endif %}
+
+
             {% endblock %}
 
         {% endblock %}
@@ -300,6 +271,7 @@
             },
             perfect_information_email_disable: false,
             perfect_information_method_disable: true,
+            select_list: [],  // 后台文章收藏选中列表
 
         },
         created(){
@@ -571,7 +543,20 @@
                     this.$message.success(res.msg)
                     this.perfect_information_dialogVisible = false
                 })
-            }
+            },
+
+            // 文章收藏 一键全选取消收藏
+            select_all(e) {
+                if (this.select_all.flag) {
+                    // 取消
+                    this.select_list = []
+                    this.select_all.flag = false
+                    return
+                }
+                this.select_all.flag = true
+                let div = e.target.getAttribute('data')
+                this.select_list = eval(div)
+            },
 
         }
     })

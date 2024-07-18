@@ -5,6 +5,7 @@
 
 aside {
   width: 200px;
+  overflow-y: auto;
   height: 100vh;
   background-color: #b5c5da;
   padding: 0;
@@ -95,7 +96,6 @@ main .actions {
 main .collection_article_all {
   margin-top: 20px;
   border-radius: 5px;
-  background-color: #e9ebec;
 }
 main .collection_article_all .collection_title {
   text-align: center;
@@ -143,6 +143,92 @@ main .collection_article_all .article_list .item .right p {
 }
 .edit_info .send_email .validation_input {
   margin-right: 10px;
+}
+
+.collection_table {
+  width: 100%;
+  border-spacing: 1px;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid #a0b1c5;
+}
+.collection_table thead {
+  background-color: #407df3;
+}
+.collection_table thead tr {
+  color: #333;
+  font-weight: 600;
+  height: 50px;
+  background-color: white;
+}
+.collection_table tbody tr {
+  height: 40px;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+.collection_table tbody tr td {
+  text-align: center;
+}
+.collection_table tbody tr td a {
+  color: #304156;
+}
+.collection_table tbody tr .select input {
+  cursor: pointer;
+}
+.collection_table tbody tr .tags i {
+  margin-right: 5px;
+  padding: 0 5px;
+  color: white;
+  border-radius: 5px;
+  font-size: 12px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+}
+.collection_table tbody tr .tags i:nth-child(4n) {
+  background-color: #ff9800;
+}
+.collection_table tbody tr .tags i:nth-child(4n+1) {
+  background-color: #dd6161;
+}
+.collection_table tbody tr .tags i:nth-child(4n+2) {
+  background-color: #26c6da;
+}
+.collection_table tbody tr .tags i:nth-child(4n+3) {
+  background-color: #3a8ee6;
+}
+.collection_table tbody tr .tags i:last-child {
+  margin-right: 0;
+}
+.collection_table tbody tr:nth-of-type(odd) {
+  background-color: #f6f7fa;
+}
+.collection_table tbody tr:nth-of-type(odd):hover {
+  background-color: #e3e6ee;
+}
+.collection_table tbody tr:nth-of-type(even) {
+  background-color: #fff;
+}
+.collection_table tbody tr:nth-of-type(even):hover {
+  background-color: #eceff5;
+}
+
+.cancel_btn {
+  margin-top: 20px;
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid #f0eeee;
+  width: 150px;
+  height: 40px;
+  cursor: pointer;
+  color: white;
+  background-color: #666d83;
+}
+
+.collection_reminder {
+  color: #555555;
+  text-align: center;
+  margin-top: 40px;
 }
 
 h1, h2, h3, h4, h5, h6 {

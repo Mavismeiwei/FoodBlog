@@ -1,11 +1,11 @@
 import time
-
 from django.views import View
 from django.http import JsonResponse
 from django.contrib import auth
 from app01.models import Avatars
 from api.views.login import clean_form
 from django import forms
+from django.shortcuts import redirect
 
 class EditPasswordForm(forms.Form):
     old_pwd = forms.CharField(min_length=4, error_messages={'required': 'Please enter your previous password', 'min_length': 'The length of password at least for 4.'})
@@ -117,7 +117,6 @@ class EditUserInfoForm(forms.Form):
             return code
         self.add_error('code', 'Code Validation Failed!')
 
-
 # 用户完善信息
 class EditUserInfoView(View):
     def put(self, request):
@@ -153,3 +152,10 @@ class EditUserInfoView(View):
 
         res['code'] = 0
         return JsonResponse(res)
+
+# 用户取消收藏
+class CancelCollection(View):
+    def post(self, request):
+        nid_list = request.POST.getlist('nid')
+        request.user.collects.remove(*nid_list)
+        return redirect('/backend/')

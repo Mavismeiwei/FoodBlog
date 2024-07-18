@@ -27,4 +27,6 @@ urlpatterns = [
 
     path(r'send_email/', api_email.ApiEmail.as_view()),  # 发送邮件
     path(r'perfect_information/', user.EditUserInfoView.as_view()),  # 后台修改个人信息
+
+    path('cancel_collection/', user.CancelCollection.as_view())  # 用户中心取消收藏
 ]

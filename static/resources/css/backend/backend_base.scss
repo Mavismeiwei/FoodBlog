@@ -5,6 +5,7 @@
 
 aside {
   width: 200px;
+  overflow-y: auto;
   height: 100vh;
   background-color: #b5c5da;
   padding: 0;
@@ -108,7 +109,6 @@ main {
   .collection_article_all {
     margin-top: 20px;
     border-radius: 5px;
-    background-color: #e9ebec;
 
     .collection_title {
       text-align: center;
@@ -170,6 +170,115 @@ main {
     }
   }
 }
+
+.collection_table {
+  width: 100%;
+  border-spacing: 1px;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid #a0b1c5;
+
+  thead {
+    background-color: #407df3;
+
+    tr {
+      color: #333;
+      font-weight: 600;
+      height: 50px;
+      background-color: white;
+    }
+  }
+
+  tbody {
+    tr {
+      height: 40px;
+      font-size: 14px;
+      transition: all 0.3s;
+
+      td {
+        text-align: center;
+
+        a {
+          color: #304156;
+        }
+      }
+
+      .select {
+        input {
+          cursor: pointer;
+        }
+      }
+
+      .tags {
+        i {
+          margin-right: 5px;
+          padding: 0 5px;
+          color: white;
+          border-radius: 5px;
+          font-size: 12px;
+          height: 20px;
+          display: inline-flex;
+          align-items: center;
+        }
+
+        i:nth-child(4n) {
+          background-color: #ff9800;
+        }
+
+        i:nth-child(4n+1) {
+          background-color: #dd6161;
+        }
+
+        i:nth-child(4n+2) {
+          background-color: #26c6da;
+        }
+
+        i:nth-child(4n+3) {
+          background-color: #3a8ee6;
+        }
+
+        i:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+
+    tr:nth-of-type(odd) {
+      background-color: #f6f7fa;
+
+      &:hover {
+        background-color: #e3e6ee;
+      }
+    }
+
+    tr:nth-of-type(even) {
+      background-color: #fff;
+
+      &:hover {
+        background-color: #eceff5;
+      }
+    }
+  }
+}
+
+.cancel_btn {
+  margin-top: 20px;
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid #f0eeee;
+  width: 150px;
+  height: 40px;
+  cursor: pointer;
+  color: white;
+  background-color: #666d83;
+}
+
+ .collection_reminder{
+  color: #555555;
+  text-align: center;
+  margin-top: 40px;
+}
+
 
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
