@@ -1,6 +1,8 @@
 {% extends 'index.html' %}
 {% load my_tag my_filter %}
-
+{% block banner %}
+    {% banner 'moods' %}
+{% endblock %}
 {% block css %}
     <link rel="stylesheet" href="/static/resources/css/moods.css">
 {% endblock %}

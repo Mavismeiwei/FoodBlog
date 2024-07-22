@@ -6,16 +6,18 @@
 {% endblock %}
 
 {% block content %}
-    <ul class="cover_list">
-    {% for cover in cover_query %}
-        <li class="{{ cover|to_calculate_cover }}">
-        <div class="delete_icon">
-            <i @click="avatar_cover_delete('{{ cover.nid }}', 'cover')" class="el-icon-delete-solid"></i>
-        </div>
-            <img src="{{ cover.url.url }}">
-        </li>
-    {% endfor %}
-    </ul>
+    <el-scrollbar style="margin-top: 20px">
+        <ul class="cover_list">
+        {% for cover in cover_query %}
+            <li class="{{ cover|to_calculate_cover }}">
+            <div class="delete_icon">
+                <i @click="avatar_cover_delete('{{ cover.nid }}', 'cover', $event)" class="el-icon-delete-solid"></i>
+            </div>
+                <img src="{{ cover.url.url }}">
+            </li>
+        {% endfor %}
+        </ul>
+    </el-scrollbar>
     <el-upload
       class="upload-demo"
       action="/api/upload/cover/"
@@ -24,7 +26,7 @@
       :before-upload="avatar_list_upload"
       :headers="avatar_list_headers"
       list-type="picture">
-      <el-button type="warning" plain >Click to upload</el-button>
+      <el-button class="upload_button" type="warning" plain >Click to upload</el-button>
       <div slot="tip" class="el-upload__tip">jpg/png files with a size less than 500kb</div>
     </el-upload>
 {% endblock %}

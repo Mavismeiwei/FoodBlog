@@ -1,6 +1,5 @@
 .cover_list {
   display: flex;
-  margin-top: 20px;
   flex-wrap: wrap;
   list-style: none;
 
@@ -48,4 +47,12 @@
       }
     }
   }
+}
+
+.el-scrollbar {
+  margin-bottom: 20px;
+}
+
+.el-scrollbar__wrap {
+  overflow-x: hidden !important;
 }

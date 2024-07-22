@@ -48,3 +48,11 @@
     }
   }
 }
+
+.el-scrollbar {
+  margin-bottom: 20px;
+}
+
+.el-scrollbar__wrap {
+  overflow-x: hidden !important;
+}

@@ -42,4 +42,12 @@
   opacity: 1;
 }
 
+.el-scrollbar {
+  margin-bottom: 20px;
+}
+
+.el-scrollbar__wrap {
+  overflow-x: hidden !important;
+}
+
 /*# sourceMappingURL=avatar_list.css.map */

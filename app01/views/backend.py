@@ -7,6 +7,11 @@ def backend(request):
     avatar_list = Avatars.objects.all()
     if not request.user.username:  # username is empty
         return redirect('/')
+
+    # 获取当前用户的收藏文章
+    user = request.user
+    collects_query = user.collects.all()
+
     return render(request, 'backend/backend.html', locals())
 
 # 后台文章添加页

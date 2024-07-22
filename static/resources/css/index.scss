@@ -155,6 +155,8 @@
               background-color: white;
               margin-bottom: 20px;
               border-radius: 5px;
+              position: relative;
+              overflow: hidden;
 
               &:first-child {
                 border-radius: 0 0 5px 5px;
@@ -242,6 +244,43 @@
                   cursor: pointer;
                 }
               }
+
+              .category_flag{
+                position: absolute;
+                top: 20px;
+                right:-70px;
+                width: 200px;
+                height: 28px;
+                font-size: 15px;
+                background-color: #79a0f1;
+                color: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transform: rotate(45deg);
+
+                &[len="15"]{
+                  font-size: 12px;
+                }
+
+                &[len="12"]{
+                  font-size: 11px;
+                }
+
+                &[type="Recipes"]{
+                  background-color: #e5a5c7;
+                }
+                &[type="Nutrition"]{
+                  background-color: #87b685;
+                }
+                &[type="Other"]{
+                  background-color: #a6a6a6;
+                }
+                &[type="Food Reviews"]{
+                  background-color: #d2934b;
+                }
+              }
+
             }
           }
         }
@@ -249,6 +288,81 @@
 
       .right {
         width: 30%;
+
+        .my_card {
+        padding: 20px;
+        width: 100%;
+        background-color: #b9ffeb;
+        border-radius: 5px;
+        margin-bottom: 20px;
+
+      .title {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+
+        h3 {
+          color: #2b542c;
+          font-size: 22px;
+          font-weight: 700;
+          letter-spacing: .3em;
+          margin-bottom: 10px;
+        }
+
+        h4 {
+          color: var(--md_tag, #e0bb53);
+          text-transform: uppercase;
+          font-style: italic;
+          font-weight: 700;
+          font-size: 22px;
+          letter-spacing: .2em;
+        }
+
+        img {
+          position: absolute;
+          right: 0;
+          top: 0;
+          height: 90px;
+          width: 90px;
+        }
+      }
+
+      .intro_me {
+        align-items: center;
+        width: 100%;
+        border-radius: 5px;
+        margin: 10px 0;
+        overflow: hidden;
+        transition: all 0.3s;
+        cursor: pointer;
+
+        img {
+          width: 80%;
+          margin-left: 10%;
+        }
+
+        &:hover {
+          transform: scale(1.03);
+        }
+      }
+
+      .footer {
+        p {
+          margin-bottom: 5px;
+          color: #A7A7A7;
+
+          span {
+            color: #555555;
+          }
+
+          a {
+            color: #ff9800;
+          }
+        }
+      }
+    }
+
 
         .advertisements >.body{
           padding: 0;
@@ -288,6 +402,7 @@
           position: relative;
 
           ul {
+            text-align: center;
             padding: 0;
             margin: 10px 0 0;
             display: flex;
@@ -335,6 +450,7 @@
             }
 
             li {
+              font-size: 15px;
               display: flex;
               align-items: center;
               justify-content: center;
@@ -348,6 +464,19 @@
 
               &:nth-child(3n+1), &:nth-child(3n+2) {
                 border-right: 1px solid #f5f5f5;
+              }
+
+              i {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 17px;
+                height: 16px;
+                font-size: 9px;
+                color: white;
+                background-color: #ff9800;
+                border-radius: 50%;
+                margin-left: 3px;
               }
             }
           }

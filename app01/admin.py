@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.admin import ModelAdmin
+
 from app01.models import *
 from django.utils.safestring import mark_safe
 
@@ -48,3 +50,30 @@ admin.site.register(Cover)
 admin.site.register(Comment)
 admin.site.register(Avatars)
 admin.site.register(UserInfo)
+
+class MenuImgAdmin(admin.ModelAdmin):
+    def get_img(self):
+        if self.url:
+            return mark_safe(f'<img src="{self.url.url}" style="height:60px; border-radius: 5px;">')
+
+    get_img.short_description = '背景图'
+    list_display = ['url', get_img]
+
+# 站点背景图
+admin.site.register(MenuImg, MenuImgAdmin)
+
+class MenuAdmin(admin.ModelAdmin):
+    def get_menu_url(self: Menu):
+        lis = [f"<img src='{i.url.url}' style='height:50px; border-radius: 5px; margin-right:5px; margin-bottom: 5px;'>" for i in self.menu_url.all()]
+
+        return mark_safe(''.join(lis))
+
+    get_menu_url.short_description = '图片组'
+
+    list_display = ['menu_title', 'menu_title_en',
+                    'title', 'abstract',
+                    'rotation', 'abstract_time',
+                    'menu_rotation', 'menu_time', get_menu_url]
+
+# 站点背景轮播图
+admin.site.register(Menu, MenuAdmin)

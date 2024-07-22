@@ -6,16 +6,19 @@
 {% endblock %}
 
 {% block content %}
-    <ul class="avatar_list">
-    {% for avatar in avatar_query %}
-        <li class="{{ avatar|to_calculate_avatar }}">
-        <div class="delete_icon">
-            <i class="el-icon-delete-solid" @click="avatar_cover_delete('{{ avatar.nid }}', 'avatar')"></i>
-        </div>
-            <img src="{{ avatar.url.url }}">
-        </li>
-    {% endfor %}
-    </ul>
+    <el-scrollbar style="margin-top: 20px">
+        <ul class="avatar_list">
+            {% for avatar in avatar_query %}
+                <li class="{{ avatar|to_calculate_avatar }}">
+                <div class="delete_icon">
+                    <i class="el-icon-delete-solid" @click="avatar_cover_delete('{{ avatar.nid }}', 'avatar', $event)"></i>
+                </div>
+                    <img src="{{ avatar.url.url }}">
+                </li>
+            {% endfor %}
+        </ul>
+    </el-scrollbar>
+
     <el-upload
       class="upload-demo"
       action="/api/upload/avatar/"

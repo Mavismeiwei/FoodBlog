@@ -157,3 +157,25 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Create third table
 AUTH_USER_MODEL = "app01.UserInfo"
+
+# 网站信息
+SITE_TITLE = "Mimi's Food Blog"
+# SITE_BEIAN = '湘ICP备10001000100号'
+SITE_INFO = {
+    'name': 'Mimi',
+    'job': 'FUll Stack Engineer',
+    'address': 'Boston, US',
+    'link': 'https://mavismeiwei.github.io/meiwei_portfolio/',
+    'date': '2023-7-29'  # 建站日期
+}
+
+# 发送邮箱配置
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'zhang.meiwei.mavis@gmail.com'
+EMAIL_HOST_PASSWORD = 'efpe gqau agtd arhx'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_USE_SSL = True
+EMAIL_USER_TLS = False
+
