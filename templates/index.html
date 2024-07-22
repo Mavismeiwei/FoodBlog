@@ -804,6 +804,11 @@
 
     // home page images window
     let menu_img = document.querySelectorAll('.dynamic_shuffle')
+
+    // 获取轮播图banner和时间
+    let banner = document.getElementById('banner_box')
+    let banner_time = Number(banner.getAttribute('banner_time'))
+
     // get the menu length
     let menu_length = menu_img.length
     let index = 0;
@@ -821,7 +826,30 @@
         i.style.opacity = 0
     }
         menu_img[index].style.opacity = 1
-    }, 2000)
+        // 判断轮播时间
+        if (!banner_time) {
+            clearInterval(timer)
+        }
+
+    }, banner_time * 1000)
+
+    let banner_slogan = document.getElementById('banner_slogan')
+    let slogan_list = eval(banner_slogan.getAttribute('lis'))
+    let slogan_time = Number(banner_slogan.getAttribute('slogan_time'))
+
+    let slogan_index = 0;
+    let slogan_timer = null;
+    slogan_timer = setInterval(() => {
+        slogan_index++
+        if (slogan_index === slogan_list.length) {
+            slogan_index = 0
+        }
+        if (!slogan_time){
+            clearInterval(slogan_timer)
+        } else {
+            banner_slogan.innerText = slogan_list[slogan_index]
+        }
+    }, slogan_time * 1000)
 
     // navbar动态导航条 下滑到一定高度固定
     let nav = document.querySelector('.nav_bg')

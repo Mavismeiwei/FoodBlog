@@ -83,6 +83,7 @@ header h1 {
 header p {
   font-size: 20px;
   text-align: center;
+  transition: all 0.3s;
 }
 header > .dynamic_shuffle {
   position: absolute;
@@ -94,11 +95,13 @@ header > .dynamic_shuffle {
   transition: all 0.5s;
   opacity: 0;
 }
-header > .dynamic_shuffle:first-child {
+header > .dynamic_shuffle:nth-child(2) {
   opacity: 1;
 }
 header > .dynamic_shuffle img {
   width: 100%;
+  height: 700px;
+  object-fit: cover;
 }
 
 main {
