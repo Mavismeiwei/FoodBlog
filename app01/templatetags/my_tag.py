@@ -86,7 +86,7 @@ def dynamic_navigation(request):
         '/': 'Home',
         '/news': 'News',
         '/moods': 'Moods',
-        '/memory': 'Memory',
+        '/history': 'History',
         '/about': 'About',
         '/sites': 'Sites'
     }
@@ -119,6 +119,18 @@ def generate_drawing(drawing: str):
     drawing_list = drawing.split(';')
     html_s = ''
     for i in drawing_list:
-        html_s += f'<img src="{i}" alt="">'
+        html_s += f'<img @error="img_error" src="{i}" alt="">'
+
+    return mark_safe(html_s)
+
+@register.simple_tag
+def generate_li(content: str):
+    if not content:
+        return ''
+    drawing = content.replace('；', ';').replace('\n', ';')
+    drawing_list = drawing.split(';')
+    html_s = ''
+    for i in drawing_list:
+        html_s += f'<li>{i}</li>'
 
     return mark_safe(html_s)

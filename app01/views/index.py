@@ -123,3 +123,15 @@ def logout(request):
     auth.logout(request)
     return redirect('/')
 
+# 回忆录history页
+def history(request):
+    history_list = History.objects.all().order_by('create_date');
+    return render(request, 'history.html', locals())
+
+# about页面
+def about(request):
+    return render(request, 'about.html')
+
+# 网站导航sites页
+def sites(request):
+    return render(request, 'sites.html')

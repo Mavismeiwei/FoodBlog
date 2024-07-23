@@ -148,7 +148,7 @@ STATICFILES_DIRS = [
 # user upload files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880 # 默认设置位5M
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -179,3 +179,6 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_USE_SSL = True
 EMAIL_USER_TLS = False
 
+# 七牛云密钥管理
+QINIU_ACCESS_KEY = '-SaDQRkAzpJM74KzkjuvXQX3f0oOYpHZdwyU461o'
+QINIU_SECRET_KEY = 'PnUOs1u6OEA_xBISe8BTMLIWLoXDAcAnqPW7gUCm'
