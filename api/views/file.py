@@ -5,7 +5,11 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from app01.models import avatar_delete, cover_delete
 from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import Q
+import base64
+import time
+from api.utils.api_qiniu import upload_data
 
+# 头像
 class AvatarView(View):
     def post(self, request):
         # 判断文件上传类型是否合法
@@ -70,6 +74,7 @@ class AvatarView(View):
         res['code'] = 0
         return JsonResponse(res)
 
+# 封面
 class CoverView(View):
         def post(self, request):
             # 判断文件上传类型是否合法
@@ -123,3 +128,11 @@ class CoverView(View):
             res['code'] = 0
             return JsonResponse(res)
 
+# 粘贴上传
+class PasteUpload(View):
+    def post(self, request):
+        img = request.data.get('image')
+        ines = img.split('base64,')
+        imgData = base64.b64decode(ines[1])
+        url = upload_data(imgData)
+        return JsonResponse({'url': url})

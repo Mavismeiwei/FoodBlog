@@ -54,4 +54,8 @@ urlpatterns = [
 
     # media configuration: user upload path configuration
     re_path(r'media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+
+    path('history/', index.history),
+    path('about/', index.about),
+    path('sites/', index.sites)
 ]

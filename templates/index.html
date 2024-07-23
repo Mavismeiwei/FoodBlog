@@ -381,7 +381,23 @@
             mood_add_comment: {
                 name: '',
                 content: '',
-            }
+            },
+
+            // 回忆录弹窗
+            history_dialogVisible: false,
+            history: {
+                title: '',
+                create_date: new Date(),
+                content: '',
+                drawing: '',
+            },
+            history_edit_add: false,  // 判断回忆录弹窗是添加(默认)还是编辑, 编辑传的参数是nid
+            history_show_drawing: [],  // 用于显示图片列表
+            history_pickerOptions: {
+                disabledDate(time) {  // 默认获取当天日期 超过今天的日期不可以选
+                    return time.getTime() > Date.now();
+                }
+            },  // 配置日期选择器的选项
 
         },
         created(){
@@ -420,6 +436,12 @@
                 localStorage.setItem('theme', themeName)
             }
         },
+
+            // 图片加载失败
+            img_error(e){
+                e.target.style().display = 'none'
+            },
+
             // set the function to switch the category of recommended articles
             switch_article_category(categoryName){
                 this.this_category = categoryName
@@ -788,12 +810,124 @@
                 })
             },
 
+            // 从粘贴事件中获取图片文件
+            uploadImgFromPaste(file) {
+                axios.post('/api/paste_upload/', { image: file }).then(res =>{
+                    this.history.drawing += res.url + '\n'
+                    console.log(res.url)
+                })
+            },
+
+            // 添加和编辑公共请求方法
+            history_add_edit_method(nid) {
+                // 添加事件 - 点击回忆录标题
+                axios.post('/api/history/' + nid, this.history).then(res=>{
+                    if (res.code){
+                        this.$message.error(res.msg)
+                        return
+                    }
+                    this.$message.success(res.msg)
+                    this.history_dialogVisible = false
+                    location.reload()
+                })
+            },
+
+            // 回忆录添加事件
+            history_add_method(nid) {
+                if (!nid) {
+                    // 添加事件
+                    this.history_add_edit_method('')
+                    return
+                } else {
+                    // 编辑事件 - 点击的是事件的时间
+                    this.history_add_edit_method(nid + '/')
+                }
+            },
+
+            // 回忆录粘贴上传的逻辑
+            paste_upload(e) {
+                let ClipboardData = (e.clipboardData || e.originalEvent.clipboardData);
+                let items = ClipboardData.items, len = items.length, blob = null;
+
+                // 在items里找粘贴的image, 拿上面分析，需要循环
+                for (let i = 0; i < len; i++) {
+                    if (items[i].type.indexOf("image") !== -1) {
+                        // getAsFile() 此方法只是living standard firefox ie11 并不支持
+                        blob = items[i].getAsFile();
+                    }
+                }
+
+                if (blob !== null) {
+                    // 读取图片文件
+                    let reader = new FileReader();
+                    reader.onload = (event) => {
+                        // event.target.result 即为图片的Base64编码字符串
+                        let base64_str = event.target.result;
+                        // 可以在这里写与上传逻辑 直接将base64编码的字符串上传（可以尝试传入blob对象）
+                        this.uploadImgFromPaste(base64_str);
+                    }
+                    reader.readAsDataURL(blob);
+                }
+            },
+
+            // 回忆录编辑 - 把内容对应的放在框中
+            history_edit_show(e, nid, title, create_date) {
+                this.history.title = title
+                this.history.create_date = create_date
+                let div = e.target
+                this.history_edit_add = nid
+                this.history.content = div.getAttribute('content')
+                this.history.drawing = div.getAttribute('drawing')
+                this.history_dialogVisible = true
+            },
+
+            // 删除回忆录事件
+            history_remove(nid, e){
+                this.$confirm('Are you sure to delete this event?', 'Remind', {
+                  confirmButtonText: 'Yes',
+                  cancelButtonText: 'Cancel',
+                  type: 'warning'
+                }).then(() => {
+                    // nid是评论的id, mood_id是心情id
+                    axios.delete(`/api/history/${nid}`).then(res => {
+                        if (res.code){
+                            this.$message.error(res.msg)
+                            return
+                        }
+                        $(e.target).parents('.timeline-item').remove()
+                    })
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: 'Canceled successfully.'
+                  });
+                });
+            },
+
+            // 回忆录弹窗的弹窗关闭处理
+            history_handleClose(done){
+                this.$confirm('Are you sure to close?')  // 清空弹窗
+                    .then(() => {
+                        this.history.title = ''
+                        this.history.create_date = new Date()
+                        this.history_edit_add = false
+                        this.history.content = ''
+                        this.history.drawing = ''
+                        done();
+                    })
+                    .catch(() => {
+
+                    });
+            }
         },
 
         watch: {
             'mood_add.drawing'(newVal, oldVal) {
                 this.mood_show_drawing = newVal.split('\n')  // 使用回车来上传多张图片
-            }
+            },
+            'history.drawing'(newVal, oldVal) {
+                this.history_show_drawing = newVal.split('\n')  // 使用回车来上传多张图片
+            },
         }
     })
 

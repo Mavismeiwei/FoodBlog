@@ -1,5 +1,5 @@
 from django.urls import path, re_path
-from api.views import login, article, comment, mood, user, file, api_email
+from api.views import login, article, comment, mood, user, file, api_email, history
 
 urlpatterns = [
     path('login/', login.LoginView.as_view()),  # 登录
@@ -25,8 +25,14 @@ urlpatterns = [
     path('upload/cover/', file.CoverView.as_view()),  # 后台上传文章封面
     re_path(r'upload/cover/(?P<nid>\d+)/', file.CoverView.as_view()),  # 后台删除文章封面
 
+    path('paste_upload/', file.PasteUpload.as_view()),  # 回忆录粘贴上传图片
+    path('history/', history.HistoryView.as_view()),  # 回忆录发布记录
+    re_path(r'history/(?P<nid>\d+)', history.HistoryView.as_view()),  # 编辑记录
+
     path(r'send_email/', api_email.ApiEmail.as_view()),  # 发送邮件
     path(r'perfect_information/', user.EditUserInfoView.as_view()),  # 后台修改个人信息
 
-    path('cancel_collection/', user.CancelCollection.as_view())  # 用户中心取消收藏
+    path('cancel_collection/', user.CancelCollection.as_view()),  # 用户中心取消收藏
+
+
 ]
