@@ -34,5 +34,7 @@ urlpatterns = [
 
     path('cancel_collection/', user.CancelCollection.as_view()),  # 用户中心取消收藏
 
+    path('feedback/', user.FeedBackView.as_view()),  # 意见反馈
+
 
 ]

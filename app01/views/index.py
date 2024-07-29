@@ -22,7 +22,7 @@ def index(request):
         all_count=article_list.count(),
         base_url=request.path_info,
         query_params=query_params,
-        per_page=5,
+        per_page=7,
         pager_page_count=7,
     )
     article_list = article_list[pager.start:pager.end]
@@ -61,7 +61,7 @@ def moods(request):
         all_count=mood_list.count(),
         base_url=request.path_info,
         query_params=query_params,
-        per_page=5,
+        per_page=7,
         pager_page_count=7,
     )
     mood_list = mood_list[pager.start:pager.end]
@@ -97,7 +97,7 @@ def search(request):
         all_count=article_list.count(),
         base_url=request.path_info,
         query_params=query_params,
-        per_page=10,
+        per_page=7,
         pager_page_count=7,
     )
     article_list = article_list[pager.start:pager.end]

@@ -1,6 +1,6 @@
 from django import template
 import re
-from app01.models import Tags, Avatars, Menu
+from app01.models import Tags, Avatars, Menu, Articles
 from app01.utils.search import Search
 from django.utils.safestring import mark_safe
 
@@ -88,7 +88,6 @@ def dynamic_navigation(request):
         '/moods': 'Moods',
         '/history': 'History',
         '/about': 'About',
-        '/sites': 'Sites'
     }
     nav_list = []
     for k, v in path_dict.items():
@@ -134,3 +133,9 @@ def generate_li(content: str):
         html_s += f'<li>{i}</li>'
 
     return mark_safe(html_s)
+
+# 计算每个category的文章数量
+@register.simple_tag
+def calculation_category_count(cid):
+    article_query = Articles.objects.filter(category=cid)
+    return article_query.count()

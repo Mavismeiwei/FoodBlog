@@ -257,24 +257,54 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="webInfo card">
+                    <div class="site_info card">
                         <div class="title">
                             <h2>Website Information</h2>
                         </div>
                         <div class="body">
-                            Main Area
+                            <div class="item"><b>Set Up Date:</b> <span>2023/10/23</span></div>
+                                <div class="item"><b>Recipes:</b> <span>{% calculation_category_count 1 %}</span></div>
+                                <div class="item"><b>Nutrition:</b> <span>{% calculation_category_count 2 %}</span></div>
+                                <div class="item"><b>Culinary Travel:</b> <span>{% calculation_category_count 3 %}</span></div>
+                                <div class="item"><b>Food Reviews:</b> <span>{% calculation_category_count 4 %}</span></div>
+                                <div class="item"><b>Other:</b> <span>{% calculation_category_count 5 %}</span></div>
+                                <div class="item"><b>Contact Me:</b>
+                                    <div class="images">
+                                        <div class="qq">
+                                            <img src="/static/resources/img/footer/wechat_QR.jpg">
+                                            My Wechat
+                                        </div>
+                                        <div class="qq">
+                                            <img src="/static/resources/img/footer/wechat_QR.jpg">
+                                            My LinkedIn
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="links card">
+                    <div class="feedback card">
                         <div class="title">
                             <h2>Feedback</h2>
                         </div>
                         <div class="body">
-                            Main Area
+                            <el-input
+                                id="feedback__email"
+                                placeholder="Please leave your email."
+                                v-model="feedback.email"
+                                >
+                            </el-input>
+                            <el-input
+                                id="feedback__content"
+                                placeholder="Please leave your feedback about our blog."
+                                type="textarea"
+                                :rows="6"
+                                resize="none"
+                                v-model="feedback.content"
+                                >
+                            </el-input>
+                            <el-button type="primary" @click="feedback_add">Submit</el-button>
                         </div>
                     </div>
-                </div>
-            </div>
         {% endblock %}
     </main>
 
@@ -398,6 +428,12 @@
                     return time.getTime() > Date.now();
                 }
             },  // 配置日期选择器的选项
+
+            // 意见反馈
+            feedback: {
+                email: '',
+                content: ''
+            }
 
         },
         created(){
@@ -918,6 +954,19 @@
                     .catch(() => {
 
                     });
+            },
+
+            // 意见反馈
+            feedback_add() {
+                axios.post('/api/feedback/', this.feedback).then(res => {
+                    if (res.code) {
+                        this.$message.error(res.msg)
+                        $(`#feedback__${res.self}`)[0].focus()
+                        return
+                    }
+                    this.$message.success(res.msg)
+                    this.feedback.content = ''   //清空输入框
+                })
             }
         },
 

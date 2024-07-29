@@ -1,9 +1,12 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
-
 from app01.models import *
 from django.utils.safestring import mark_safe
+from threading import Thread
+from django.core.mail import send_mail
+from django.conf import settings
 
+# 文章表
 class ArticleAdmin(admin.ModelAdmin):
     # 自定义方法在django后台编辑文章页面显示文章封面
     def get_cover(self, obj):
@@ -51,6 +54,7 @@ admin.site.register(Comment)
 admin.site.register(Avatars)
 admin.site.register(UserInfo)
 
+# 站点图片
 class MenuImgAdmin(admin.ModelAdmin):
     def get_img(self):
         if self.url:
@@ -62,6 +66,7 @@ class MenuImgAdmin(admin.ModelAdmin):
 # 站点背景图
 admin.site.register(MenuImg, MenuImgAdmin)
 
+# 菜单
 class MenuAdmin(admin.ModelAdmin):
     def get_menu_url(self: Menu):
         lis = [f"<img src='{i.url.url}' style='height:50px; border-radius: 5px; margin-right:5px; margin-bottom: 5px;'>" for i in self.menu_url.all()]
@@ -75,5 +80,64 @@ class MenuAdmin(admin.ModelAdmin):
                     'rotation', 'abstract_time',
                     'menu_rotation', 'menu_time', get_menu_url]
 
-# 站点背景轮播图
 admin.site.register(Menu, MenuAdmin)
+
+# 用户信息
+class UserInfoAdmin(admin.ModelAdmin):
+    def get_avatar(self: UserInfo):
+        if self.sign_status in [1, 2]:
+            return mark_safe(f'<img src="{self.avatar_url}" style="width:30px;height:30px;border-radius:50%;">')
+
+        if self.avatar:
+            return mark_safe(f'<img src="{self.avatar.url.url}" style="width:30px;height:30px;border-radius:50%;">')
+
+    get_avatar.short_description = '头像'
+
+    def get_user_name(self):
+        if not self.sign_status:
+            return self.username
+        return '****'
+
+    get_user_name.short_description = '用户名'
+
+    list_display = [get_user_name, 'nick_name', get_avatar, 'sign_status', 'ip', 'addr', 'is_superuser', 'date_joined',
+                    'last_login']
+
+    # 获取头像
+    def get_avatar_action(self, request, queryset):
+        for obj in queryset:
+            if not obj.sign_status:
+                continue
+            # 其他平台注册的
+
+    get_avatar_action.short_description = '获取用户信息'
+
+    actions = [get_avatar_action]
+
+# 意见反馈
+class FeedBackAdmin(admin.ModelAdmin):
+    list_display = ['email', 'content', 'status', 'processing_content']
+    readonly_fields = ['email', 'content', 'status']
+
+    def has_add_permission(self, request):
+        return False
+
+    def save_model(self, request, obj, form, change):  # change == True 编辑
+        if not change:
+            return
+        # 编辑
+        email = obj.email
+        content = obj.content
+        obj.status = True
+        processing_content = form.data.get('processing_content')
+
+        Thread(target=send_mail,
+               args=(f'【Mimi Food Blog】Your feedback：{content} has been replied！',
+                     processing_content,
+                     settings.EMAIL_HOST_USER,
+                     [email, ],
+                     False)).start()
+
+        return super(FeedBackAdmin, self).save_model(request, obj, form, change)
+
+admin.site.register(Feedback, FeedBackAdmin)
