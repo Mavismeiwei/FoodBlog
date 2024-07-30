@@ -1,93 +1,205 @@
 .main {
-  width: 1200px;
+  width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
 
   .news_content {
     display: flex;
-    min-height: 800px;
-    background-color: white;
-    border-radius: 5px;
+    background-color: #fafafa;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
 
     .left {
-      width: 30%;
-      border-right: 1px solid #f0eeee;
+      width: 20%;
+      background-color: #fff;
+      border-right: 1px solid #dcdcdc;
 
-      ul{
+      ul {
         padding: 0;
-        margin-top: 20px;
+        margin: 0;
+        list-style: none;
 
-        img {
-          height: 25px;
-          border-radius: 5px;
-          margin-right: 10px;
-        }
-        li{
-          color: #333333;
-          height: 40px;
+        li {
+          padding-left: 30px;
           display: flex;
           align-items: center;
-          padding-left: 30%;
+          padding-top: 10px;
+          padding-bottom: 10px;
+          font-size: 16px;
           cursor: pointer;
-          transition: all 0.3s;
+          transition: background-color 0.3s, color 0.3s;
+
+          img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            margin-right: 12px;
+          }
+
+          &:hover {
+            background-color: #f0f0f0;
+            color: #007acc;
+          }
         }
-        li[active="true"]{
-          background-color: #3a8ee6;
-          color: white;
+
+        li.active{
+          background-color: #808595;
+          color: whitesmoke;
+        }
+
+        li:not(li.active):hover{
+          // 只能选择不是active的
+          color: #007acc;
+          cursor: pointer;
         }
       }
     }
 
     .right {
-      width: 80%;
-      padding: 20px;
+      width: 75%;
+      padding: 30px;
 
       .title {
         display: flex;
         align-items: center;
-        padding-bottom: 10px;
-        border-bottom: 1px solid #f0eeee;
+        margin-bottom: 25px;
 
         img {
-          width: 35px;
+          width: 55px;
+          height: 55px;
           border-radius: 50%;
-          margin-right: 10px;
+          margin-right: 20px;
         }
 
         h2 {
-          font-size: 20px;
+          font-size: 26px;
+          color: #333;
         }
       }
 
       .body {
-        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
 
         ul {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 20px;
+          padding: 0;
+          margin: 0;
+          width: 100%;
           list-style: none;
 
           li {
-            height: 30px;
-            align-items: center;
-            display: flex;
+            background-color: #fff;
+            border: 1px solid #eaeaea;
+            border-radius: 10px;
+            overflow: hidden;
+            flex-basis: calc(33.333% - 20px);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
 
-            .index{
-              width: 20px;
-              height: 20px;
-              border-radius: 5px;
-              color: white;
-              background: #ff9800;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              margin-right: 20px;
+            &:hover {
+              transform: translateY(-5px);
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             }
 
-            a{
-              width: 77%;
+            .recipe-image {
+              width: 100%;
+              height: 200px;
+              object-fit: cover;
             }
 
-            .num {
-              width: 20%;
-              display: flex;
-              justify-content: right;
+            .recipe-details {
+              padding: 20px;
+
+              h3 {
+                font-size: 20px;
+                margin-bottom: 12px;
+                color: #333;
+              }
+
+              p {
+                margin: 5px 0;
+                font-size: 14px;
+                color: #666;
+              }
+
+              .nutrition-info {
+                display: flex;
+                justify-content: space-between;
+                font-size: 14px;
+                margin-top: 12px;
+
+                p {
+                  margin: 0;
+                }
+
+                strong {
+                  font-weight: 600;
+                  color: #333;
+                }
+              }
+
+              a {
+                display: block;
+                margin-top: 12px;
+                text-decoration: none;
+                color: #007acc;
+                font-weight: bold;
+                text-align: center;
+
+                &:hover {
+                  text-decoration: underline;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive design for smaller screens
+@media (max-width: 1024px) {
+  .main {
+    .news_content {
+      .right {
+        .body {
+          ul {
+            li {
+              flex-basis: calc(50% - 20px); // Two per row on smaller screens
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .main {
+    .news_content {
+      flex-direction: column;
+
+      .left {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #eaeaea;
+        padding: 15px;
+      }
+
+      .right {
+        width: 100%;
+        padding: 15px;
+
+        .body {
+          ul {
+            li {
+              flex-basis: 100%; // One per row on very small screens
             }
           }
         }
