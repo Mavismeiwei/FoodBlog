@@ -84,10 +84,9 @@ def dynamic_navigation(request):
     path = request.path_info
     path_dict = {
         '/': 'Home',
-        '/news': 'News',
-        '/moods': 'Moods',
-        '/history': 'History',
-        '/about': 'About',
+        '/news': 'Hot Search',
+        '/moods': 'Communication',
+        '/history': 'Memory',
     }
     nav_list = []
     for k, v in path_dict.items():

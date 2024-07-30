@@ -5,48 +5,44 @@
 {% endblock %}
 {% block css %}
     <link rel="stylesheet" href="/static/resources/css/news.css">
-
 {% endblock %}
 {% block main %}
-    <div class="main">
-    {% csrf_token %}
-        <div class="news_content">
-            <div class="left">
-                <ul>
-                    <li active="true" @click="get_new_data()"><img src="/static/resources/img/recommended_articles_card/2.jpeg">Recipes</li>
-                    <li><img src="/static/resources/img/recommended_articles_card/1.jpeg"></li>
-                </ul>
-            </div>
-
-            <div class="right">
-                <div class="title">
-                    <img src="/static/resources/img/recommended_articles_card/3.jpeg">
-                    <h2>Recipes · Hot Search</h2>
-                </div>
-                <div class="body">
-                    <ul>
-                        <li v-for="item in news_list" :key="item.index"><span class="index">[[ strMeal ]]</span> <a :href="item.link" target="_blank"> [[ item.title ]]</a> <span class="num">[[item.hotValue]]</span></li>
-{#                        <li class="wow fadeInUp"><span class="index">2</span> <a href="" target="_blank"> link 2</a> <span class="num">2.3M</span></li>#}
-{#                        <li class="wow fadeInUp"><span class="index">3 </span> <a href="" target="_blank"> link 3</a> <span class="num">1.7M</span></li>#}
-                    </ul>
-                    <div>
-                       <h1>Test</h1>
-                        <button @click="get_recipe('Salad')">Get Salad Recipe</button>
-                        <button @click="get_recipe('Soup')">Get Soup Recipe</button>
-                        <button @click="get_recipe('Cake')">Get Cake Recipe</button>
-
-                        <ul>
-                            <li v-for="recipe in recipes_list" :key="recipe.url">
-                                <h3>{{ recipe.label }}</h3>
-                                <img :src="recipe.image" alt="Recipe Image">
-                                <a :href="recipe.url" target="_blank">View Recipe</a>
-                            </li>
-                        </ul>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
+<div class="main">
+  <div class="news_content">
+    <div class="left">
+      <ul>
+        <li :class="item.type === recipes_active ? 'active' : ''" v-for="item in recipes_init" @click="get_recipe(item.id, item.type, item.url, false, 0)">
+            <img :src="item.url">[[item.type]]
+        </li>
+      </ul>
     </div>
+    <div class="right">
+      <div class="title">
+        <img :src="recipes_active_url">
+        <h2>Recipes · [[recipes_active]]</h2>
+      </div>
+      <div class="body">
+        <ul>
+          <li v-for="recipe in recipes_list" :key="recipe.url">
+            <a :href="recipe.url" target="_blank" class="recipe-link">
+              <img :src="recipe.image" alt="Recipe Image" class="recipe-image">
+              <div class="recipe-details">
+                <h3>[[ recipe.label ]]</h3>
+                <p v-if="recipe.dietLabels.length > 3">
+                  [[ recipe.dietLabels.slice(0, 2).join(', ') ]] <span v-if="recipe.dietLabels.length > 3"></span>
+                </p>
+                <p v-if="recipe.healthLabels.length > 3">
+                  [[ recipe.healthLabels.slice(0, 2).join(', ') ]] <span v-if="recipe.healthLabels.length > 3"></span>
+                </p>
+                <div class="nutrition-info">
+                  <p><strong>Calories:</strong> [[ recipe.calories.toFixed(2) ]] kcal</p>
+                </div>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

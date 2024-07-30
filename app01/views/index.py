@@ -40,7 +40,7 @@ def article(request, nid):
 
     return render(request, 'article.html', locals())
 
-# 新闻页
+# 新闻页 添加分页器
 def news(request):
     return render(request, 'news.html')
 

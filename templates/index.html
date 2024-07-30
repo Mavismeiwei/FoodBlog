@@ -56,7 +56,6 @@
                 <a href="/login">Login</a>
                 <a href="/register">Register</a>
             {% endif %}
-
         </div>
     </nav>
 
@@ -148,20 +147,22 @@
                         </div>
                     </div>
 
-                    <div class="hot_topics card">
+                    <div class="hotList card">
                         <div id="con">
 
                         </div>
                         <div class="title">
                             <h2 id="pos">Hot Searches</h2>
                             <div>
-                                <a href="#">More</a>
+                                <a href="/news">More</a>
                             </div>
                         </div>
-                        <div class="body">
-                            Main Area
-                        </div>
+                    <div class="body">
+                      <div v-for="item in limitedRecipes" :key="item.label" class="index">
+                         <a :href="item.url" target="_blank"><span class="index">[[ item.label ]]</span></a>
 
+                      </div>
+                    </div>
                     </div>
                     <div class="all_articles card">
                         <div class="title">
@@ -222,11 +223,11 @@
                                     <img src="https://media.healthyfood.com/wp-content/uploads/2024/06/HFG-IMAGES-600-x-450-px-32.png" alt="">
                                 </a>
                             </div>
-{#                            <div>#}
-{#                                <a href="https://hernexxchapter.org/blog/2022/05/19/make-time-to-enjoy-a-healthy-meal-with-others-this-national-mediterranean-diet-month/?gad_source=1&gclid=CjwKCAjw4ri0BhAvEiwA8oo6F5mrED49c2p25NnPzBeOSdVVJcnR4Rvi0nhPFZgZWbCsTca83VzH3RoC1j4QAvD_BwE" target="_blank">#}
-{#                                    <img src="https://hernexxchapter.org/wp-content/uploads/2022/05/Make-Time-to-Enjoy-a-Healthy-Meal-with-Others-This-National-Mediterranean-Diet-Month.png" alt="">#}
-{#                                </a>#}
-{#                            </div>#}
+                            <div>
+                                <a href="https://hernexxchapter.org/blog/2022/05/19/make-time-to-enjoy-a-healthy-meal-with-others-this-national-mediterranean-diet-month/?gad_source=1&gclid=CjwKCAjw4ri0BhAvEiwA8oo6F5mrED49c2p25NnPzBeOSdVVJcnR4Rvi0nhPFZgZWbCsTca83VzH3RoC1j4QAvD_BwE" target="_blank">
+                                    <img src="https://hernexxchapter.org/wp-content/uploads/2022/05/Make-Time-to-Enjoy-a-Healthy-Meal-with-Others-This-National-Mediterranean-Diet-Month.png" alt="">
+                                </a>
+                            </div>
 
                             <div class="my_card">
                                 <div class="title">
@@ -390,8 +391,19 @@
 
             search_key: '',  // 搜索key
 
-            news_list: [],  // 新闻热搜list
-            recipes_list: [],  // 新闻热搜list
+
+            recipes_list: [],  // 热门食谱list
+
+            // 侧边食谱列表初始化
+            recipes_init:[
+                {id:'1', type: 'Appetizers', url: '/static/resources/img/recommended_articles_card/2.jpeg'},
+                {id:'2', type: 'Salads', url: '/static/resources/img/recommended_articles_card/1.jpeg'},
+                {id:'3', type: 'Soups', url: '/static/resources/img/recommended_articles_card/3.jpeg'},
+            ],
+
+            // 食谱选中状态 用type名去检验
+            recipes_active: 'Appetizers',  // 默认设置为第一个Appetizers
+            recipes_active_url: '/static/resources/img/recommended_articles_card/2.jpeg',
 
             mood_dialogVisible: false, //发布心情
 
@@ -436,6 +448,11 @@
             }
 
         },
+        computed: {
+            limitedRecipes() {
+              return this.recipes_list.slice(0, 5);
+            }
+        },
         created(){
             this.init_theme()
 
@@ -447,6 +464,16 @@
             // 判断当前页是否是搜索页面
             if (path.indexOf('search') !== -1){
                 this.init_search_key()
+            }
+
+            // 判断当前路径是否是news页面
+            if (path.indexOf('news') !== -1){
+                this.recipes_init_method(0)  // news页size值不传
+            }
+
+            // 主页的话 size传5
+            if (path.indexOf('/') !== -1){
+                this.recipes_init_method(3)
             }
 
             setTimeout(() => {
@@ -716,20 +743,40 @@
                 this.search_key = key
             },
 
-            // 获取热搜数据
-            get_new_data(id, name){
-                axios.post('https://api.codelife.cc/api/top/list', {id}).then(
-                    console.log(res)
-                )
-            },
+            // 从www.edamam.com获取食谱
+            get_recipe(id, type, url, flag, size){  // flag为True就不需要执行init初始化方法
+                // 如果已经被点击了 那就不要再发请求了
+                if (type === this.recipes_active && !flag){
+                    return
+                }
+                this.recipes_active = type;
+                this.recipes_active_url = url;
+                let data = {
+                    id,
+                }
+                if(size){
+                    data.size = size
+                }
 
-            // 测试获取食谱 ---- 后续完善！！！！
-            get_recipe(type){
                 const appid = '9efdb599';
                 const appKey = 'ae630ec4854aba74003222d9eed06631';
-                axios.get(`https://api.edamam.com/api/recipes/v2?q=${type}&app_key=${appKey}&_cont=CHcVQBtNNQphDmgVQntAEX4BYUtyBwsGRmJCAmQQa1V7DQYVX3dDC2Mba11xVwcPQmVHVzYbMgZ0BlVUSmwSCzcRN11wABFqX3cWQT1OcV9xBE4%3D&type=public&app_id=${appid}`).then(res =>{
-                    this.recipes_list = res.hits.slice(0, 15).map(hit => hit.recipe);
+                axios.get(`https://api.edamam.com/api/recipes/v2?q=${type}&app_key=${appKey}&_cont=CHcVQBtNNQphDmgVQntAEX4BYUtyBwsGRmJCAmQQa1V7DQYVX3dDC2Mba11xVwcPQmVHVzYbMgZ0BlVUSmwSCzcRN11wABFqX3cWQT1OcV9xBE4%3D&type=public&app_id=${appid}`, data).then(res =>{
+                    this.recipes_list = res.hits.slice(2, 17).map(hit => ({
+                        label: hit.recipe.label,
+                        image: hit.recipe.image,
+                        url: hit.recipe.url,
+                        dietLabels: hit.recipe.dietLabels || [],
+                        healthLabels: hit.recipe.healthLabels || [],
+                        calories: hit.recipe.calories,
+                        yield: hit.recipe.yield
+                    }));
                 })
+            },
+
+            // 食谱页默认初始化选中方法 初始化选中Appetizers
+            recipes_init_method(size){
+                this.get_recipe('1','Appetizers','/static/resources/img/recommended_articles_card/2.jpeg', true, size)
+
             },
 
             // 心情页面回复折叠
