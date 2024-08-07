@@ -56,6 +56,9 @@ ul.pager > li.active a {
   color: darkorange;
   font-size: 14px;
 }
+.card .title > div a:hover {
+  color: darkgreen;
+}
 .card .body {
   border-radius: 0 0 5px 5px;
   padding: 10px 20px 20px 20px;
@@ -102,6 +105,7 @@ ul.pager > li.active a {
   box-sizing: border-box;
   display: flex;
   padding: 10px 0;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 #app .main .left .recommended_articles > .body > ul > li:nth-child(1), #app .main .left .recommended_articles > .body > ul > li:nth-child(3), #app .main .left .recommended_articles > .body > ul > li:nth-child(5) {
   border-right: 1px solid #f0eeee;
@@ -112,6 +116,10 @@ ul.pager > li.active a {
 }
 #app .main .left .recommended_articles > .body > ul > li:nth-child(1), #app .main .left .recommended_articles > .body > ul > li:nth-child(2), #app .main .left .recommended_articles > .body > ul > li:nth-child(3), #app .main .left .recommended_articles > .body > ul > li:nth-child(4) {
   border-bottom: 1px solid #f0eeee;
+}
+#app .main .left .recommended_articles > .body > ul > li:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 #app .main .left .recommended_articles > .body > ul > li .left {
   width: 40%;
@@ -124,10 +132,11 @@ ul.pager > li.active a {
 #app .main .left .recommended_articles > .body > ul > li .left img {
   height: 100%;
   object-fit: cover;
+  border-radius: 5px;
   transition: all 0.3s;
 }
 #app .main .left .recommended_articles > .body > ul > li .left img:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 #app .main .left .recommended_articles > .body > ul > li .right {
   width: 60%;
@@ -138,9 +147,16 @@ ul.pager > li.active a {
   padding-left: 10px;
 }
 #app .main .left .recommended_articles > .body > ul > li .right h2 {
-  font-size: 20px;
+  font-size: 18px;
+}
+#app .main .left .recommended_articles > .body > ul > li .right a {
+  color: #333333;
+}
+#app .main .left .recommended_articles > .body > ul > li .right a:hover {
+  color: #0e7e70;
 }
 #app .main .left .recommended_articles > .body > ul > li .right p {
+  font-size: 15px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -162,10 +178,11 @@ ul.pager > li.active a {
   width: 100%;
   display: flex;
   background-color: white;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   border-radius: 5px;
   position: relative;
   overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 #app .main .left .all_articles > .body > ul > li:first-child {
   border-radius: 0 0 5px 5px;
@@ -175,6 +192,10 @@ ul.pager > li.active a {
 }
 #app .main .left .all_articles > .body > ul > li:first-child .right {
   padding: 10px 20px 20px 10px;
+}
+#app .main .left .all_articles > .body > ul > li:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 #app .main .left .all_articles > .body > ul > li .left {
   width: 30%;
@@ -189,10 +210,12 @@ ul.pager > li.active a {
 }
 #app .main .left .all_articles > .body > ul > li .left img {
   width: 100%;
+  border-radius: 5px;
+  transition: all 0.3s;
+  height: 95%;
 }
 #app .main .left .all_articles > .body > ul > li .left img:hover {
-  transform: scale(1.1);
-  transition: all 0.3s;
+  transform: scale(1.05);
 }
 #app .main .left .all_articles > .body > ul > li .right {
   width: 70%;
@@ -200,6 +223,7 @@ ul.pager > li.active a {
   position: relative;
 }
 #app .main .left .all_articles > .body > ul > li .right > h2 {
+  margin-top: 10px;
   font-size: 23px;
   margin-bottom: 10px;
 }
@@ -278,47 +302,62 @@ ul.pager > li.active a {
   margin-bottom: 20px;
   overflow: hidden;
 }
-#app .main .left .hotList #con {
-  /* Placeholder for any specific styles for this element */
+#app .main .left .hotList .hot_icon {
+  margin-bottom: -5px;
 }
 #app .main .left .hotList .title {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
-  background-color: #f7f7f7;
-  border-bottom: 1px solid #ddd;
+  background-color: white;
+  border-bottom: 1px solid whitesmoke;
 }
 #app .main .left .hotList .title h2 {
-  font-size: 18px;
-  color: #333;
+  font-size: 20px;
   margin: 0;
 }
-#app .main .left .hotList .title div a {
-  color: #0073e6;
-  font-size: 14px;
+#app .main .left .hotList .title > div a {
+  color: #0e7e70;
+  font-size: 16px;
+  font-weight: bolder;
   text-decoration: none;
 }
-#app .main .left .hotList .title div a:hover {
-  color: #005bb5;
+#app .main .left .hotList .title > div a:hover {
+  color: darkgreen;
 }
 #app .main .left .hotList .body {
-  padding: 15px 20px;
+  padding: 10px 20px;
 }
 #app .main .left .hotList .body .index {
-  padding: 10px 0;
+  padding: 8px 0;
   border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.3s;
 }
 #app .main .left .hotList .body .index:last-child {
   border-bottom: none;
 }
+#app .main .left .hotList .body .index:hover {
+  background-color: #f5f5f5;
+}
+#app .main .left .hotList .body .index .item_icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  margin-bottom: -5px;
+}
 #app .main .left .hotList .body .index a {
+  font-weight: bold;
   text-decoration: none;
+  padding-left: 10px;
   font-size: 16px;
   color: #333;
+  display: block;
+  transition: color 0.3s, padding-left 0.3s;
 }
 #app .main .left .hotList .body .index a:hover {
-  color: #0073e6;
+  color: #0e7e70;
+  padding-left: 15px;
 }
 #app .main .right {
   width: 30%;
@@ -376,7 +415,7 @@ ul.pager > li.active a {
 }
 #app .main .right .my_card .footer p {
   margin-bottom: 5px;
-  color: #A7A7A7;
+  color: #a7a7a7;
 }
 #app .main .right .my_card .footer p span {
   color: #555555;
@@ -478,7 +517,7 @@ ul.pager > li.active a {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 17px;
+  width: 18px;
   height: 16px;
   font-size: 9px;
   color: white;
@@ -504,7 +543,8 @@ ul.pager > li.active a {
   height: 100px;
   border-radius: 5px;
 }
-#app .main .right .feedback > .body .el-input, #app .main .right .feedback > .body .el-textarea {
+#app .main .right .feedback > .body .el-input,
+#app .main .right .feedback > .body .el-textarea {
   margin-bottom: 10px;
 }
 #app .main .right .feedback > .body .el-button {
@@ -522,7 +562,12 @@ ul.pager > li.active a {
   height: 40px;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
 }
 

@@ -46,9 +46,11 @@
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item><a href="/backend/">User Center</a></el-dropdown-item>
-                <el-dropdown-item><a href="/backend/edit_avatar/">Avatar Setting</a></el-dropdown-item>
+{#                <el-dropdown-item><a href="/backend/edit_avatar/">Avatar Setting</a></el-dropdown-item>#}
                 <el-dropdown-item><a href="/backend/add_article/">Post Articles</a></el-dropdown-item>
-                <el-dropdown-item><a href="/admin/">Backstage</a></el-dropdown-item>
+                {% if request.user.is_superuser %}
+                    <el-dropdown-item><a href="/admin/">Admin System</a></el-dropdown-item>
+                {% endif %}
                 <el-dropdown-item><a href="/logout/">Log Out</a></el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -72,10 +74,8 @@
                         <div class="title">
                             <h2>Recommend Articles</h2>
                             <div class="switch_article_category">
-                                <span :active="this_category === 'recipe'" @click="switch_article_category('recipe')">Recipes</span>
-                                <span :active="this_category === 'nutrition'" @click="switch_article_category('nutrition')">Nutrition</span>
-                                <span :active="this_category === 'travel'" @click="switch_article_category('travel')">Travel</span>
                                 <span :active="this_category === 'reviews'" @click="switch_article_category('reviews')">Reviews</span>
+                                <span :active="this_category === 'recipe'" @click="switch_article_category('recipe')">Recipes</span>
                             </div>
                         </div>
                         <div class="body">
@@ -94,39 +94,6 @@
                                     </div>
                                 </li>
                                 {% endfor %}
-                            </ul>
-                            <ul v-show="this_category === 'nutrition'" class="recommend2">
-                                {% for nutrition in nutrition_list %}
-                                    <li>
-                                    <div class="left">
-                                        <div>
-                                            <img src="{{ nutrition.cover.url.url }}" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <h2><a href="/article/{{ nutrition.nid }}" >{{ nutrition.title }}</a></h2>
-                                        <p>{{ nutrition.abstract }}</p>
-                                        <span>{{ nutrition.create_date|date_format }}</span>
-                                    </div>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                            <ul v-show="this_category === 'travel'" class="recommend1">
-                                {% for culinary in culinary_list %}
-                                    <li>
-                                    <div class="left">
-                                        <div>
-                                            <img src="{{ culinary.cover.url.url }}" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <h2><a href="/article/{{ culinary.nid }}" >{{ culinary.title }}</a></h2>
-                                        <p>{{ culinary.abstract }}</p>
-                                        <span>{{ culinary.create_date|date_format }}</span>
-                                    </div>
-                                </li>
-                                {% endfor %}
-
                             </ul>
                             <ul v-show="this_category === 'reviews'" class="recommend2">
                                 {% for review in food_reviews_list %}
@@ -152,14 +119,16 @@
 
                         </div>
                         <div class="title">
-                            <h2 id="pos">Hot Searches</h2>
+                            <h2 id="pos"><img class="hot_icon" src="/static/resources/img/hot_search/fire.png"> Hot Searches</h2>
                             <div>
                                 <a href="/news">More</a>
                             </div>
                         </div>
                     <div class="body">
-                      <div v-for="item in limitedRecipes" :key="item.label" class="index">
-                         <a :href="item.url" target="_blank"><span class="index">[[ item.label ]]</span></a>
+                      <div v-for="(item, index) in limitedRecipes" :key="index" class="index">
+                         <a :href="item.url" target="_blank">
+                         <span class="index">
+                            <img class="item_icon" :src="'/static/resources/img/hot_search/' + (index + 1) + '.png'">[[ item.label ]]</span></a>
 
                       </div>
                     </div>
@@ -172,9 +141,9 @@
                             <ul class="article_content">
                                 {% for article in article_list %}
                                     <li>
-                                    <div class="category_flag" len="{{ article.get_category_display|length }}" type="{{ article.get_category_display }}">
-                                        {{ article.get_category_display }}
-                                    </div>
+{#                                    <div class="category_flag" len="{{ article.get_category_display|length }}" type="{{ article.get_category_display }}">#}
+{#                                        {{ article.get_category_display }}#}
+{#                                    </div>#}
                                     <div class="left">
                                         <div>
                                             <img src="{{ article.cover.url.url }}" alt="">
@@ -265,11 +234,11 @@
                         <div class="body">
                             <div class="item"><b>Set Up Date:</b> <span>2023/10/23</span></div>
                                 <div class="item"><b>Recipes:</b> <span>{% calculation_category_count 1 %}</span></div>
-                                <div class="item"><b>Nutrition:</b> <span>{% calculation_category_count 2 %}</span></div>
-                                <div class="item"><b>Culinary Travel:</b> <span>{% calculation_category_count 3 %}</span></div>
+                                <div class="item"><b>Restaurant Recommendations:</b> <span>{% calculation_category_count 2 %}</span></div>
+                                <div class="item"><b>Quick & Easy:</b> <span>{% calculation_category_count 3 %}</span></div>
                                 <div class="item"><b>Food Reviews:</b> <span>{% calculation_category_count 4 %}</span></div>
-                                <div class="item"><b>Other:</b> <span>{% calculation_category_count 5 %}</span></div>
-                                <div class="item"><b>Contact Me:</b>
+                                <div class="item"><b>Healthy Eating:</b> <span>{% calculation_category_count 5 %}</span></div>
+                                <div class="item"><b>Contact Me: </b>
                                     <div class="images">
                                         <div class="qq">
                                             <img src="/static/resources/img/footer/wechat_QR.jpg">
@@ -396,9 +365,26 @@
 
             // 侧边食谱列表初始化
             recipes_init:[
-                {id:'1', type: 'Appetizers', url: '/static/resources/img/recommended_articles_card/2.jpeg'},
-                {id:'2', type: 'Salads', url: '/static/resources/img/recommended_articles_card/1.jpeg'},
-                {id:'3', type: 'Soups', url: '/static/resources/img/recommended_articles_card/3.jpeg'},
+                {id:'1', type: 'Appetizers', url: '/static/resources/img/news/1.jpg'},
+                {id:'2', type: 'Salads', url: '/static/resources/img/news/2.jpg'},
+                {id:'3', type: 'Soups', url: '/static/resources/img/news/3.jpg'},
+                { id: '4', type: 'Main Dishes', url: '/static/resources/img/news/4.jpg' },
+                { id: '5', type: 'Side Dishes', url: '/static/resources/img/news/5.webp' },
+                { id: '6', type: 'Desserts', url: '/static/resources/img/news/6.jpg' },
+                { id: '7', type: 'Beverages', url: '/static/resources/img/news/7.jpg' },
+                { id: '8', type: 'Snacks', url: '/static/resources/img/news/8.jpg' },
+                { id: '9', type: 'Breakfast', url: '/static/resources/img/news/9.webp' },
+                { id: '10', type: 'Brunch', url: '/static/resources/img/news/10.jpg' },
+                { id: '11', type: 'Lunch', url: '/static/resources/img/news/11.jpg' },
+                { id: '12', type: 'Dinner', url: '/static/resources/img/news/12.jpg' },
+                { id: '13', type: 'Vegan', url: '/static/resources/img/news/13.jpg' },
+                { id: '14', type: 'Vegetarian', url: '/static/resources/img/news/14.webp' },
+                { id: '15', type: 'Gluten-Free', url: '/static/resources/img/news/15.jpg' },
+                { id: '16', type: 'Keto', url: '/static/resources/img/news/16.jpg' },
+                { id: '17', type: 'Paleo', url: '/static/resources/img/news/17.jpg' },
+                { id: '18', type: 'Low-Carb', url: '/static/resources/img/news/18.jpg' },
+                { id: '19', type: 'Whole30', url: '/static/resources/img/news/19.jpg' },
+                { id: '20', type: 'Mediterranean', url: '/static/resources/img/news/20.jpg' }
             ],
 
             // 食谱选中状态 用type名去检验
@@ -720,27 +706,34 @@
                 $('html,body').animate({scrollTop: pos.top}, 600)
             },
 
-            // 搜索方法 继承问题
-            search(path='/search/', target='_blank'){
-                let box = document.querySelector('.search')
+            // 搜索方法
+            search(path = '/search/', target = '_blank') {
+                let box = document.querySelector('.search');
 
+                // 如果搜索框未显示，则显示搜索框
                 if (!box.classList.contains('show_search')) {
-                    box.classList.add('show_search')
-                    return
-                }
-                if (!this.search_key){
-                    box.classList.remove('show_search')
+                    box.classList.add('show_search');
                     return;
                 }
-                // 打开搜索标签页
-                window.open(path + '?key=' + this.search_key, name=target)
+                // 如果没有搜索关键词，则隐藏搜索框
+                if (!this.search_key) {
+                    box.classList.remove('show_search');
+                    return;
+                }
+
+                // 预处理搜索关键词：去除首尾空格并转换为小写，替换多个空格为一个空格
+                let processedKey = this.search_key.trim().toLowerCase().replace(/\s+/g, ' ');
+
+                // 使用处理后的关键词打开搜索标签页
+                window.open(path + '?key=' + encodeURIComponent(processedKey), target);
             },
 
             // 初始化搜索词
-            init_search_key(){
-                let dom = document.querySelector('.search_key_input')
-                let key = dom.getAttribute('data')
-                this.search_key = key
+            init_search_key() {
+                let dom = document.querySelector('.search_key_input');
+                let key = dom.getAttribute('data');
+                // 预处理初始搜索关键词：去除首尾空格并转换为小写，替换多个空格为一个空格
+                this.search_key = key ? key.trim().toLowerCase().replace(/\s+/g, ' ') : '';
             },
 
             // 从www.edamam.com获取食谱
