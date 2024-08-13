@@ -5,6 +5,7 @@ from django.utils.safestring import mark_safe
 from threading import Thread
 from django.core.mail import send_mail
 from django.conf import settings
+from api.models import Email
 
 # 文章表
 class ArticleAdmin(admin.ModelAdmin):
@@ -52,7 +53,6 @@ admin.site.register(Tags)
 admin.site.register(Cover)
 admin.site.register(Comment)
 admin.site.register(Avatars)
-admin.site.register(UserInfo)
 
 # 站点图片
 class MenuImgAdmin(admin.ModelAdmin):
@@ -114,6 +114,9 @@ class UserInfoAdmin(admin.ModelAdmin):
 
     actions = [get_avatar_action]
 
+admin.site.register(UserInfo, UserInfoAdmin)
+
+
 # 意见反馈
 class FeedBackAdmin(admin.ModelAdmin):
     list_display = ['email', 'content', 'status', 'processing_content']
@@ -137,6 +140,10 @@ class FeedBackAdmin(admin.ModelAdmin):
                      settings.EMAIL_HOST_USER,
                      [email, ],
                      False)).start()
+        Email.objects.create(
+            email=email,
+            content=processing_content
+        )
 
         return super(FeedBackAdmin, self).save_model(request, obj, form, change)
 

@@ -1,6 +1,8 @@
+import datetime
 from django.shortcuts import render, HttpResponse, redirect
-from app01.models import *
 
+from api.models import Email
+from app01.models import *
 
 # 后台用户界面
 def backend(request):
@@ -83,3 +85,20 @@ def avatar_list(request):
 def cover_list(request):
     cover_query = Cover.objects.all()
     return render(request, 'backend/cover_list.html', locals())
+
+# 后台
+def admin_home(request):
+    user_count = UserInfo.objects.count()
+    article_count = Articles.objects.count()
+    mood_count = Moods.objects.count()
+    # 邮件发送数量
+    email_count = Email.objects.count()
+    # 今日注册
+    now = datetime.date.today()
+    today_sign = UserInfo.objects.filter(
+        date_joined__gte=now,
+    ).count()
+
+    print(request.online_list)
+
+    return render(request, 'admin_home.html', locals())

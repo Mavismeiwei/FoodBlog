@@ -27,11 +27,11 @@
 {#            <li><a href="/backend/add_article/">Upload Article</a></li>#}
             <!-- 后续可修改！！！设置权限 只有超级管理员可以进行文章的上传 -->
             {% if request.user.is_superuser %}
+                <a href="/admin_home/" target="_blank">Dashboard</a>
                 <a href="/backend/avatar_list/">Avatar List</a>
                 <a href="/backend/cover_list/">Article Cover</a>
                 <a href="/admin/">Admin System</a>
             {% endif %}
-            <a href="/logout/">Logout Exit</a>
         </div>
     </aside>
     <main>

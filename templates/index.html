@@ -49,6 +49,7 @@
 {#                <el-dropdown-item><a href="/backend/edit_avatar/">Avatar Setting</a></el-dropdown-item>#}
                 <el-dropdown-item><a href="/backend/add_article/">Post Articles</a></el-dropdown-item>
                 {% if request.user.is_superuser %}
+                    <el-dropdown-item><a href="/admin_home/" target="_blank">Dashboard</a></el-dropdown-item>
                     <el-dropdown-item><a href="/admin/">Admin System</a></el-dropdown-item>
                 {% endif %}
                 <el-dropdown-item><a href="/logout/">Log Out</a></el-dropdown-item>
@@ -233,11 +234,13 @@
                         </div>
                         <div class="body">
                             <div class="item"><b>Set Up Date:</b> <span>2023/10/23</span></div>
+                            <div class="item"><b>Online User:</b> <span>{{ online_count }}</span></div>
                                 <div class="item"><b>Recipes:</b> <span>{% calculation_category_count 1 %}</span></div>
                                 <div class="item"><b>Restaurant Recommendations:</b> <span>{% calculation_category_count 2 %}</span></div>
                                 <div class="item"><b>Quick & Easy:</b> <span>{% calculation_category_count 3 %}</span></div>
                                 <div class="item"><b>Food Reviews:</b> <span>{% calculation_category_count 4 %}</span></div>
                                 <div class="item"><b>Healthy Eating:</b> <span>{% calculation_category_count 5 %}</span></div>
+
                                 <div class="item"><b>Contact Me: </b>
                                     <div class="images">
                                         <div class="qq">
