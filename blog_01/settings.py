@@ -152,9 +152,12 @@ USE_TZ = True
 
 # media configuration
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
+STATICFILES_DIRS = [ 
     os.path.join(BASE_DIR, 'static')
 ]
+
+# 收集项目的静态文件
+STATIC_ROOT = os.path.join(BASE_DIR, 'mimi_static')
 
 # user upload files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
