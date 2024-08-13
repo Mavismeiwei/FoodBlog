@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
+import django.core.cache.backends.locmem
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -51,7 +53,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'app01.middleware_decode.Md1'
+    'app01.middleware_decode.Md1',
+    'app01.middleware_decode.Statistical'
 ]
 
 ROOT_URLCONF = 'blog_01.urls'
@@ -98,6 +101,14 @@ DATABASES = {
     }
 }
 
+# 配置在线人数缓存
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake'
+    }
+}
+
 # Create third table
 AUTH_USER_MODEL = "app01.UserInfo"
 
@@ -141,9 +152,12 @@ USE_TZ = True
 
 # media configuration
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
+STATICFILES_DIRS = [ 
     os.path.join(BASE_DIR, 'static')
 ]
+
+# 收集项目的静态文件
+STATIC_ROOT = os.path.join(BASE_DIR, 'mimi_static')
 
 # user upload files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

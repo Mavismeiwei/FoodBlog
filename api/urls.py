@@ -1,9 +1,11 @@
 from django.urls import path, re_path
-from api.views import login, article, comment, mood, user, file, api_email, history
+from api.views import login, article, comment, mood, user, file, api_email, history, admin_data
 
 urlpatterns = [
     path('login/', login.LoginView.as_view()),  # 登录
     path('register/', login.RegisterView.as_view()),  # 注册
+    path('get_online/', admin_data.get_online),  # 获取在线人数
+    path('get_seven_data/', admin_data.get_seven_data),  # 七天活跃人数
     path('article/', article.ArticleView.as_view()),  # 发布文章
     re_path('article/(?P<nid>\d+)/', article.ArticleView.as_view()),  # 编辑文章
     re_path('article/comment/(?P<nid>\d+)/', comment.CommentView.as_view()),  # 发布评论

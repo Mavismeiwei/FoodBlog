@@ -15,6 +15,11 @@ main {
   align-items: center;
   width: 80%;
 }
+.main .search_box .search_img {
+  height: 60px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
 .main .search_box > div {
   margin-right: 10px;
 }

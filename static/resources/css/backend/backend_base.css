@@ -1,15 +1,17 @@
 #app {
   display: flex;
   margin: 0;
+  font-family: "Arial", sans-serif;
 }
 
 aside {
   width: 200px;
   overflow-y: auto;
   height: 100vh;
-  background-color: #b5c5da;
+  background-color: #dfe6e9;
   padding: 0;
   margin: 0;
+  color: #2d3436;
 }
 aside .slogan {
   width: 100%;
@@ -19,32 +21,31 @@ aside .slogan {
 }
 aside .slogan img {
   width: 80%;
+  border-radius: 50%;
+  border: 2px solid #2d3436;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-aside > #dynamic_menu {
+aside #dynamic_menu {
   width: 100%;
   margin-top: 40px;
   padding: 0;
 }
-aside > #dynamic_menu > a {
-  text-decoration-line: none;
+aside #dynamic_menu > a {
+  text-decoration: none;
   width: 100%;
   height: 50px;
+  display: flex;
   justify-content: center;
   align-items: center;
-  display: flex;
   transition: all 0.2s;
-  color: white;
-}
-aside > #dynamic_menu > a a {
-  color: white;
-  text-decoration: none;
+  color: #2d3436;
   font-size: 18px;
 }
-aside > #dynamic_menu > a:hover {
-  background-color: rgba(0, 0, 0, 0.2);
+aside #dynamic_menu > a:hover {
+  background-color: rgba(45, 52, 54, 0.1);
 }
-aside > #dynamic_menu > a.active {
-  background-color: rgba(0, 0, 0, 0.2);
+aside #dynamic_menu > a.active {
+  background-color: rgba(45, 52, 54, 0.2);
 }
 
 main {
@@ -60,6 +61,7 @@ main .user_info {
   display: flex;
   background-color: #e9ebec;
   border-radius: 5px;
+  padding: 20px;
 }
 main .user_info .left {
   width: 20%;
@@ -73,7 +75,7 @@ main .user_info .left img {
   border-radius: 50%;
 }
 main .user_info .right {
-  width: 50%;
+  width: 80%;
   display: flex;
   flex-wrap: wrap;
 }
@@ -82,6 +84,17 @@ main .user_info .right .item {
   height: 40px;
   display: flex;
   align-items: center;
+  font-size: 14px;
+  color: #34495e;
+}
+main .user_info .right .item a {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+main .user_info .right .item a:hover {
+  color: #2980b9;
 }
 main .actions {
   width: 100%;
@@ -96,6 +109,9 @@ main .actions {
 main .collection_article_all {
   margin-top: 20px;
   border-radius: 5px;
+  background-color: #ffffff;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 main .collection_article_all .collection_title {
   text-align: center;
@@ -132,17 +148,64 @@ main .collection_article_all .article_list .item .right p {
   -webkit-box-orient: vertical;
 }
 
+.edit_info {
+  background-color: #ffffff;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 .edit_info > div {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+}
+.edit_info > div label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #34495e;
+}
+.edit_info > div .el-input {
+  width: 100%;
 }
 .edit_info .send_email {
   display: flex;
-}
-.edit_info .send_email .el-button {
-  width: 150px;
+  align-items: center;
 }
 .edit_info .send_email .validation_input {
   margin-right: 10px;
+  flex-grow: 1;
+}
+.edit_info .send_email .el-button {
+  width: 150px;
+  background-color: #3498db;
+  color: white;
+}
+.edit_info .send_email .el-button:hover {
+  background-color: #2980b9;
+}
+.edit_info .send_email .el-button:disabled {
+  background-color: #b3c0d1;
+  color: #ffffff;
+}
+.edit_info .dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+.edit_info .dialog-footer .el-button {
+  margin-left: 10px;
+}
+.edit_info .dialog-footer .el-button--default {
+  background-color: #c0392b;
+  color: white;
+}
+.edit_info .dialog-footer .el-button--default:hover {
+  background-color: #e74c3c;
+}
+.edit_info .dialog-footer .el-button--primary {
+  background-color: #3498db;
+  color: white;
+}
+.edit_info .dialog-footer .el-button--primary:hover {
+  background-color: #2980b9;
 }
 
 .collection_table {
@@ -150,16 +213,17 @@ main .collection_article_all .article_list .item .right p {
   border-spacing: 1px;
   border-radius: 5px;
   overflow: hidden;
-  border: 1px solid #a0b1c5;
+  border: 1px solid #dcdcdc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .collection_table thead {
-  background-color: #407df3;
+  background-color: #3498db;
 }
 .collection_table thead tr {
-  color: #333;
+  color: #ecf0f1;
   font-weight: 600;
   height: 50px;
-  background-color: white;
+  background-color: #2980b9;
 }
 .collection_table tbody tr {
   height: 40px;
@@ -170,7 +234,7 @@ main .collection_article_all .article_list .item .right p {
   text-align: center;
 }
 .collection_table tbody tr td a {
-  color: #304156;
+  color: #2980b9;
 }
 .collection_table tbody tr .select input {
   cursor: pointer;
@@ -207,7 +271,7 @@ main .collection_article_all .article_list .item .right p {
   background-color: #e3e6ee;
 }
 .collection_table tbody tr:nth-of-type(even) {
-  background-color: #fff;
+  background-color: #ffffff;
 }
 .collection_table tbody tr:nth-of-type(even):hover {
   background-color: #eceff5;
@@ -223,6 +287,7 @@ main .collection_article_all .article_list .item .right p {
   cursor: pointer;
   color: white;
   background-color: #666d83;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .collection_reminder {
@@ -234,7 +299,5 @@ main .collection_article_all .article_list .item .right p {
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
-
-
 
 /*# sourceMappingURL=backend_base.css.map */

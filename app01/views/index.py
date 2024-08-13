@@ -11,8 +11,8 @@ from app01.utils.pagination import Pagination
 def index(request):
     article_list = Articles.objects.filter(status=1).order_by('-change_date')  # status为1 说明文章已发布
     recipes_list = article_list.filter(category=1)[:6]  # 获取不同category的文章
-    nutrition_list = article_list.filter(category=2)[:6]
-    culinary_list = article_list.filter(category=3)[:6]
+    # nutrition_list = article_list.filter(category=2)[:6]
+    # culinary_list = article_list.filter(category=3)[:6]
     food_reviews_list = article_list.filter(category=4)[:6]
 
     # 使用分页器
@@ -22,10 +22,13 @@ def index(request):
         all_count=article_list.count(),
         base_url=request.path_info,
         query_params=query_params,
-        per_page=7,
+        per_page=8,
         pager_page_count=7,
     )
     article_list = article_list[pager.start:pager.end]
+
+    # 获取在线人数
+    online_count = len(request.online_list)
 
     return render(request, 'index.html', locals())
 
@@ -61,7 +64,7 @@ def moods(request):
         all_count=mood_list.count(),
         base_url=request.path_info,
         query_params=query_params,
-        per_page=7,
+        per_page=10,
         pager_page_count=7,
     )
     mood_list = mood_list[pager.start:pager.end]

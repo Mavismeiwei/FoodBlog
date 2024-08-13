@@ -120,10 +120,10 @@ class Articles(models.Model):
     # 文章分类设置
     category_choice = (
         (1, 'Recipes'),
-        (2, 'Nutrition'),
-        (3, 'Culinary Travel'),
+        (2, 'Restaurant Recommendations'),
+        (3, 'Quick & Easy'),
         (4, 'Food Reviews'),
-        (5, 'Other'),
+        (5, 'Healthy Eating'),
     )
     category = models.IntegerField(verbose_name='Classification', choices=category_choice, null=True, blank=True)
     tag = models.ManyToManyField(

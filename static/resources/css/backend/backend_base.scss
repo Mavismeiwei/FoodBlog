@@ -1,15 +1,17 @@
 #app {
   display: flex;
   margin: 0;
+  font-family: 'Arial', sans-serif;
 }
 
 aside {
   width: 200px;
   overflow-y: auto;
   height: 100vh;
-  background-color: #b5c5da;
+  background-color: #dfe6e9;
   padding: 0;
   margin: 0;
+  color: #2d3436;
 
   .slogan {
     width: 100%;
@@ -19,36 +21,34 @@ aside {
 
     img {
       width: 80%;
+      border-radius: 50%;
+      border: 2px solid #2d3436;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
   }
 
-  > #dynamic_menu {
+  #dynamic_menu {
     width: 100%;
     margin-top: 40px;
     padding: 0;
 
     > a {
-      text-decoration-line: none;
+      text-decoration: none;
       width: 100%;
       height: 50px;
+      display: flex;
       justify-content: center;
       align-items: center;
-      display: flex;
       transition: all 0.2s;
-      color: white;
-
-      a {
-        color: white;
-        text-decoration: none;
-        font-size: 18px;
-      }
+      color: #2d3436;
+      font-size: 18px;
 
       &:hover {
-        background-color: rgba(0, 0, 0, 0.2);
+        background-color: rgba(45, 52, 54, 0.1);
       }
 
       &.active {
-        background-color: rgba(0, 0, 0, 0.2);
+        background-color: rgba(45, 52, 54, 0.2);
       }
     }
   }
@@ -67,6 +67,7 @@ main {
     display: flex;
     background-color: #e9ebec;
     border-radius: 5px;
+    padding: 20px;
 
     .left {
       width: 20%;
@@ -82,7 +83,7 @@ main {
     }
 
     .right {
-      width: 50%;
+      width: 80%;
       display: flex;
       flex-wrap: wrap;
 
@@ -91,6 +92,19 @@ main {
         height: 40px;
         display: flex;
         align-items: center;
+        font-size: 14px;
+        color: #34495e;
+
+        a {
+          color: #3498db;
+          text-decoration: none;
+          font-weight: 600;
+          transition: color 0.2s;
+
+          &:hover {
+            color: #2980b9;
+          }
+        }
       }
     }
   }
@@ -109,6 +123,9 @@ main {
   .collection_article_all {
     margin-top: 20px;
     border-radius: 5px;
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
     .collection_title {
       text-align: center;
@@ -153,20 +170,76 @@ main {
   }
 }
 
-.edit_info{
+.edit_info {
+  background-color: #ffffff;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
   > div {
-    margin-bottom: 10px;
-  }
+    margin-bottom: 15px;
 
-  .send_email{
-    display: flex;
-
-    .el-button{
-      width: 150px;
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #34495e;
     }
 
-    .validation_input{
+    .el-input {
+      width: 100%;
+    }
+  }
+
+  .send_email {
+    display: flex;
+    align-items: center;
+
+    .validation_input {
       margin-right: 10px;
+      flex-grow: 1;
+    }
+
+    .el-button {
+      width: 150px;
+      background-color: #3498db;
+      color: white;
+
+      &:hover {
+        background-color: #2980b9;
+      }
+
+      &:disabled {
+        background-color: #b3c0d1;
+        color: #ffffff;
+      }
+    }
+  }
+
+  .dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+
+    .el-button {
+      margin-left: 10px;
+    }
+
+    .el-button--default {
+      background-color: #c0392b;
+      color: white;
+
+      &:hover {
+        background-color: #e74c3c;
+      }
+    }
+
+    .el-button--primary {
+      background-color: #3498db;
+      color: white;
+
+      &:hover {
+        background-color: #2980b9;
+      }
     }
   }
 }
@@ -176,16 +249,17 @@ main {
   border-spacing: 1px;
   border-radius: 5px;
   overflow: hidden;
-  border: 1px solid #a0b1c5;
+  border: 1px solid #dcdcdc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   thead {
-    background-color: #407df3;
+    background-color: #3498db;
 
     tr {
-      color: #333;
+      color: #ecf0f1;
       font-weight: 600;
       height: 50px;
-      background-color: white;
+      background-color: #2980b9;
     }
   }
 
@@ -199,7 +273,7 @@ main {
         text-align: center;
 
         a {
-          color: #304156;
+          color: #2980b9;
         }
       }
 
@@ -252,7 +326,7 @@ main {
     }
 
     tr:nth-of-type(even) {
-      background-color: #fff;
+      background-color: #ffffff;
 
       &:hover {
         background-color: #eceff5;
@@ -271,17 +345,15 @@ main {
   cursor: pointer;
   color: white;
   background-color: #666d83;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
- .collection_reminder{
+.collection_reminder {
   color: #555555;
   text-align: center;
   margin-top: 40px;
 }
 
-
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
-
-/*# sourceMappingURL=backend_base.css.map */

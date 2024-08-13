@@ -22,16 +22,16 @@
             <a href="/">Home Page</a>
             <a href="/backend/">My Collections</a>
             <a href="/backend/edit_avatar/">Edit Avatar</a>
+            <a href="/backend/add_article/">Upload Article</a>
 
 {#            <li><a href="/backend/add_article/">Upload Article</a></li>#}
             <!-- 后续可修改！！！设置权限 只有超级管理员可以进行文章的上传 -->
             {% if request.user.is_superuser %}
-                <a href="/backend/add_article/">Upload Article</a>
+                <a href="/admin_home/" target="_blank">Dashboard</a>
                 <a href="/backend/avatar_list/">Avatar List</a>
                 <a href="/backend/cover_list/">Article Cover</a>
                 <a href="/admin/">Admin System</a>
             {% endif %}
-            <a href="/logout/">Logout Exit</a>
         </div>
     </aside>
     <main>
@@ -66,7 +66,10 @@
 
                         </span>
                     </div>
+                    <div class="item">
                         <span><b>Account Status: </b>{{ request.user.get_account_status_display }}</span>
+                    </div>
+
                     </div>
             </div>
             <div class="actions">
@@ -93,7 +96,7 @@
                         <el-input type="password" id="" v-model="perfect_information.pwd" placeholder="Please enter your password."></el-input>
                       </div>
                       <p>
-                         You can login with your email and password after binding email with your account.
+                         You can login with your email and password after binding your email with your account.
                       </p>
                   </div>
                   <span slot="footer" class="dialog-footer">
@@ -126,7 +129,7 @@
                       </div>
                   </div>
                   <span slot="footer" class="dialog-footer">
-                    <el-button @click="edit_password_dialogVisible = false">Cancel</el-button>
+                    <el-button @click="edit_password_dialogVisible = false" class="cancel">Cancel</el-button>
                     <el-button type="primary" @click="edit_password_method">Update</el-button>
                   </span>
                 </el-dialog>
@@ -134,7 +137,7 @@
                      <el-button @click="edit_password_dialogVisible = true" type="warning">Update Password</el-button>
                 </div>
                  <div class="item">
-                     <el-button  href="/logout/" type="danger">Logout & Exit</el-button>
+                     <el-button type="danger"><a href="/logout/" style="color: white; text-decoration: none"> Logout & Exit</a></el-button>
                 </div>
             </div>
 

@@ -49,8 +49,8 @@
             </h2>
             <p>
                 <span>Post Time: <i>{{ article.create_date|date:'m/d/Y' }}</i></span>
-                <span>Author: <i>{{ article.author }}</i> </span>
-                <span>Source: <i>{{ article.source }}</i></span>
+                <span>Author: <i>{{ request.user.username }}</i> </span>
+{#                <span>Source: <i>{{ article.source }}</i></span>#}
             </p>
             <div>
                 {% if article.tag.all %}

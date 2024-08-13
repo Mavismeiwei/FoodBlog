@@ -2,7 +2,7 @@ from django.views import View
 from django.http import JsonResponse
 from markdown import markdown
 from pyquery import PyQuery
-from app01.models import Tags, Articles, Cover
+from app01.models import Tags, Articles, Cover, UserInfo
 from django import forms
 from api.views.login import clean_form
 import random

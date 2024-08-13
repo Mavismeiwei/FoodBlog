@@ -9,6 +9,7 @@ from django.core.handlers.wsgi import WSGIRequest
 import time
 from threading import Thread
 from app01.models import UserInfo
+from api.models import Email
 
 class EmailForm(forms.Form):
     email = forms.EmailField(error_messages={'required': 'Please enter email', "invalid": 'Please enter valid email.'})
@@ -58,6 +59,10 @@ class ApiEmail(View):
                 f"[Mimi's Food Blog] Use this code {valid_email_code} to bind your email with your account. The code is valid for 5 minutes ",
                 settings.EMAIL_HOST_USER,
                 [form.cleaned_data.get('email')], False)).start()
+        Email.objects.create(
+            email=form.cleaned_data.get('email'),
+            content='Complete Information'
+        )
 
         res['code'] = 0
         return JsonResponse(res)

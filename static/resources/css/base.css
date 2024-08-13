@@ -43,9 +43,6 @@ nav a {
 nav a:last-child {
   margin-right: 0;
 }
-nav a.active {
-  color: #ff9800;
-}
 
 nav.show {
   background-color: white;
@@ -53,9 +50,6 @@ nav.show {
 }
 nav.show a {
   color: #333333;
-}
-nav.show a.active {
-  color: #ff9800;
 }
 nav.show .el-dropdown {
   color: #333333;
