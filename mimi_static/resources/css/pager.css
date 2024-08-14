@@ -1,0 +1,43 @@
+ul.pager {
+  list-style: none;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+ul.pager .last_page, ul.pager .next_page {
+  width: 80px !important;
+}
+ul.pager > li {
+  width: 40px !important;
+  height: 40px !important;
+  background-color: white;
+  border-radius: 5px !important;
+  transition: all 0.3s !important;
+  margin-right: 10px;
+}
+ul.pager > li:last-child {
+  margin-right: 0;
+}
+ul.pager > li a {
+  display: inline-flex !important;
+  height: 100%;
+  width: 100%;
+  color: #0e7e70;
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+}
+ul.pager > li:hover {
+  background-color: #21a998 !important;
+}
+ul.pager > li:hover a {
+  color: white;
+}
+ul.pager > li.active {
+  background-color: #0e7e70 !important;
+}
+ul.pager > li.active a {
+  color: white;
+}
+
+/*# sourceMappingURL=pager.css.map */

@@ -1,0 +1,22 @@
+.avatar_list {
+  display: flex;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  list-style: none;
+
+  > li {
+    margin-bottom: 20px;
+    margin-right: 30px;
+
+    .el-radio {
+      display: flex;
+      align-items: center;
+    }
+
+    img{
+      width: 70px;
+      height: 70px;
+      border-radius: 5px;
+    }
+  }
+}
