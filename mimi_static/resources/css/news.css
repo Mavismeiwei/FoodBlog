@@ -1,0 +1,167 @@
+.main {
+  width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.main .news_content {
+  display: flex;
+  background-color: #fafafa;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+.main .news_content .left {
+  width: 20%;
+  background-color: #fff;
+  border-right: 1px solid #dcdcdc;
+}
+.main .news_content .left .left:first-child {
+  margin-top: 30px;
+}
+.main .news_content .left ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.main .news_content .left ul li {
+  padding-left: 30px;
+  display: flex;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+.main .news_content .left ul li img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+.main .news_content .left ul li:hover {
+  background-color: #f0f0f0;
+  color: #007acc;
+}
+.main .news_content .left ul li.active {
+  background-color: #808595;
+  color: whitesmoke;
+}
+.main .news_content .left ul li:not(li.active):hover {
+  color: #007acc;
+  cursor: pointer;
+}
+.main .news_content .right {
+  width: 75%;
+  padding: 30px;
+}
+.main .news_content .right .title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+}
+.main .news_content .right .title img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+.main .news_content .right .title h2 {
+  font-size: 26px;
+  color: #333;
+}
+.main .news_content .right .body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.main .news_content .right .body ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  list-style: none;
+}
+.main .news_content .right .body ul li {
+  background-color: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-basis: calc(33.333% - 20px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.main .news_content .right .body ul li:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.main .news_content .right .body ul li .recipe-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+.main .news_content .right .body ul li .recipe-details {
+  padding: 20px;
+}
+.main .news_content .right .body ul li .recipe-details h3 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  color: #333;
+}
+.main .news_content .right .body ul li .recipe-details p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #666;
+}
+.main .news_content .right .body ul li .recipe-details .nutrition-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-top: 12px;
+}
+.main .news_content .right .body ul li .recipe-details .nutrition-info p {
+  margin: 0;
+}
+.main .news_content .right .body ul li .recipe-details .nutrition-info strong {
+  font-weight: 600;
+  color: #333;
+}
+.main .news_content .right .body ul li .recipe-details a {
+  display: block;
+  margin-top: 12px;
+  text-decoration: none;
+  color: #007acc;
+  font-weight: bold;
+  text-align: center;
+}
+.main .news_content .right .body ul li .recipe-details a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1024px) {
+  .main .news_content .right .body ul li {
+    flex-basis: calc(50% - 20px);
+  }
+}
+@media (max-width: 768px) {
+  .main .news_content {
+    flex-direction: column;
+  }
+  .main .news_content .left {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #eaeaea;
+    padding: 15px;
+  }
+  .main .news_content .right {
+    width: 100%;
+    padding: 15px;
+  }
+  .main .news_content .right .body ul li {
+    flex-basis: 100%;
+  }
+}
+
+/*# sourceMappingURL=news.css.map */
