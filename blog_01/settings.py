@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1-r^$!om1)jxgsegs2qm2ebdcbqe=^uf$7ewj)r&r)+79c_bvr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -90,12 +90,24 @@ WSGI_APPLICATION = 'blog_01.wsgi.application'
 # }
 
 # Mysql database configuration
+# DATABASES = {
+#     "default": {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'blog_2023',
+#         'USER': 'root',
+#         'PASSWORD': '123456',
+#         'HOST': '127.0.0.1',
+#         'PORT': 3306
+#     }
+# }
+
+# 云服务器配置
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'blog_2023',
-        'USER': 'root',
-        'PASSWORD': '123456',
+        'NAME': 'foodblog',
+        'USER': 'foodblog',
+        'PASSWORD': 'saAPtLyrSAJEJY6Y',
         'HOST': '127.0.0.1',
         'PORT': 3306
     }
@@ -156,7 +168,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-# 收集项目的静态文件
+# # 收集项目的静态文件
 STATIC_ROOT = os.path.join(BASE_DIR, 'mimi_static')
 
 # user upload files
