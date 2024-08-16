@@ -1,0 +1,108 @@
+{% extends 'backend/add_article.html' %}
+
+{% block btn %}
+    <el-button id="edit_info"
+               data_title="{{ article_obj.title }}"
+               data_abstract="{{ article_obj.abstract }}"
+               data_pwd="{{ article_obj.pwd }}"
+               data_category="{{ article_obj.category }}"
+               data_tags="{{ tags }}"
+               data_cover_id="{{ article_obj.cover.nid }}"
+               data_cover_url="{{ article_obj.cover.url.url }}"
+               data_recommend="{{ article_obj.recommend }}"
+               type="warning" @click="add_drawer=true">Edit Article</el-button>
+{% endblock %}
+
+{% block drawer %}
+    <el-drawer
+  style="font-weight:bolder"
+  title="Edit Article"
+  :visible.sync="add_drawer"
+  direction="rtl"
+  :before-close="add_handleClose">
+  <div class="add_el_drawer_content">
+    {% csrf_token %}
+    <el-collapse v-model="add_article_activeNames">
+      <el-collapse-item title="Article Title" name="1">
+          <el-input v-model="title" type="text" placeholder="Please input the title of the article"> </el-input>
+      </el-collapse-item>
+      <el-collapse-item title="Article Abstract" name="2">
+          <el-input
+          type="textarea"
+          :rows="6"
+          resize="none"
+          placeholder="Please enter the introduction of the article (Optional)"
+          v-model="abstract">
+        </el-input>
+      </el-collapse-item>
+
+      <el-collapse-item class="category_tags" title="Article Category and Tag" name="3">
+        <el-select v-model="category_id" class="category" placeholder="Please choose category">
+            <!-- 从category_list中遍历获得文章所有类别 -->
+            {% for category in category_list %}
+                    <el-option
+                      label="{{ category.1 }}"
+                      value="{{ category.0 }}">
+                    </el-option>
+                {% endfor %}
+        </el-select>
+        <el-select
+            v-model="tags"
+            class="tags"
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            placeholder="Please choose the tag">
+            {% for tag in tag_list %}
+                <el-option
+                  label="{{ tag.title }}"
+                  value="{{ tag.nid }}">
+                </el-option>
+            {% endfor %}
+        </el-select>
+      </el-collapse-item>
+      <el-collapse-item class="article_cover" title="Article Cover" name="4">
+          <div class="left">
+            <img id="cover_img" src="/media/article_img/cover1.jpeg" alt="">
+          </div>
+          <div class="right">
+            <el-select @change="select_cover" v-model="cover_id" placeholder="Please choose the article cover">
+                {% for cover in cover_list %}
+                    <el-option
+                      label="{{cover.url.url}}"
+                      value="{{ cover.nid }}">
+                    </el-option>
+                {% endfor %}
+            </el-select>
+          </div>
+      </el-collapse-item>
+      <el-collapse-item class="can_choose_" title="Article Optional Settings" name="5">
+              <el-switch
+                  style="display: block"
+                  v-model="recommend"
+                  active-color="#13ce66"
+                  inactive-color="gray"
+                  active-text="Quick Recommendation"
+                  inactive-text="General">
+              </el-switch>
+              <el-switch
+                  v-model="pwd_active"
+                  active-text="Encrypt"
+                  inactive-text="Public">
+              </el-switch>
+              <el-input v-show="pwd_active" v-model="pwd" placeholder="Please enter the password"></el-input>
+
+
+      </el-collapse-item>
+    </el-collapse>
+      <div class="article_btn_list">
+          <el-button type="warning" @click="edit_article('{{ article_obj.nid }}')">Edit</el-button>
+      </div>
+  </div>
+</el-drawer>
+{% endblock %}
+
+{% block textarea %}
+    <textarea style="display: none;">{{ article_obj.content }}</textarea>
+{% endblock %}

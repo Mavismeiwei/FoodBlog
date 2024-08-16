@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-{% load my_tag %}
+{% load my_tag my_filter%}
 <head>
     <meta charset="UTF-8">
     <title>Vivi_Blog</title>
@@ -12,24 +12,28 @@
     {% endblock %}
 
     <!-- Import style of ElementUI -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="/static/elementui/theme-chalk/index.css">
     <link rel="stylesheet" href="/static/fontawesome/css/all.min.css">
     <script src="/static/vue/vue.js"></script>
+    <script src="/static/jquery/jquery.min.js"></script>
 
     <!-- Import Component Library -->
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="/static/elementui/index.js"></script>
 </head>
 <body>
 <div id="app">
     <link rel="stylesheet" :href="'/static/resources/css/theme/' + theme + '.css'">
-    <nav>
-        <div class="left">
-            <a href="/">Home</a>
-            <a href="/news">News</a>
-            <a href="#">Emotion</a>
-            <a href="#">Memory</a>
-            <a href="#">About Us</a>
-            <a href="#">Navigator</a>
+    <nav class="nav_bg">
+        <div class="left" id="dynamic_nav">
+            {% dynamic_navigation request%}
+
+            {% block search %}
+                <div class="search">
+                    <input @keydown.enter="search()" type="text" v-model="search_key" class="search_box"placeholder="Search Something...">
+                    <button @click="search()"><i class="fa fa-search"></i></button>
+                </div>
+            {% endblock %}
+
         </div>
         <div class="right">
               <img v-show="theme === 'light'" src="/static/resources/img/nav/dark.png" @click="setTheme('dark')" alt="">
@@ -42,9 +46,12 @@
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item><a href="/backend/">User Center</a></el-dropdown-item>
-                <el-dropdown-item><a href="/backend/edit_avatar/">Avatar Setting</a></el-dropdown-item>
+{#                <el-dropdown-item><a href="/backend/edit_avatar/">Avatar Setting</a></el-dropdown-item>#}
                 <el-dropdown-item><a href="/backend/add_article/">Post Articles</a></el-dropdown-item>
-                <el-dropdown-item><a href="/admin/">Backstage</a></el-dropdown-item>
+                {% if request.user.is_superuser %}
+                    <el-dropdown-item><a href="/admin_home/" target="_blank">Dashboard</a></el-dropdown-item>
+                    <el-dropdown-item><a href="/admin/">Admin System</a></el-dropdown-item>
+                {% endif %}
                 <el-dropdown-item><a href="/logout/">Log Out</a></el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -52,7 +59,6 @@
                 <a href="/login">Login</a>
                 <a href="/register">Register</a>
             {% endif %}
-
         </div>
     </nav>
 
@@ -61,6 +67,7 @@
     {% endblock %}
 
     <main>
+    {% csrf_token %}
         {% block main %}
             <div class="main">
                 <div class="left">
@@ -68,436 +75,108 @@
                         <div class="title">
                             <h2>Recommend Articles</h2>
                             <div class="switch_article_category">
-                                <span :active="this_category === 'breakfast'" @click="switch_article_category('breakfast')">Breakfast</span>
-                                <span :active="this_category === 'lunch'" @click="switch_article_category('lunch')">Lunch</span>
+                                <span :active="this_category === 'reviews'" @click="switch_article_category('reviews')">Reviews</span>
+                                <span :active="this_category === 'recipe'" @click="switch_article_category('recipe')">Recipes</span>
                             </div>
                         </div>
                         <div class="body">
-                            <ul v-show="this_category === 'breakfast'" class="recommend1">
-                                <li>
+                            <ul v-show="this_category === 'recipe'" class="recommend1">
+                                {% for recipe in recipes_list %}
+                                    <li>
                                     <div class="left">
                                         <div>
-                                            <img src="/static/resources/img/recommended_articles_card/1.jpeg" alt="">
+                                            <img src="{{ recipe.cover.url.url }}" alt="">
                                         </div>
                                     </div>
                                     <div class="right">
-                                        <h2>Hamburger </h2>
-                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
-                                        <span>3 days ago</span>
+                                        <h2><a href="/article/{{ recipe.nid }}" >{{ recipe.title }}</a></h2>
+                                        <p>{{ recipe.abstract }}</p>
+                                        <span>{{ recipe.create_date|date_format }}</span>
                                     </div>
                                 </li>
-                                <li>
-                                    <div class="left">
-                                        <div>
-                                            <img src="/static/resources/img/recommended_articles_card/2.jpeg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <h2>Hamburger </h2>
-                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
-                                        <span>3 days ago</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <div>
-                                            <img src="/static/resources/img/recommended_articles_card/3.jpeg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <h2>Hamburger </h2>
-                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
-                                        <span>3 days ago</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <div>
-                                            <img src="/static/resources/img/recommended_articles_card/4.jpeg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <h2>Hamburger </h2>
-                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
-                                        <span>3 days ago</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <div>
-                                            <img src="/static/resources/img/recommended_articles_card/5.jpeg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <h2>Hamburger </h2>
-                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
-                                        <span>3 days ago</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <div>
-                                            <img src="/static/resources/img/recommended_articles_card/6.jpeg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <h2>Hamburger </h2>
-                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
-                                        <span>3 days ago</span>
-                                    </div>
-                                </li>
+                                {% endfor %}
                             </ul>
-                            <ul v-show="this_category === 'lunch'" class="recommend2">
-                                <li>
+                            <ul v-show="this_category === 'reviews'" class="recommend2">
+                                {% for review in food_reviews_list %}
+                                    <li>
                                     <div class="left">
                                         <div>
-                                            <img src="/static/resources/img/recommended_articles_card/7.jpeg" alt="">
+                                            <img src="{{ review.cover.url.url }}" alt="">
                                         </div>
                                     </div>
                                     <div class="right">
-                                        <h2>Pizza</h2>
-                                        <p>How to make pizza? How to make hamburgers? How to make hamburgers?</p>
-                                        <span>3 days ago</span>
+                                        <h2><a href="/article/{{ review.nid }}" >{{ review.title }}</a></h2>
+                                        <p>{{ review.abstract }}</p>
+                                        <span>{{ review.create_date|date_format }}</span>
                                     </div>
                                 </li>
-                                <li>
-                                    <div class="left">
-                                        <div>
-                                            <img src="/static/resources/img/recommended_articles_card/8.jpeg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <h2>Hamburger </h2>
-                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
-                                        <span>3 days ago</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <div>
-                                            <img src="/static/resources/img/recommended_articles_card/9.jpeg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <h2>Hamburger </h2>
-                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
-                                        <span>3 days ago</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <div>
-                                            <img src="/static/resources/img/recommended_articles_card/10.jpeg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <h2>Hamburger </h2>
-                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
-                                        <span>3 days ago</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <div>
-                                            <img src="/static/resources/img/recommended_articles_card/11.jpeg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <h2>Hamburger </h2>
-                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
-                                        <span>3 days ago</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <div>
-                                            <img src="/static/resources/img/recommended_articles_card/12.jpeg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <h2>Hamburger </h2>
-                                        <p>How to make hamburgers? How to make hamburgers? How to make hamburgers?</p>
-                                        <span>3 days ago</span>
-                                    </div>
-                                </li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
 
-                    <div class="hot_topics card">
+                    <div class="hotList card">
+                        <div id="con">
+
+                        </div>
                         <div class="title">
-                            <h2>Hot Searches</h2>
+                            <h2 id="pos"><img class="hot_icon" src="/static/resources/img/hot_search/fire.png"> Hot Searches</h2>
                             <div>
-                                <a href="#">More</a>
+                                <a href="/news">More</a>
                             </div>
                         </div>
-                        <div class="body">
-                            Main Area
-                        </div>
+                    <div class="body">
+                      <div v-for="(item, index) in limitedRecipes" :key="index" class="index">
+                         <a :href="item.url" target="_blank">
+                         <span class="index">
+                            <img class="item_icon" :src="'/static/resources/img/hot_search/' + (index + 1) + '.png'">[[ item.label ]]</span></a>
 
+                      </div>
+                    </div>
                     </div>
                     <div class="all_articles card">
                         <div class="title">
                             <h2>Blog Articles</h2>
                         </div>
                         <div class="body">
-                            <ul>
-                                <li>
+                            <ul class="article_content">
+                                {% for article in article_list %}
+                                    <li>
+{#                                    <div class="category_flag" len="{{ article.get_category_display|length }}" type="{{ article.get_category_display }}">#}
+{#                                        {{ article.get_category_display }}#}
+{#                                    </div>#}
                                     <div class="left">
                                         <div>
-                                            <img src="/static/resources/img/all_articles_card/1.jpeg" alt="">
+                                            <img src="{{ article.cover.url.url }}" alt="">
                                         </div>
                                     </div>
                                     <div class="right">
-                                        <h2><a href="#">Salmon Fish</a></h2>
-                                        <p>Cooking salmon is a delicious and healthy option.
-                                            Here's a simple recipe for baking salmon in the oven:
-                                            Ingredients:
-                                            Salmon fillets or steaks Olive oil Lemon wedges
-                                            Salt and pepper (to taste) Fresh herbs
-                                            (optional, such as dill, parsley, or thyme)</p>
+                                        <h2><a href="/article/{{ article.nid }}/">{{ article.title }}</a></h2>
+                                        <p>{{ article.abstract }}</p>
                                         <div class="article_info">
                                             <span>
-                                                <i class="fa-regular fa-clock"></i>2023-06-08
+                                                <i class="fa-regular fa-clock"></i>{{ article.create_date|date:'Y-m-d' }}
                                             </span>
                                             <span>
-                                                <i class="fa-regular fa-thumbs-up"></i>876
+                                                <i class="fa-regular fa-thumbs-up"></i>{{ article.digg_count }}
                                             </span>
                                             <span>
-                                                <i class="fa-regular fa-eye"></i>876
+                                                <i class="fa-regular fa-eye"></i>{{ article.look_count }}
                                             </span>
                                             <span>
-                                                <i class="fa-regular fa-comments"></i>876
+                                                <i class="fa-regular fa-comments"></i>{{ article.comment_count }}
                                             </span>
                                             <span>
-                                                <i class="fa-regular fa-star-half-alt"></i>876
+                                                <i class="fa-regular fa-star-half-alt"></i>{{ article.collects_count }}
                                             </span>
                                         </div>
-                                        <a href="">Details</a>
+                                        <a href="/article/{{ article.nid }}/" target="_blank">Details</a>
                                     </div>
                                 </li>
-                                <li>
-                                    <div class="left">
-                                        <div>
-                                            <img src="/static/resources/img/all_articles_card/2.jpeg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <h2><a href="#">Roasted Beef</a></h2>
-                                        <p>To make roasted beef, you'll need a cut of beef (such as a rib roast, tenderloin, or top sirloin),
-                                            some basic ingredients, and an oven. Here's a simple recipe to guide you through the process:
-                                            3 to 5 pounds (1.4 to 2.3 kg) of beef roast (choose a cut suitable for roasting)
-                                            2 tablespoons olive oil or melted butter
-                                            3-4 garlic cloves, minced
-                                            1 tablespoon fresh thyme leaves (or 1 teaspoon dried thyme)
-                                            1 tablespoon fresh rosemary leaves (or 1 teaspoon dried rosemary)
-                                            1 teaspoon salt
-                                            1/2 teaspoon black pepper</p>
-                                        <div class="article_info">
-                                            <span>
-                                                <i class="fa-regular fa-clock"></i>2023-06-08
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-thumbs-up"></i>876
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-eye"></i>876
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-comments"></i>876
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-star-half-alt"></i>876
-                                            </span>
-                                        </div>
-                                        <a href="">Details</a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <div>
-                                            <img src="/static/resources/img/all_articles_card/6.jpeg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <h2><a href="#">Roasted Beef</a></h2>
-                                        <p>To make roasted beef, you'll need a cut of beef (such as a rib roast, tenderloin, or top sirloin),
-                                            some basic ingredients, and an oven. Here's a simple recipe to guide you through the process:
-                                            3 to 5 pounds (1.4 to 2.3 kg) of beef roast (choose a cut suitable for roasting)
-                                            2 tablespoons olive oil or melted butter
-                                            3-4 garlic cloves, minced
-                                            1 tablespoon fresh thyme leaves (or 1 teaspoon dried thyme)
-                                            1 tablespoon fresh rosemary leaves (or 1 teaspoon dried rosemary)
-                                            1 teaspoon salt
-                                            1/2 teaspoon black pepper</p>
-                                        <div class="article_info">
-                                            <span>
-                                                <i class="fa-regular fa-clock"></i>2023-06-08
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-thumbs-up"></i>876
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-eye"></i>876
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-comments"></i>876
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-star-half-alt"></i>876
-                                            </span>
-                                        </div>
-                                        <a href="">Details</a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <div>
-                                            <img src="/static/resources/img/all_articles_card/3.jpeg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <h2><a href="#">Roasted Beef</a></h2>
-                                        <p>To make roasted beef, you'll need a cut of beef (such as a rib roast, tenderloin, or top sirloin),
-                                            some basic ingredients, and an oven. Here's a simple recipe to guide you through the process:
-                                            3 to 5 pounds (1.4 to 2.3 kg) of beef roast (choose a cut suitable for roasting)
-                                            2 tablespoons olive oil or melted butter
-                                            3-4 garlic cloves, minced
-                                            1 tablespoon fresh thyme leaves (or 1 teaspoon dried thyme)
-                                            1 tablespoon fresh rosemary leaves (or 1 teaspoon dried rosemary)
-                                            1 teaspoon salt
-                                            1/2 teaspoon black pepper</p>
-                                        <div class="article_info">
-                                            <span>
-                                                <i class="fa-regular fa-clock"></i>2023-06-08
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-thumbs-up"></i>876
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-eye"></i>876
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-comments"></i>876
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-star-half-alt"></i>876
-                                            </span>
-                                        </div>
-                                        <a href="">Details</a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <div>
-                                            <img src="/static/resources/img/all_articles_card/4.jpeg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <h2><a href="#">Roasted Beef</a></h2>
-                                        <p>To make roasted beef, you'll need a cut of beef (such as a rib roast, tenderloin, or top sirloin),
-                                            some basic ingredients, and an oven. Here's a simple recipe to guide you through the process:
-                                            3 to 5 pounds (1.4 to 2.3 kg) of beef roast (choose a cut suitable for roasting)
-                                            2 tablespoons olive oil or melted butter
-                                            3-4 garlic cloves, minced
-                                            1 tablespoon fresh thyme leaves (or 1 teaspoon dried thyme)
-                                            1 tablespoon fresh rosemary leaves (or 1 teaspoon dried rosemary)
-                                            1 teaspoon salt
-                                            1/2 teaspoon black pepper</p>
-                                        <div class="article_info">
-                                            <span>
-                                                <i class="fa-regular fa-clock"></i>2023-06-08
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-thumbs-up"></i>876
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-eye"></i>876
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-comments"></i>876
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-star-half-alt"></i>876
-                                            </span>
-                                        </div>
-                                        <a href="">Details</a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <div>
-                                            <img src="/static/resources/img/all_articles_card/5.jpeg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <h2><a href="#">Roasted Beef</a></h2>
-                                        <p>To make roasted beef, you'll need a cut of beef (such as a rib roast, tenderloin, or top sirloin),
-                                            some basic ingredients, and an oven. Here's a simple recipe to guide you through the process:
-                                            3 to 5 pounds (1.4 to 2.3 kg) of beef roast (choose a cut suitable for roasting)
-                                            2 tablespoons olive oil or melted butter
-                                            3-4 garlic cloves, minced
-                                            1 tablespoon fresh thyme leaves (or 1 teaspoon dried thyme)
-                                            1 tablespoon fresh rosemary leaves (or 1 teaspoon dried rosemary)
-                                            1 teaspoon salt
-                                            1/2 teaspoon black pepper</p>
-                                        <div class="article_info">
-                                            <span>
-                                                <i class="fa-regular fa-clock"></i>2023-06-08
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-thumbs-up"></i>876
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-eye"></i>876
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-comments"></i>876
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-star-half-alt"></i>876
-                                            </span>
-                                        </div>
-                                        <a href="">Details</a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <div>
-                                            <img src="/static/resources/img/all_articles_card/7.jpeg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <h2><a href="#">Roasted Beef</a></h2>
-                                        <p>To make roasted beef, you'll need a cut of beef (such as a rib roast, tenderloin, or top sirloin),
-                                            some basic ingredients, and an oven. Here's a simple recipe to guide you through the process:
-                                            3 to 5 pounds (1.4 to 2.3 kg) of beef roast (choose a cut suitable for roasting)
-                                            2 tablespoons olive oil or melted butter
-                                            3-4 garlic cloves, minced
-                                            1 tablespoon fresh thyme leaves (or 1 teaspoon dried thyme)
-                                            1 tablespoon fresh rosemary leaves (or 1 teaspoon dried rosemary)
-                                            1 teaspoon salt
-                                            1/2 teaspoon black pepper</p>
-                                        <div class="article_info">
-                                            <span>
-                                                <i class="fa-regular fa-clock"></i>2023-06-08
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-thumbs-up"></i>876
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-eye"></i>876
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-comments"></i>876
-                                            </span>
-                                            <span>
-                                                <i class="fa-regular fa-star-half-alt"></i>876
-                                            </span>
-                                        </div>
-                                        <a href="">Details</a>
-                                    </div>
-                                </li>
+                                {% endfor %}
+                            </ul>
+                            <ul class="pager">
+                                {{ pager.page_html|safe }}
                             </ul>
                         </div>
                     </div>
@@ -509,7 +188,34 @@
                             <a href="#">Apply</a>
                         </div>
                         <div class="body">
-                            Main Area
+                            <div>
+                                <a href="https://www.healthyfood.com/" target="_blank">
+                                    <img src="https://media.healthyfood.com/wp-content/uploads/2024/06/HFG-IMAGES-600-x-450-px-32.png" alt="">
+                                </a>
+                            </div>
+                            <div>
+                                <a href="https://hernexxchapter.org/blog/2022/05/19/make-time-to-enjoy-a-healthy-meal-with-others-this-national-mediterranean-diet-month/?gad_source=1&gclid=CjwKCAjw4ri0BhAvEiwA8oo6F5mrED49c2p25NnPzBeOSdVVJcnR4Rvi0nhPFZgZWbCsTca83VzH3RoC1j4QAvD_BwE" target="_blank">
+                                    <img src="https://hernexxchapter.org/wp-content/uploads/2022/05/Make-Time-to-Enjoy-a-Healthy-Meal-with-Others-This-National-Mediterranean-Diet-Month.png" alt="">
+                                </a>
+                            </div>
+
+                            <div class="my_card">
+                                <div class="title">
+                                    <h3>About Me</h3>
+                                    <h4>MY PROFILE</h4>
+                                </div>
+                                <div class="intro_me">
+                                    <a target="_blank" href="https://mavismeiwei.github.io/meiwei_portfolio/"><img id="intro_img" src="https://cdn-icons-png.flaticon.com/256/4471/4471007.png"></a>
+                                </div>
+                                <div class="footer">
+                                    <p>NAME <span>Mimi's Food Blog</span></p>
+                                    <p>JOB <span>Fullstack Developer</span></p>
+                                    <p>ADDR <span>Boston, US</span></p>
+                                    <p>WEB <a target="_blank" href="https://mavismeiwei.github.io/meiwei_portfolio/">www.meiwei-zhang.cn</a>
+                                </p>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                     <div class="tags card">
@@ -518,42 +224,60 @@
                         </div>
                         <div class="body">
                             <ul>
-                                <li>Foods</li>
-                                <li>Drinks</li>
-                                <li>Restaurants</li>
-                                <li>MakeUp</li>
-                                <li>Fashion</li>
-                                <li>Beauty</li>
-                                <li>Shopping</li>
-                                <li>Types</li>
-                                <li>Cooking</li>
-                                <li>Sports</li>
-                                <li>Clothes</li>
-                                <li>Jewerly</li>
-                                <li>Relax</li>
-                                <li>Places</li>
-                                <li>Special</li>
+                                {% generate_tag_html %}
                             </ul>
                         </div>
                     </div>
-                    <div class="webInfo card">
+                    <div class="site_info card">
                         <div class="title">
                             <h2>Website Information</h2>
                         </div>
                         <div class="body">
-                            Main Area
+                            <div class="item"><b>Set Up Date:</b> <span>2023/10/23</span></div>
+                            <div class="item"><b>Online User:</b> <span>{{ online_count }}</span></div>
+                                <div class="item"><b>Recipes:</b> <span>{% calculation_category_count 1 %}</span></div>
+                                <div class="item"><b>Restaurant Recommendations:</b> <span>{% calculation_category_count 2 %}</span></div>
+                                <div class="item"><b>Quick & Easy:</b> <span>{% calculation_category_count 3 %}</span></div>
+                                <div class="item"><b>Food Reviews:</b> <span>{% calculation_category_count 4 %}</span></div>
+                                <div class="item"><b>Healthy Eating:</b> <span>{% calculation_category_count 5 %}</span></div>
+
+                                <div class="item"><b>Contact Me: </b>
+                                    <div class="images">
+                                        <div class="qq">
+                                            <img src="/static/resources/img/footer/wechat_QR.jpg">
+                                            My Wechat
+                                        </div>
+                                        <div class="qq">
+                                            <img src="/static/resources/img/footer/wechat_QR.jpg">
+                                            My LinkedIn
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="links card">
+                    <div class="feedback card">
                         <div class="title">
                             <h2>Feedback</h2>
                         </div>
                         <div class="body">
-                            Main Area
+                            <el-input
+                                id="feedback__email"
+                                placeholder="Please leave your email."
+                                v-model="feedback.email"
+                                >
+                            </el-input>
+                            <el-input
+                                id="feedback__content"
+                                placeholder="Please leave your feedback about our blog."
+                                type="textarea"
+                                :rows="6"
+                                resize="none"
+                                v-model="feedback.content"
+                                >
+                            </el-input>
+                            <el-button type="primary" @click="feedback_add">Submit</el-button>
                         </div>
                     </div>
-                </div>
-            </div>
         {% endblock %}
     </main>
 
@@ -607,19 +331,143 @@
             </div>
     </footer>
 </div>
-{% block js %}
 
-{% endblock %}
+
+<script src="/static/axios/axios.min.js"></script>
 <script>
+    // axios请求中间件和响应中间件
+    axios.interceptors.request.use(request => {
+        if (request.method !== 'get'){
+            let csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value
+            request.headers['X-CSRFToken'] = csrftoken
+        }
+        return request
+        })
+    // axios response middleware function
+    axios.interceptors.response.use(
+        response => {
+            return response.data
+        })
+
     new Vue({
         el:'#app',
         delimiters: ["[[", "]]"], // revise vue syntax configuration to adjust to django
         data:{
             theme: 'light',  // default theme: light
-            this_category: 'breakfast', // current recommended articles position
+            this_category: 'recipe', // current recommended articles position
+            comment_content: '', // 评论内容
+
+            isShowSlider: false,  // 是否显示文章悬浮目录
+            slide_list: [],  // 文章悬浮目录list
+            slide_text: 'Show Catalog',  //文章目录
+
+            search_key: '',  // 搜索key
+
+
+            recipes_list: [],  // 热门食谱list
+
+            // 侧边食谱列表初始化
+            recipes_init:[
+                {id:'1', type: 'Appetizers', url: '/static/resources/img/news/1.jpg'},
+                {id:'2', type: 'Salads', url: '/static/resources/img/news/2.jpg'},
+                {id:'3', type: 'Soups', url: '/static/resources/img/news/3.jpg'},
+                { id: '4', type: 'Main Dishes', url: '/static/resources/img/news/4.jpg' },
+                { id: '5', type: 'Side Dishes', url: '/static/resources/img/news/5.webp' },
+                { id: '6', type: 'Desserts', url: '/static/resources/img/news/6.jpg' },
+                { id: '7', type: 'Beverages', url: '/static/resources/img/news/7.jpg' },
+                { id: '8', type: 'Snacks', url: '/static/resources/img/news/8.jpg' },
+                { id: '9', type: 'Breakfast', url: '/static/resources/img/news/9.webp' },
+                { id: '10', type: 'Brunch', url: '/static/resources/img/news/10.jpg' },
+                { id: '11', type: 'Lunch', url: '/static/resources/img/news/11.jpg' },
+                { id: '12', type: 'Dinner', url: '/static/resources/img/news/12.jpg' },
+                { id: '13', type: 'Vegan', url: '/static/resources/img/news/13.jpg' },
+                { id: '14', type: 'Vegetarian', url: '/static/resources/img/news/14.webp' },
+                { id: '15', type: 'Gluten-Free', url: '/static/resources/img/news/15.jpg' },
+                { id: '16', type: 'Keto', url: '/static/resources/img/news/16.jpg' },
+                { id: '17', type: 'Paleo', url: '/static/resources/img/news/17.jpg' },
+                { id: '18', type: 'Low-Carb', url: '/static/resources/img/news/18.jpg' },
+                { id: '19', type: 'Whole30', url: '/static/resources/img/news/19.jpg' },
+                { id: '20', type: 'Mediterranean', url: '/static/resources/img/news/20.jpg' }
+            ],
+
+            // 食谱选中状态 用type名去检验
+            recipes_active: 'Appetizers',  // 默认设置为第一个Appetizers
+            recipes_active_url: '/static/resources/img/recommended_articles_card/2.jpeg',
+
+            mood_dialogVisible: false, //发布心情
+
+            mood_add: {
+                name: '',
+                avatar_id: null,
+                content: '',
+                drawing: '',
+            },
+
+            // 发布心情的图片list
+             mood_show_drawing: [],
+
+            // 回复心情
+             mood_comment_dialogVisible: false,
+
+            mood_add_comment: {
+                name: '',
+                content: '',
+            },
+
+            // 回忆录弹窗
+            history_dialogVisible: false,
+            history: {
+                title: '',
+                create_date: new Date(),
+                content: '',
+                drawing: '',
+            },
+            history_edit_add: false,  // 判断回忆录弹窗是添加(默认)还是编辑, 编辑传的参数是nid
+            history_show_drawing: [],  // 用于显示图片列表
+            history_pickerOptions: {
+                disabledDate(time) {  // 默认获取当天日期 超过今天的日期不可以选
+                    return time.getTime() > Date.now();
+                }
+            },  // 配置日期选择器的选项
+
+            // 意见反馈
+            feedback: {
+                email: '',
+                content: ''
+            }
+
+        },
+        computed: {
+            limitedRecipes() {
+              return this.recipes_list.slice(0, 5);
+            }
         },
         created(){
             this.init_theme()
+
+            // 判断是否为文章详情页的slider
+            let path = location.pathname
+            if (path.indexOf('article') !== -1){
+                this.init_slider()
+            }
+            // 判断当前页是否是搜索页面
+            if (path.indexOf('search') !== -1){
+                this.init_search_key()
+            }
+
+            // 判断当前路径是否是news页面
+            if (path.indexOf('news') !== -1){
+                this.recipes_init_method(0)  // news页size值不传
+            }
+
+            // 主页的话 size传5
+            if (path.indexOf('/') !== -1){
+                this.recipes_init_method(3)
+            }
+
+            setTimeout(() => {
+                this.get_sidebar()
+            }, 200)
         },
         methods: {
             // initialize theme
@@ -640,15 +488,553 @@
                 localStorage.setItem('theme', themeName)
             }
         },
+
+            // 图片加载失败
+            img_error(e){
+                e.target.style().display = 'none'
+            },
+
             // set the function to switch the category of recommended articles
             switch_article_category(categoryName){
                 this.this_category = categoryName
+            },
+
+            // 发布评论
+            add_comment(nid){
+                axios.post(`/api/article/comment/${nid}/`, { content: this.comment_content })
+                    .then(res => {
+                    if (res.code){
+                        if (res.self){
+                            this.$refs[`comment_${res.self}`].focus();
+                        }
+                        this.$message.error(res.msg)
+                        return
+                    }
+                    this.$message.success(res.msg)
+                        setTimeout(() => {
+                            location.reload()
+                        }, 500)
+                })
+            },
+
+            // 被评论人的用户名写到placeholder
+            set_sub_placeholder(div, username, cid){
+                 $(div).find('textarea').attr('placeholder', `@${username}`)
+                 $(div).find('textarea').attr('cid', cid)
+            },
+
+            // 展示子评论列表
+            show_sub_comment_list(e, username, cid){
+                let div = $(e.target).parent().parent().next()
+                $(div).slideToggle()
+                // div 是点回复的div
+                this.set_sub_placeholder(div, username, cid)
+            },
+
+            // 子评论回复显示 获取当前子评论
+            sub_comment_set_placeholder(e, username, cid){
+                let div = $(e.target).parents('.sub_comment_list')
+                this.set_sub_placeholder(div, username, cid)
+            },
+
+            // 发布子评论
+            add_sub_comment(e, nid){
+                // nid: 文章id  cid：评论id
+
+                axios.post(`/api/article/comment/${nid}/`, {
+                    content: $(e.target).prev().val(),
+                    pid: $(e.target).prev().attr('cid')
+                }).then(res => {
+                    if (res.code){
+                        if (res.self){
+                            this.$refs[`sub_comment_${res.self}`].focus();
+                        }
+                        this.$message.error(res.msg)
+                        return
+                    }
+                    this.$message.success(res.msg)
+                        setTimeout(() => {
+                            location.reload()
+                        }, 500)
+                })
+            },
+
+            // 删除子评论
+            delete_sub_comment(nid, aid, root_comment_id){
+                  this.$confirm('Are you sure to delete this comment?', 'Reminder', {
+                  confirmButtonText: 'Yes',
+                  cancelButtonText: 'Cancel',
+                  type: 'warning'
+                }).then(() => {
+                     axios.delete(`/api/article/comment/${nid}/`, {data: {
+                         aid, pid: root_comment_id
+                         }}).then(res=>{
+                    if (res.code) {  // 删除状态不成功时要对用户进行提示
+                        this.$message.error(res.msg)
+                        return
+                    }
+                    this.$message.success(res.msg)
+                    setTimeout(() => {
+                        location.reload()
+                    }, 500)
+                })
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: 'Delete Canceled.'
+                  });
+                });
+            },
+
+            // 评论点赞
+            comment_digg(e, nid){
+                axios.post(`/api/comment/digg/${nid}/`).then(res=>{
+                    if (res.code) {
+                        this.$message.error(res.msg)
+                        return
+                    }
+                    e.target.innerHTML = `Like(${res.data})`
+                    this.$message.success(res.msg)
+                })
+            },
+
+            // 文章点赞
+            article_digg(e, nid){
+                let dom = e.target
+                dom.classList.add('show')
+                axios.post(`/api/article/digg/${nid}/`).then(res => {
+                    if (res.code) {
+                        this.$message.error(res.msg)
+                        return
+                    }
+                    $(dom).next().text(res.data)
+                    this.$message.success(res.msg)
+                })
+
+                let timer = null
+                clearTimeout(timer)
+                timer = setTimeout(()=>{
+                    dom.classList.remove('show')
+                }, 1000)
+            },
+
+            // 文章收藏
+            article_collects(e, nid){
+                let dom = e.target
+                axios.post(`/api/article/collects/${nid}/`).then(res => {
+                    if (res.code) {
+                        this.$message.error(res.msg)
+                        return
+                    }
+                    this.$message.success(res.msg)  // 不管取消收藏还是收藏都要显示提示信息msg
+                     $(dom).next().text(res.data)   // 都要修改并显示收藏数
+                    // 收藏
+                    if(res.isCollects){
+                        dom.classList.add('show')
+                        return
+                    }
+                    // 取消收藏
+                    dom.classList.remove('show')
+                })
+            },
+
+            // 回到顶部
+            go_to_top(){
+                $('html,body').animate({
+                    scrollTop: 0
+                }, 1000)
+            },
+
+            // 初始化悬浮目录
+            init_slider(){
+                let flag = localStorage.getItem('isShowSlider')
+                if (flag){
+                    flag = eval(flag)
+                    if (flag){
+                        this.isShowSlider = true
+                        this.$nextTick(() => {
+                            this.sliderChange(true)
+                        })
+                    }
+                    return
+                }
+            },
+
+            // 是否显示文章悬浮目录
+            sliderChange(val){
+                let dom = this.$refs.slider
+                // 持久化存储 存储悬浮目录开始的默认状态为不显示目录
+                localStorage.setItem('isShowSlider', val)
+                if (val){
+                    dom.classList.add('show')
+                    this.slide_text = 'Hide Catalog'
+                    return
+                }
+                dom.classList.remove('show')
+                this.slide_text = 'Show Catalog'
+            },
+
+            // 获取文章的结构信息
+            get_sidebar(){
+                let content = $('#article_content')
+                let h_list = content.children('h1,h2,h3,h4')
+                let lis = []
+                for (let i = 0; i < h_list.length; i++) {
+                    let c = h_list[i].innerText
+                    let tagName = h_list[i].tagName
+                    let tagId = h_list[i].id
+                    let ele = {
+                        tagName,
+                        c,
+                        pos: '#' + tagId
+                    }
+                    lis.push(ele)
+                }
+                lis.push({
+                    tagName: 'H1',
+                    c: 'Comment something!',
+                    pos: '.comment_submit'
+                })
+                this.slide_list = lis
+            },
+
+            // 悬浮目录跳转
+            go_side_bar(selector, e){
+                $('.slider_bar .body>p').css('color', '')  // 默认设置颜色
+                e.target.style.color = '#ff9800'  // 点击后的颜色
+
+                let box = $(selector)
+                let pos = box.offset()
+                pos.top = pos.top - 80
+                $('html,body').animate({scrollTop: pos.top}, 600)
+            },
+
+            // 搜索方法
+            search(path = '/search/', target = '_blank') {
+                let box = document.querySelector('.search');
+
+                // 如果搜索框未显示，则显示搜索框
+                if (!box.classList.contains('show_search')) {
+                    box.classList.add('show_search');
+                    return;
+                }
+                // 如果没有搜索关键词，则隐藏搜索框
+                if (!this.search_key) {
+                    box.classList.remove('show_search');
+                    return;
+                }
+
+                // 预处理搜索关键词：去除首尾空格并转换为小写，替换多个空格为一个空格
+                let processedKey = this.search_key.trim().toLowerCase().replace(/\s+/g, ' ');
+
+                // 使用处理后的关键词打开搜索标签页
+                window.open(path + '?key=' + encodeURIComponent(processedKey), target);
+            },
+
+            // 初始化搜索词
+            init_search_key() {
+                let dom = document.querySelector('.search_key_input');
+                let key = dom.getAttribute('data');
+                // 预处理初始搜索关键词：去除首尾空格并转换为小写，替换多个空格为一个空格
+                this.search_key = key ? key.trim().toLowerCase().replace(/\s+/g, ' ') : '';
+            },
+
+            // 从www.edamam.com获取食谱
+            get_recipe(id, type, url, flag, size){  // flag为True就不需要执行init初始化方法
+                // 如果已经被点击了 那就不要再发请求了
+                if (type === this.recipes_active && !flag){
+                    return
+                }
+                this.recipes_active = type;
+                this.recipes_active_url = url;
+                let data = {
+                    id,
+                }
+                if(size){
+                    data.size = size
+                }
+
+                const appid = '9efdb599';
+                const appKey = 'ae630ec4854aba74003222d9eed06631';
+                axios.get(`https://api.edamam.com/api/recipes/v2?q=${type}&app_key=${appKey}&_cont=CHcVQBtNNQphDmgVQntAEX4BYUtyBwsGRmJCAmQQa1V7DQYVX3dDC2Mba11xVwcPQmVHVzYbMgZ0BlVUSmwSCzcRN11wABFqX3cWQT1OcV9xBE4%3D&type=public&app_id=${appid}`, data).then(res =>{
+                    this.recipes_list = res.hits.slice(2, 17).map(hit => ({
+                        label: hit.recipe.label,
+                        image: hit.recipe.image,
+                        url: hit.recipe.url,
+                        dietLabels: hit.recipe.dietLabels || [],
+                        healthLabels: hit.recipe.healthLabels || [],
+                        calories: hit.recipe.calories,
+                        yield: hit.recipe.yield
+                    }));
+                })
+            },
+
+            // 食谱页默认初始化选中方法 初始化选中Appetizers
+            recipes_init_method(size){
+                this.get_recipe('1','Appetizers','/static/resources/img/recommended_articles_card/2.jpeg', true, size)
+
+            },
+
+            // 心情页面回复折叠
+            mood_show_comment_list(e){
+                let div = $(e.target).parent().parent().next()
+                div.slideToggle()
+            },
+
+            // 发布心情
+            mood_add_method(){
+                axios.post('/api/moods/', this.mood_add).then(res=>{
+                   //校验不成功code不为0时
+                    if (res.code){
+                        this.$message.error(res.msg)
+                        this.$refs[`mood_add__${res.self}`].focus()
+                        return
+                    }
+                    this.$message.success(res.msg)
+                    setTimeout(()=>{
+                        location.reload()
+                    }, 1000)
+                })
+            },
+
+            // 删除心情
+            mood_delete(nid, e){
+              this.$confirm('Are you sure to delete this mood?', 'Remind', {
+                  confirmButtonText: 'Yes',
+                  cancelButtonText: 'Cancel',
+                  type: 'warning'
+                }).then(() => {
+                    axios.delete(`/api/moods/${nid}`).then(res=>{
+                        if (res.code){
+                            this.$message.error(res.msg)
+                            return
+                        }
+                        this.$message.success(res.msg)
+                        setTimeout(()=>{
+                            $(e.target).parents('.mood').remove()
+                        }, 500)
+                        })
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: 'Canceled successfully.'
+                  });
+                });
+            },
+
+            // 打开回复心情的弹窗
+            mood_comment_dialogVisible_show(nid){
+                this.mood_comment_dialogVisible = true
+                this.mood_comment_add_method.nid = nid;
+            },
+
+            // 评论心情
+            mood_comment_add_method(){
+                let nid = this.mood_comment_add_method.nid
+
+                axios.post(`/api/mood_comments/${nid}/`, this.mood_add_comment).then(res=>{
+                    if (res.code){
+                        this.$message.error(res.msg)
+                        this.$refs[`mood_comment_add__${res.self}`].focus()
+                        return
+                    }
+                    this.$message.success(res.msg)
+                    setTimeout(()=>{
+                        location.reload()
+                    }, 1000)
+                })
+            },
+
+            // 删除心情评论
+            mood_sub_comment_delete(nid, mood_id, e){
+                this.$confirm('Are you sure to delete this comment?', 'Remind', {
+                  confirmButtonText: 'Yes',
+                  cancelButtonText: 'Cancel',
+                  type: 'warning'
+                }).then(() => {
+                    // nid是评论的id, mood_id是心情id
+                    axios.delete(`/api/mood_comments/${nid}`, {
+                        data: {
+                            mood_id,
+                        }
+                    }).then(res=>{
+                        if (res.code){
+                            this.$message.error(res.msg)
+                            return
+                        }
+                        this.$message.success(res.msg)
+                        setTimeout(()=>{
+                            let div = $(e.target).parents('.mood').find('.mood_comment_num').text(`Comment (${res.data})`)
+                            console.log(div)
+                            $(e.target).parents('li').remove()
+                        }, 300)
+                        })
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: 'Canceled successfully.'
+                  });
+                });
+            },
+
+            // 心情点赞和心情评论点赞
+            mood_digg(path, nid, e){
+                axios.put(`/api/${path}/${nid}/`).then(res => {
+                    if (res.code) {
+                        this.$message.error(res.msg)
+                        return
+                    }
+                    this.$message.success(res.msg)
+                    $(e.target).text(`Like (${res.data})`)
+                })
+            },
+
+            // 从粘贴事件中获取图片文件
+            uploadImgFromPaste(file) {
+                axios.post('/api/paste_upload/', { image: file }).then(res =>{
+                    this.history.drawing += res.url + '\n'
+                    console.log(res.url)
+                })
+            },
+
+            // 添加和编辑公共请求方法
+            history_add_edit_method(nid) {
+                // 添加事件 - 点击回忆录标题
+                axios.post('/api/history/' + nid, this.history).then(res=>{
+                    if (res.code){
+                        this.$message.error(res.msg)
+                        return
+                    }
+                    this.$message.success(res.msg)
+                    this.history_dialogVisible = false
+                    location.reload()
+                })
+            },
+
+            // 回忆录添加事件
+            history_add_method(nid) {
+                if (!nid) {
+                    // 添加事件
+                    this.history_add_edit_method('')
+                    return
+                } else {
+                    // 编辑事件 - 点击的是事件的时间
+                    this.history_add_edit_method(nid + '/')
+                }
+            },
+
+            // 回忆录粘贴上传的逻辑
+            paste_upload(e) {
+                let ClipboardData = (e.clipboardData || e.originalEvent.clipboardData);
+                let items = ClipboardData.items, len = items.length, blob = null;
+
+                // 在items里找粘贴的image, 拿上面分析，需要循环
+                for (let i = 0; i < len; i++) {
+                    if (items[i].type.indexOf("image") !== -1) {
+                        // getAsFile() 此方法只是living standard firefox ie11 并不支持
+                        blob = items[i].getAsFile();
+                    }
+                }
+
+                if (blob !== null) {
+                    // 读取图片文件
+                    let reader = new FileReader();
+                    reader.onload = (event) => {
+                        // event.target.result 即为图片的Base64编码字符串
+                        let base64_str = event.target.result;
+                        // 可以在这里写与上传逻辑 直接将base64编码的字符串上传（可以尝试传入blob对象）
+                        this.uploadImgFromPaste(base64_str);
+                    }
+                    reader.readAsDataURL(blob);
+                }
+            },
+
+            // 回忆录编辑 - 把内容对应的放在框中
+            history_edit_show(e, nid, title, create_date) {
+                this.history.title = title
+                this.history.create_date = create_date
+                let div = e.target
+                this.history_edit_add = nid
+                this.history.content = div.getAttribute('content')
+                this.history.drawing = div.getAttribute('drawing')
+                this.history_dialogVisible = true
+            },
+
+            // 删除回忆录事件
+            history_remove(nid, e){
+                this.$confirm('Are you sure to delete this event?', 'Remind', {
+                  confirmButtonText: 'Yes',
+                  cancelButtonText: 'Cancel',
+                  type: 'warning'
+                }).then(() => {
+                    // nid是评论的id, mood_id是心情id
+                    axios.delete(`/api/history/${nid}`).then(res => {
+                        if (res.code){
+                            this.$message.error(res.msg)
+                            return
+                        }
+                        $(e.target).parents('.timeline-item').remove()
+                    })
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: 'Canceled successfully.'
+                  });
+                });
+            },
+
+            // 回忆录弹窗的弹窗关闭处理
+            history_handleClose(done){
+                this.$confirm('Are you sure to close?')  // 清空弹窗
+                    .then(() => {
+                        this.history.title = ''
+                        this.history.create_date = new Date()
+                        this.history_edit_add = false
+                        this.history.content = ''
+                        this.history.drawing = ''
+                        done();
+                    })
+                    .catch(() => {
+
+                    });
+            },
+
+            // 意见反馈
+            feedback_add() {
+                axios.post('/api/feedback/', this.feedback).then(res => {
+                    if (res.code) {
+                        this.$message.error(res.msg)
+                        $(`#feedback__${res.self}`)[0].focus()
+                        return
+                    }
+                    this.$message.success(res.msg)
+                    this.feedback.content = ''   //清空输入框
+                })
             }
+        },
+
+        watch: {
+            'mood_add.drawing'(newVal, oldVal) {
+                this.mood_show_drawing = newVal.split('\n')  // 使用回车来上传多张图片
+            },
+            'history.drawing'(newVal, oldVal) {
+                this.history_show_drawing = newVal.split('\n')  // 使用回车来上传多张图片
+            },
         }
     })
 
+</script>
+
+{% block js %}
+    <script>
+
     // home page images window
     let menu_img = document.querySelectorAll('.dynamic_shuffle')
+
+    // 获取轮播图banner和时间
+    let banner = document.getElementById('banner_box')
+    let banner_time = Number(banner.getAttribute('banner_time'))
+
     // get the menu length
     let menu_length = menu_img.length
     let index = 0;
@@ -658,7 +1044,7 @@
     // set img timer
     timer = setInterval(()=>{
         index ++
-        if (index == menu_length){
+        if (index === menu_length){
             index = 0 // traverse at the last picture, initialize to 0
         }
         // reset the img style
@@ -666,9 +1052,68 @@
         i.style.opacity = 0
     }
         menu_img[index].style.opacity = 1
-    }, 2000)
-    
-</script>
+        // 判断轮播时间
+        if (!banner_time) {
+            clearInterval(timer)
+        }
+
+    }, banner_time * 1000)
+
+    let banner_slogan = document.getElementById('banner_slogan')
+    let slogan_list = eval(banner_slogan.getAttribute('lis'))
+    let slogan_time = Number(banner_slogan.getAttribute('slogan_time'))
+
+    let slogan_index = 0;
+    let slogan_timer = null;
+    slogan_timer = setInterval(() => {
+        slogan_index++
+        if (slogan_index === slogan_list.length) {
+            slogan_index = 0
+        }
+        if (!slogan_time){
+            clearInterval(slogan_timer)
+        } else {
+            banner_slogan.innerText = slogan_list[slogan_index]
+        }
+    }, slogan_time * 1000)
+
+    // navbar动态导航条 下滑到一定高度固定
+    let nav = document.querySelector('.nav_bg')
+
+    // 判断是文章详情页还是homepage
+    let path = location.pathname
+
+    // 悬浮目录的滑动固定
+    let slider;
+    slider = document.querySelector('.slider_bar')
+    let top1 = 0;
+    if (path.indexOf('article') !== -1){
+        top1 = $(slider).offset().top - 80 // 获得当前高度 -80 为开始浮动的位置
+    }
+    window.onscroll = function(){
+        let top = document.documentElement.scrollTop
+        if (top >= 200){
+            nav.classList.add('show')
+        } else {
+            nav.classList.remove('show')
+        }
+
+        // 当slider存在时 即当前页面为文章详情页时 进行下拉固定
+        if (slider) {
+            if (top >= top1) {
+            slider.classList.add('fixed')
+        } else {
+            slider.classList.remove('fixed')
+        }
+        }
+
+    }
+
+    </script>
+{% endblock %}
+
+{% block article_js %}
+{% endblock %}
 
 </body>
 </html>

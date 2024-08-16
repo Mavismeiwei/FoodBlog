@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
+import django.core.cache.backends.locmem
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,12 +27,13 @@ SECRET_KEY = 'django-insecure-1-r^$!om1)jxgsegs2qm2ebdcbqe=^uf$7ewj)r&r)+79c_bvr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'simpleui',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,7 +53,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'app01.middleware_decode.Md1'
+    'app01.middleware_decode.Md1',
+    'app01.middleware_decode.Statistical'
 ]
 
 ROOT_URLCONF = 'blog_01.urls'
@@ -86,14 +90,34 @@ WSGI_APPLICATION = 'blog_01.wsgi.application'
 # }
 
 # Mysql database configuration
+# DATABASES = {
+#     "default": {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'blog_2023',
+#         'USER': 'root',
+#         'PASSWORD': '123456',
+#         'HOST': '127.0.0.1',
+#         'PORT': 3306
+#     }
+# }
+
+# 云服务器配置
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'blog_2023',
-        'USER': 'root',
-        'PASSWORD': '123456',
+        'NAME': 'foodblog',
+        'USER': 'foodblog',
+        'PASSWORD': 'saAPtLyrSAJEJY6Y',
         'HOST': '127.0.0.1',
         'PORT': 3306
+    }
+}
+
+# 配置在线人数缓存
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake'
     }
 }
 
@@ -144,10 +168,13 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
+# # 收集项目的静态文件
+STATIC_ROOT = os.path.join(BASE_DIR, 'mimi_static')
+
 # user upload files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880 # 默认设置位5M
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -156,3 +183,28 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Create third table
 AUTH_USER_MODEL = "app01.UserInfo"
+
+# 网站信息
+SITE_TITLE = "Mimi's Food Blog"
+# SITE_BEIAN = '湘ICP备10001000100号'
+SITE_INFO = {
+    'name': 'Mimi',
+    'job': 'FUll Stack Engineer',
+    'address': 'Boston, US',
+    'link': 'https://mavismeiwei.github.io/meiwei_portfolio/',
+    'date': '2023-7-29'  # 建站日期
+}
+
+# 发送邮箱配置
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'zhang.meiwei.mavis@gmail.com'
+EMAIL_HOST_PASSWORD = 'efpe gqau agtd arhx'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_USE_SSL = True
+EMAIL_USER_TLS = False
+
+# 七牛云密钥管理
+QINIU_ACCESS_KEY = '-SaDQRkAzpJM74KzkjuvXQX3f0oOYpHZdwyU461o'
+QINIU_SECRET_KEY = 'PnUOs1u6OEA_xBISe8BTMLIWLoXDAcAnqPW7gUCm'

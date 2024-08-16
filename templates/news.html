@@ -1,5 +1,48 @@
 {% extends 'index.html' %}
-
+{% load my_tag %}
+{% block banner %}
+    {% banner 'news' %}
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="/static/resources/css/news.css">
+{% endblock %}
 {% block main %}
-    News Page
+<div class="main">
+  <div class="news_content">
+    <div class="left">
+      <ul>
+        <li :class="item.type === recipes_active ? 'active' : ''" v-for="item in recipes_init" @click="get_recipe(item.id, item.type, item.url, false, 0)">
+            <img :src="item.url">[[item.type]]
+        </li>
+      </ul>
+    </div>
+    <div class="right">
+      <div class="title">
+        <img :src="recipes_active_url">
+        <h2>Recipes · [[recipes_active]]</h2>
+      </div>
+      <div class="body">
+        <ul>
+          <li v-for="recipe in recipes_list" :key="recipe.url">
+            <a :href="recipe.url" target="_blank" class="recipe-link">
+              <img :src="recipe.image" alt="Recipe Image" class="recipe-image">
+              <div class="recipe-details">
+                <h3>[[ recipe.label ]]</h3>
+                <p v-if="recipe.dietLabels.length > 3">
+                  [[ recipe.dietLabels.slice(0, 2).join(', ') ]] <span v-if="recipe.dietLabels.length > 3"></span>
+                </p>
+                <p v-if="recipe.healthLabels.length > 3">
+                  [[ recipe.healthLabels.slice(0, 2).join(', ') ]] <span v-if="recipe.healthLabels.length > 3"></span>
+                </p>
+                <div class="nutrition-info">
+                  <p><strong>Calories:</strong> [[ recipe.calories.toFixed(2) ]] kcal</p>
+                </div>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

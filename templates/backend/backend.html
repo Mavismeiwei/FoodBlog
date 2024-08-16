@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load my_filter my_tag %}
 <head>
     <meta charset="UTF-8">
     <title>User Backend Page</title>
@@ -10,159 +11,202 @@
     {% endblock %}
 </head>
 <body>
+
 <div id="app">
     <aside>
     <div class="slogan">
-        <img src="/static/resources/img/backend/logo.jpeg" alt="">
+        <img src="{{ request.user.avatar.url.url }}" alt="">
     </div>
-        <ul>
+        <div id="dynamic_menu">
             {# function in normal users #}
-            <li><a href="/">Home Page</a></li>
-            <li><a href="/backend/">User Center</a></li>
-            <li><a href="/backend/edit_avatar/">Edit Avatar</a></li>
-            <li><a href="/backend/reset_password/">Update Password</a></li>
+            <a href="/">Home Page</a>
+            <a href="/backend/">My Collections</a>
+            <a href="/backend/edit_avatar/">Edit Avatar</a>
+            <a href="/backend/add_article/">Upload Article</a>
+
+{#            <li><a href="/backend/add_article/">Upload Article</a></li>#}
+            <!-- 后续可修改！！！设置权限 只有超级管理员可以进行文章的上传 -->
             {% if request.user.is_superuser %}
-                <li><a href="/backend/add_article/">Upload Article</a></li>
+                <a href="/admin_home/" target="_blank">Dashboard</a>
+                <a href="/backend/avatar_list/">Avatar List</a>
+                <a href="/backend/cover_list/">Article Cover</a>
+                <a href="/admin/">Admin System</a>
             {% endif %}
-            <li><a href="/logout/">Logout Exit</a></li>
-        </ul>
+        </div>
     </aside>
     <main>
+        {% csrf_token %}
          {% block main %}
             <div class="user_info">
                 <div class="left">
-                    <img src="/static/resources/img/user/1.jpg" alt="">
+                    <img src="{{ request.user.avatar.url.url }}" alt="">
                 </div>
                 <div class="right">
                     <div class="item">
-                        <span><b>User Name:</b> Vivi</span>
+                        <span><b>User Name: </b>{{ request.user.username }}</span>
                     </div>
                     <div class="item">
-                        <span><b>Registration Date:</b> 05/23/2023</span>
+                        <span><b>Registration Date: </b>{{ request.user.date_joined }}</span>
                     </div>
                     <div class="item">
-                        <span><b>Last Time Login:</b> 08/23/2023</span>
+                        <span><b>Last Time Login: </b>{{ request.user.last_login}}</span>
                     </div>
                     <div class="item">
-                        <span><b>Score:</b> 200</span>
+                        <span><b>Source Channel: </b>{{ request.user.get_sign_status_display }}</span>
                     </div>
                     <div class="item">
-                        <span><b>Email:</b> zhag@163.com</span>
+                        <span><b>Email: </b>
+
+                        {% if request.user.email %}
+                            {{ request.user.email }}
+
+                            {% else %}
+                                <a href="javascript:void (0);" @click="perfect_information_dialogVisible=true">Bind Email</a>
+                        {% endif %}
+
+                        </span>
                     </div>
                     <div class="item">
-                        <span><b>Phone Number:</b> 88888888</span>
+                        <span><b>Account Status: </b>{{ request.user.get_account_status_display }}</span>
                     </div>
+
                     </div>
             </div>
             <div class="actions">
+            {% csrf_token %}
+                <el-dialog
+                  title="Update Information"
+                  :visible.sync="perfect_information_dialogVisible"
+                  width="30%">
+                  <div class="edit_info">
+                      <div>
+                          <label for="">Email</label>
+                        <el-input id="" v-model="perfect_information.email" placeholder="Please enter your email."></el-input>
+                      </div>
+                      <div >
+                          <label for="">Validation Code</label>
+                          <div class="send_email">
+                             <el-input class="validation_input" id="" v-model="perfect_information.code" placeholder="Please enter validation code."></el-input>
+                             <el-button @click="send_email" :disabled="perfect_information_email_disable">Send Code</el-button>
+                          </div>
+
+                      </div>
+                      <div>
+                          <label for="">Password</label>
+                        <el-input type="password" id="" v-model="perfect_information.pwd" placeholder="Please enter your password."></el-input>
+                      </div>
+                      <p>
+                         You can login with your email and password after binding your email with your account.
+                      </p>
+                  </div>
+                  <span slot="footer" class="dialog-footer">
+                    <el-button @click="perfect_information_dialogVisible = false">Cancel</el-button>
+                    <el-button type="primary" :disabled="perfect_information_method_disable" @click="perfect_information_method">Update</el-button>
+                  </span>
+                </el-dialog>
                 <div class="item">
-                     <el-button type="primary">Update Information</el-button>
+                     <el-button type="primary" @click="perfect_information_dialogVisible=true">Update Information</el-button>
                 </div>
                  <div class="item">
-                     <el-button type="success">Update Portrait</el-button>
+                     <el-button type="success"><a href="/backend/edit_avatar/" style="color: white; text-decoration: none">Update Avatar</a></el-button>
+                </div>
+                <el-dialog
+                  title="Update Password"
+                  :visible.sync="edit_password_dialogVisible"
+                  width="30%">
+                  <div class="edit_info">
+                      <div>
+                          <label for="edit_password_old_pwd">Previous Password</label>
+                        <el-input type="password" id="edit_password_old_pwd" v-model="edit_password.old_pwd" placeholder="Please enter your previous password."></el-input>
+                      </div>
+                      <div>
+                          <label for="edit_password_pwd">New Password</label>
+                        <el-input type="password" id="edit_password_pwd" v-model="edit_password.pwd" placeholder="Please enter your new password."></el-input>
+                      </div>
+                      <div>
+                          <label for="edit_password_re_pwd">Confirm Password</label>
+                        <el-input type="password" id="edit_password_re_pwd" v-model="edit_password.re_pwd" placeholder="Please confirm your new password."></el-input>
+                      </div>
+                  </div>
+                  <span slot="footer" class="dialog-footer">
+                    <el-button @click="edit_password_dialogVisible = false" class="cancel">Cancel</el-button>
+                    <el-button type="primary" @click="edit_password_method">Update</el-button>
+                  </span>
+                </el-dialog>
+                 <div class="item">
+                     <el-button @click="edit_password_dialogVisible = true" type="warning">Update Password</el-button>
                 </div>
                  <div class="item">
-                     <el-button type="warning">Update Password</el-button>
-                </div>
-                 <div class="item">
-                     <el-button type="danger">Logout & Exit</el-button>
+                     <el-button type="danger"><a href="/logout/" style="color: white; text-decoration: none"> Logout & Exit</a></el-button>
                 </div>
             </div>
 
             {% block content %}
-                <div class="collection_article_all">
-                <p class="collection_title"><b>My Collections</b></p>
-                <div class="article_list">
-                    <div class="item">
-                        <div class="left">
-                            <img src="/static/resources/img/all_articles_card/5.jpeg" alt="">
-                        </div>
-                        <div class="right">
-                            <h4>Healthy Salad</h4>
-                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="left">
-                            <img src="/static/resources/img/all_articles_card/1.jpeg" alt="">
-                        </div>
-                        <div class="right">
-                            <h4>Healthy Salad</h4>
-                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="left">
-                            <img src="/static/resources/img/all_articles_card/2.jpeg" alt="">
-                        </div>
-                        <div class="right">
-                            <h4>Healthy Salad</h4>
-                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="left">
-                            <img src="/static/resources/img/all_articles_card/3.jpeg" alt="">
-                        </div>
-                        <div class="right">
-                            <h4>Healthy Salad</h4>
-                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                        </div>
-                    </div>
-                     <div class="item">
-                        <div class="left">
-                            <img src="/static/resources/img/all_articles_card/4.jpeg" alt="">
-                        </div>
-                        <div class="right">
-                            <h4>Healthy Salad</h4>
-                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                        </div>
-                    </div>
-                     <div class="item">
-                        <div class="left">
-                            <img src="/static/resources/img/all_articles_card/6.jpeg" alt="">
-                        </div>
-                        <div class="right">
-                            <h4>Healthy Salad</h4>
-                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                        </div>
-                    </div>
-                     <div class="item">
-                        <div class="left">
-                            <img src="/static/resources/img/all_articles_card/7.jpeg" alt="">
-                        </div>
-                        <div class="right">
-                            <h4>Healthy Salad</h4>
-                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                        </div>
-                    </div>
-                     <div class="item">
-                        <div class="left">
-                            <img src="/static/resources/img/all_articles_card/1.jpeg" alt="">
-                        </div>
-                        <div class="right">
-                            <h4>Healthy Salad</h4>
-                            <p>you're interested in making a healthy salad! Salads are a great way to incorporate a variety of vegetables, fruits, proteins, and other nutritious ingredients into your diet. </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+              {% if collects_query.count %}
+                    <form method="post" action="/api/cancel_collection/" class="collection_article_all">
+                                        {% csrf_token %}
+                                        <p class="collection_title"><b>My Collections</b></p>
+{#                                        <p>Collect {{ collects_query.count }} articles in total, you select [[ select_list.length ]] articles.</p>#}
+                                        <table class="collection_table">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <input type="checkbox" @click="select_all" data="{{ collects_query|get_coll_nid }}">
+                                                    </th>
+                                                    <th>Title</th>
+                                                    <th>Category</th>
+                                                    <th>Tag</th>
+                                                    <th>View</th>
+                                                    <th>Collect</th>
+                                                    <th>Post Date</th>
+
+                                                </tr>
+
+                                            </thead>
+                                            <tbody>
+                                                {% for col in collects_query %}
+                                                    <tr>
+                                                        <td class="select"><input v-model="select_list" type="checkbox" name="nid" value="{{ col.nid }}"></td>
+                                                        <td>{{ col.title }}</td>
+                                                        <td>{{ col.get_category_display }}</td>
+                                                        <td class="tags">{{ col.tag.all|get_tags }}</td>
+                                                        <td>{{ col.look_count }}</td>
+                                                        <td>{{ col.collects_count }}</td>
+                                                        <td>{{ col.create_date | date_format }}</td>
+
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        <!--未选中文章的话取消收藏按钮不会出现 -->
+                                        <input v-show="select_list.length" type="submit" class="cancel_btn" value="Cancel Collection">
+                                </form>
+
+              {% else %}
+                    <h2 class="collection_reminder">You haven't collected anything.</br>
+                    Go to the home page to collect now!</h2>
+
+              {% endif %}
+
+
             {% endblock %}
 
         {% endblock %}
     </main>
 </div>
 
+
 <script src="/static/axios/axios.min.js"></script>
 <script src="/static/vue/vue.js"></script>
+<script src="/static/jquery/jquery.min.js"></script>
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 {% block js %}
 
 {% endblock %}
 <script>
-    // axios请求中间件和响应中间件
+    // axios请求中间件和响应中间件 只要不是get请求 都加上csrf token
     axios.interceptors.request.use(request => {
-        if (request.method === 'post'){
+        if (request.method !== 'get'){
             let csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value
             request.headers['X-CSRFToken'] = csrftoken
         }
@@ -205,21 +249,81 @@
             // 文章标题
             title: '',
             // 文章简介
-            abstract: ''
+            abstract: '',
+
+            // 修改密码的弹窗
+            edit_password_dialogVisible: false,
+            // 修改密码
+            edit_password:{
+                old_pwd: '',
+                pwd: '',
+                re_pwd: '',
+            },
+
+            // 修改头像id
+            edit_avatar_id: '',
+
+            // 头像上传时要给element ui添加请求头
+            avatar_list_headers: {},
+
+            perfect_information_dialogVisible: false,
+            perfect_information:{
+                email: '',
+                pwd: '',
+                code: '',  // 验证码
+            },
+            perfect_information_email_disable: false,
+            perfect_information_method_disable: true,
+            select_list: [],  // 后台文章收藏选中列表
+
         },
         created(){
             let img = document.getElementById('cover_img')
+<<<<<<< HEAD
             let cover_list = eval(img.getAttribute('data'))
             let item = cover_list[Math.floor(Math.random() * cover_list.length)]
             img.setAttribute('src', item.url)
             this.cover_id = item.nid.toString()
         },
+=======
+
+            let path_dict = {
+                "add_article": this.init_add_article,
+                "edit_article": this.init_edit_article,
+                "edit_avatar": this.init_edit_avatar,  // avatar初始化 头像选择按钮初始化
+                "cover_list": this.init_cover_list,  // cover list高度初始化
+                "avatar_list": this.init_avatar_list,  // avatar list高度初始化
+            }
+            let path = location.pathname
+            for (const key in path_dict) {
+                 let index = path.indexOf(key)  // 根据返回的index值进行判断
+                if (index !== -1){
+                    path_dict[key](img)
+                    break
+                }
+            }
+        },
+        mounted(){
+            // 动态导航的a标签 父级、添加一个ref=“dynamic_menu”
+            let dynamic_menu = document.getElementById('dynamic_menu')
+            let a_list = dynamic_menu.querySelectorAll('a')
+            let path = location.pathname
+            for (const a of a_list) {
+                let a_href = a.getAttribute('href')
+                if (a_href == path || a_href + '/' === path) {
+                a.classList.add('active')
+                }
+            }
+        },
+
+>>>>>>> cb12b4fb8c14abc0615d935b208fd5fde6d2c944
         methods:{
             add_handleClose(done) {
                 done()
               },
-            // 添加文章的函数
-            add_article() {
+
+            // 添加文章和编辑文章的公共函数
+            add_edit_article(){
                 let data = {
                     title: this.title,
                     abstract: this.abstract,
@@ -230,9 +334,12 @@
                     category: this.category_id,
                     content: editor.querySelector('.editormd-markdown-textarea').value
                 }
+                return data
+            },
 
-                axios.post('/api/article/', data).then(res => {
-                    if (res.code){
+            // 添加文章和编辑文章的回掉函数
+            add_edit_article_callback(res){
+                if (res.code){
                         this.$message.error(res.msg)
                         return
                     }
@@ -240,14 +347,29 @@
                     setTimeout(()=>{
                         location.href = `/article/${res.data}/`
                     }, 1000)
+            },
+
+            // 添加文章的函数 - POST请求
+            add_article() {
+                let data = this.add_edit_article()
+                axios.post('/api/article/', data).then(res => {
+                    this.add_edit_article_callback(res)
                 })
+            },
+
+            //添加文章的初始化
+            init_add_article(img){
+                let cover_list = eval(img.getAttribute('data'))
+                let item = cover_list[Math.floor(Math.random() * cover_list.length)]
+                img.setAttribute('src', item.url)
+                this.cover_id = item.nid.toString()
             },
 
             // 选择文章封面函数
             select_cover(val) {
                 setTimeout(() => {
                     let v = document.querySelector('.article_cover input').value
-                    let cover = document.getElementById('cover_id')
+                    let cover = document.getElementById('cover_img')
                     console.log(cover); // 检查 cover 是否为 null
                     if (cover) {
                         cover.src = v
@@ -255,7 +377,198 @@
                         console.error('Element with id cover_img not found');
                     }
                 }, 1)
-            }
+            },
+
+            // 编辑文章的函数 - PUT请求
+            edit_article(nid) {
+                let data = this.add_edit_article()
+                axios.put(`/api/article/${nid}/`, data).then(res => {
+                    this.add_edit_article_callback(res)
+                })
+            },
+
+            // 编辑文章的初始化
+            init_edit_article(img){
+                                // 获取文章的title abstract并显示在编辑框中
+                let box = document.getElementById('edit_info')
+                this.title = box.getAttribute('data_title')
+                this.abstract = box.getAttribute('data_abstract')
+                // 获取文章的category并显示
+                let category_id = box.getAttribute('data_category')
+                if(category_id!=="None"){
+                    this.category_id = category_id
+                }
+                // 获取文章的tags并显示, 返回一个列表 使用eval方法
+                this.tags = eval(box.getAttribute('data_tags'))
+
+                // 获取文章的cover
+                this.cover_id = box.getAttribute('data_cover_id')
+                //  获得当前文档封面的url并显示出来setAttribute
+                let cover_url = box.getAttribute('data_cover_url')
+                img.setAttribute('src', cover_url)
+
+                // 获取文章的pwd并显示(添加判断是否设置了pwd)
+                let pwd = box.getAttribute('data_pwd')
+                if(pwd!=="None"){
+                    this.pwd = pwd;
+                    this.pwd_active = true
+                }
+                 // 获取文章是否上推荐recommend, true false进行判断
+                let recommend = box.getAttribute('data_recommend')
+                if(recommend==='True'){
+                    this.recommend = true
+                } else {
+                    this.recommend = false
+                }
+            },
+
+            // 修改密码
+            edit_password_method(){
+                 axios.post('/api/edit_password/', this.edit_password).then(res=>{
+                    if (res.code){
+                        this.$message.error(res.msg)
+                        $(`#edit_password_${res.self}`)[0].focus()
+                        return
+                    }
+                    this.$message.success(res.msg)
+                })
+            },
+
+            // 修改头像
+            edit_avatar_method(){
+
+                axios.put('/api/edit_avatar/', {
+
+                    avatar_id: this.edit_avatar_id,
+
+                }).then(res=>{
+                   if(res.code){
+                       this.$message.error(res.msg)
+                       return
+                   }
+                   this.$message.success(res.msg)
+                   $('.user_info img').attr('src', res.data)
+                })
+            },
+
+            // 初始化修改头像
+                init_edit_avatar(img){
+                let nid = eval($('.avatar_list').attr('avatar_nid'))
+                this.edit_avatar_id = nid
+            },
+
+            // 上传头像
+            avatar_list_upload(){
+                console.log(1)
+                let csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value
+                this.avatar_list_headers['X-CSRFToken'] = csrftoken
+            },
+
+            // 上传头像成功事件
+            avatar_list_success(res){
+                if (!res.code){
+                    return
+                }
+                this.$message.error(res.msg)
+            },
+
+            // 头像和文章封面删除事件
+            avatar_cover_delete(nid, url, e){
+                this.$confirm('Are you sure to delete this avatar?', 'Reminder', {
+                  confirmButtonText: 'Delete',
+                  cancelButtonText: 'Cancel',
+                  type: 'warning'
+                }).then(() => {
+                  axios.delete(`/api/upload/${url}/${nid}/`).then(res =>{
+                  if (res.code){
+                      this.$message.error(res.msg)
+                      return
+                  }
+                  this.$message.success(res.msg)
+                  $(e.target).parent().parent().remove()
+                  }
+                  )
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: 'Delete Cancel.'
+                  });
+                });
+
+            },
+
+            // 后台cover_list文章封面初始化
+            init_cover_list(img){
+                setTimeout(() => {
+                let h = document.querySelector('.cover_list').offsetHeight
+                if (h > 500) {
+                    h = 500
+                }
+                document.querySelector('.el-scrollbar').style.height = h + 'px'
+                }, 1)
+            },
+
+            // 后台avatar_list高估初始化
+            init_avatar_list(img){
+                setTimeout(() => {
+                let h = document.querySelector('.avatar_list').offsetHeight
+                if (h > 500) {
+                    h = 500
+                }
+                document.querySelector('.el-scrollbar').style.height = h + 'px'
+                }, 1)
+            },
+
+            // 邮箱发送绑定验证码
+            send_email(){
+                axios.post('/api/send_email/', this.perfect_information).then(res=>{
+                if (res.code){
+                    this.$message.error(res.msg)
+                    return
+                }
+                this.$message.success(res.msg)
+                let num = 60
+                let span = document.querySelector('.send_email .el-button span')
+                this.perfect_information_email_disable = true   // 发送验证码按钮禁用设置
+                this.perfect_information_method_disable = false
+                let timer = null
+                timer = setInterval(() => {
+                    span.innerHTML = num + 'S'
+                    if (num === 1) {
+                        span.innerHTML = 'Send Code'
+                        this.perfect_information_email_disable = false
+                        clearInterval(timer)
+                    }
+                    num --
+                }, 1000)
+                })
+            },
+
+            // 完善信息方法
+            perfect_information_method(){
+                axios.put('/api/perfect_information/', this.perfect_information).then(res =>{
+                    if (res.code){
+                        this.$message.error(res.msg)
+                        return
+                    }
+                    this.$message.success(res.msg)
+                    this.perfect_information_dialogVisible = false
+                })
+            },
+
+            // 文章收藏 一键全选取消收藏
+            select_all(e) {
+                if (this.select_all.flag) {
+                    // 取消
+                    this.select_list = []
+                    this.select_all.flag = false
+                    return
+                }
+                this.select_all.flag = true
+                let div = e.target.getAttribute('data')
+                this.select_list = eval(div)
+            },
+
         }
     })
 </script>

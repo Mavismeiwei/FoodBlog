@@ -1,5 +1,5 @@
 {% extends 'index.html' %}
-{% load my_tag %}
+{% load my_tag my_filter %}
 {% block css %}
     <link rel="stylesheet" href="/static/editor-md/css/editormd.css"/>
     <link rel="stylesheet" href="/static/resources/css/article.css">
@@ -10,189 +10,137 @@
 {% endblock %}
 
 {% block main %}
-
-    <div class="article">
-    <div class="slider_bar">
-        <div class="title">
-            Article Directory
-        </div>
-        <div class="body">
-            <p class="H1">How to make hamburger at home? How to make hamburger at home? How to make hamburger at home?</p>
-            <p class="H2">Let's eat some healthy salads!</p>
-            <p class="H3">h3 title</p>
-            <p class="H4">h4 title</p>
-            <p class="H5">h5 title</p>
-        </div>
-    </div>
-        <div class="article_title">
-            <h2>{{ article.title }}</h2>
-            <p>
-                <span>Post Time: <i>{{ article.create_date|date:'m/d/Y' }}</i></span>
-                <span>Author: <i>{{ article.author }}</i> </span>
-                <span>Source: <i>{{ article.source }}</i></span>
-            </p>
-            <div>
-                <i title="Tag" class="fas fa-tags"></i>
-                {% for tag in article.tag.all %}
-                    <i>{{ tag.title }}</i>
-                {% endfor %}
+    <div class="slider_bar" ref="slider">
+            <div class="title">
+                <span><i class="fa-solid fa-folder-tree" style="color:grey"></i><span></span>[[ slide_text ]]</span>
+                <el-switch
+                      v-model="isShowSlider"
+                      active-color="#13ce66"
+                      inactive-color="#ff4949"
+                      @change="sliderChange">
+                </el-switch>
+            </div>
+            <div class="body">
+                <p :tagName="item.tagName" @click="go_side_bar(item.pos, $event)" v-for="(item, index) in slide_list" :key="index">
+                    [[ item.c ]]
+                </p>
             </div>
         </div>
-    <div class="article_content" id="article_content">
-        <textarea style="display: none;">{{ article.content }}</textarea>
-    </div>
-    <div class="comment_submit">
-        <div class="title">
-            What do you think about this article?
+    <div class="article">
+        <div class="article_actions">
+            <div class="item" title="Article_Like">
+                <i class="fas fa-thumbs-up" @click="article_digg($event, '{{ article.nid }}')"></i>
+                <span>{{ article.digg_count }}</span>
+            </div>
+            <div class="item" title="Article_Collect">
+                <i class="fas fa-star {{ article|is_user_collects:request }}" @click="article_collects($event, '{{ article.nid }}')"></i>
+                <span>{{ article.collects_count }}</span>
+            </div>
+            <div class="item" title="Back_To_The_Top">
+                <i class="fa fa-angle-double-up" @click="go_to_top"></i>
+            </div>
         </div>
-        <div class="body">
-            <textarea name="" id="" rows="10" placeholder="Write down your feelings..."></textarea>
-            <button class="submit_comment">
-                Comment
-            </button>
+        <div class="article_title">
+            <h2>{{ article.title }}
+            <!-- 后续可修改！！！设置权限 只有超级管理员可以进行文章的编辑修改 -->
+                {% if request.user.is_superuser %}
+                    <a href="/backend/edit_article/{{ article.nid }}/"><i class="fas fa-edit"></i></a>
+                {% endif %}
+            </h2>
+            <p>
+                <span>Post Time: <i>{{ article.create_date|date:'m/d/Y' }}</i></span>
+                <span>Author: <i>{{ request.user.username }}</i> </span>
+{#                <span>Source: <i>{{ article.source }}</i></span>#}
+            </p>
+            <div>
+                {% if article.tag.all %}
+                    <i title="Tag" class="fas fa-tags"></i>
+                    {% for tag in article.tag.all %}
+                        <i>{{ tag.title }}</i>
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
-        <div class="footer">
-            <p><span>49</span> people view, <span>18</span> comments</p>
+        <div class="article_content" id="article_content">
+            <textarea style="display: none;">{{ article.content }}</textarea>
         </div>
-    </div>
-    <div class="comment_list">
-        <ul>
-            <li>
-                <div class="left">
-                    <img src="/static/resources/img/user/1.jpg">
-                </div>
-                <div class="right">
-                    <h4>Vivi Blog</h4>
-                    <div class="comment_content">
-                        <p>Hello！！</p>
-                        <div>
-                            <img src="/static/resources/img/login/4.svg">
-                            <img src="/static/resources/img/login/5.svg">
-                            <img src="/static/resources/img/login/6.svg">
+        <div class="comment_submit">
+            <div class="title">
+                What do you think about this article?
+            </div>
+            {% csrf_token %}
+            <div class="body">
+                <textarea name="" id="" ref="comment_content" rows="10" v-model="comment_content" placeholder="Write down your feelings..."></textarea>
+                <button class="submit_comment" @click="add_comment({{ article.nid }})">
+                    Comment
+                </button>
+            </div>
+            <div class="footer">
+                <p><span>{{ article.look_count }}</span> people view, <span>{{ article.comment_count }}</span> comments</p>
+            </div>
+        </div>
+        <div class="comment_list">
+            <ul>
+                {% for comment in comment_list %}
+                    <li>
+                        <div class="left">
+                            <img src="{{ comment.user.avatar.url.url }}">
                         </div>
-                    </div>
-                    <div class="comment_info">
-                        <span>Recent</span>
-                        <div>
-                            <span>Like(8)</span>
-                            <span>Comment(2)</span>
-                            <span class="delete">Delete</span>
-                        </div>
-                    </div>
+                        <div class="right">
+                            <h4>{{ comment.user.username }}</h4>
+                            <div class="comment_content">
+                                {{ comment.content }}
+                            </div>
+                            <div class="comment_info">
+                                <span>{{ comment.create_time }}</span>
+                                <div>
+                                    <span @click="comment_digg($event, '{{ comment.nid }}')">Like({{ comment.digg_count }})</span>
+                                    <span @click="show_sub_comment_list($event, '{{ comment.user.username }}', '{{ comment.nid }}')">Comment({{ comment.comment_count }})</span>
+                                    {% if comment.user == request.user or request.user.is_superuser %}
+                                        <span class="delete" @click="delete_sub_comment('{{ comment.nid }}', '{{ article.nid }}', null)">Delete</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="sub_comment_list">
+                                {% for sub in comment.sub_comment %}
+                                    <div class="sub_comment_item">
+                                        <div class="left">
+                                            <img src="{{ sub.user.avatar.url.url }}">
+                                        </div>
+                                        <div class="right">
+                                            <h4>{{ sub.user.username }} @ {{ sub.parent_comment.user.username }}</h4>
+                                            <div class="sub_comment_content">
+                                                {{ sub.content }}
+                                            </div>
+                                            <div class="sub_comment_info">
+                                                <span>{{ sub.create_time }}</span>
+                                                <div>
+                                                    <span @click="comment_digg($event, '{{ sub.nid }}')">Like({{ sub.digg_count }})</span>
+                                                    <span @click="sub_comment_set_placeholder($event, '{{ sub.user.username }}', '{{ sub.nid }}')">Comment</span>
+                                                    {% if sub.user == request.user or request.user.is_superuser%} <!-- 如果评论人和当前user一致或着是管理员 才会显示delete按钮 -->
+                                                        <span class="delete" @click="delete_sub_comment('{{ sub.nid }}', '{{ article.nid }}', '{{ comment.nid }}')">Delete</span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
 
-                    <div class="sub_comment_list">
-                        <div class="sub_comment_item">
-                            <div class="left">
-                                 <img src="/static/resources/img/user/2.jpg">
-                            </div>
-                            <div class="right">
-                                <h4>Fang @ Vivi</h4>
-                                <div class="sub_comment_content">
-                                    Hi！！！！！
-                                </div>
-                                <div class="sub_comment_info">
-                                    <span>5 min ago</span>
-                                    <div>
-                                        <span>Like(3)</span>
-                                        <span>Comment(1)</span>
-                                        <span class="delete">Delete</span>
-                                    </div>
+                                <div class="sub_comment_textarea">
+                                    <textarea name="" id="" rows="6" ref="sub_comment_content" placeholder="@Mimi">
+                                    </textarea>
+                                    <button @click="add_sub_comment($event, '{{ article.nid }}')">Reply</button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="sub_comment_item">
-                            <div class="left">
-                                 <img src="/static/resources/img/user/2.jpg">
-                            </div>
-                            <div class="right">
-                                <h4>Fang @ Vivi</h4>
-                                <div class="sub_comment_content">
-                                    Hi！！！！！
-                                </div>
-                                <div class="sub_comment_info">
-                                    <span>5 min ago</span>
-                                    <div>
-                                        <span>Like(3)</span>
-                                        <span>Comment(1)</span>
-                                        <span class="delete">Delete</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="left">
-                    <img src="/static/resources/img/user/1.jpg">
-                </div>
-                <div class="right">
-                    <h4>Vivi Blog</h4>
-                    <div class="comment_content">
-                        <p>Hello！！</p>
-                        <div>
-                            <img src="/static/resources/img/login/4.svg">
-                            <img src="/static/resources/img/login/5.svg">
-                            <img src="/static/resources/img/login/6.svg">
-                        </div>
-                    </div>
-                    <div class="comment_info">
-                        <span>Recent</span>
-                        <div>
-                            <span>Like(8)</span>
-                            <span>Comment(2)</span>
-                            <span class="delete">Delete</span>
-                        </div>
-                    </div>
-
-                    <div class="sub_comment_list">
-                        <div class="sub_comment_item">
-                            <div class="left">
-                                 <img src="/static/resources/img/user/2.jpg">
-                            </div>
-                            <div class="right">
-                                <h4>Fang @ Vivi</h4>
-                                <div class="sub_comment_content">
-                                    Hi！！！！！
-                                </div>
-                                <div class="sub_comment_info">
-                                    <span>5 min ago</span>
-                                    <div>
-                                        <span>Like(3)</span>
-                                        <span>Comment(1)</span>
-                                        <span class="delete">Delete</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="sub_comment_item">
-                            <div class="left">
-                                 <img src="/static/resources/img/user/2.jpg">
-                            </div>
-                            <div class="right">
-                                <h4>Fang @ Vivi</h4>
-                                <div class="sub_comment_content">
-                                    Hi！！！！！
-                                </div>
-                                <div class="sub_comment_info">
-                                    <span>5 min ago</span>
-                                    <div>
-                                        <span>Like(3)</span>
-                                        <span>Comment(1)</span>
-                                        <span class="delete">Delete</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </div>
+                        </div> <!-- 添加的关闭 div 标签 -->
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 {% endblock %}
 
-{% block js %}
+{% block article_js %}
     <script src="/static/editor-md/lib/marked.min.js"></script>
     <script src="/static/editor-md/lib/prettify.min.js"></script>
     <script src="/static/jquery/jquery.min.js"></script>

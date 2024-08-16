@@ -38,7 +38,7 @@ class UserInfo(AbstractUser):
     ip = models.GenericIPAddressField(verbose_name='ip地址', default='120.228.2.238')
     addr = models.TextField(verbose_name='用户地址信息', null=True, blank=True)
     sign_choice = (
-        (0, '用户名注册'),
+        (0, 'Username register'),
         (1, 'QQ注册'),
         (2, 'gitee注册'),
         (3, '手机号注册'),
@@ -46,9 +46,9 @@ class UserInfo(AbstractUser):
     )
     sign_status = models.IntegerField(default=0, choices=sign_choice, verbose_name='注册方式')
     account_status_choice = (
-        (0, '账号正常'),
-        (1, '账号异常'),
-        (2, '账号被封禁'),
+        (0, 'Normal'),
+        (1, 'Exception'),
+        (2, 'Be banned'),
     )
     account_status = models.IntegerField(default=0, choices=account_status_choice, verbose_name='账号状态')
     avatar = models.ForeignKey(
@@ -119,11 +119,11 @@ class Articles(models.Model):
     collects_count = models.IntegerField(verbose_name='Collections', default=0)
     # 文章分类设置
     category_choice = (
-        (0, 'Recipes'),
-        (1, 'Nutrition'),
-        (2, 'Culinary Travel'),
-        (3, 'Food Reviews'),
-        (4, 'Other'),
+        (1, 'Recipes'),
+        (2, 'Restaurant Recommendations'),
+        (3, 'Quick & Easy'),
+        (4, 'Food Reviews'),
+        (5, 'Healthy Eating'),
     )
     category = models.IntegerField(verbose_name='Classification', choices=category_choice, null=True, blank=True)
     tag = models.ManyToManyField(

@@ -1,0 +1,150 @@
+body{
+  width: 100%;
+  height: 100vh;
+  #app{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+   }
+}
+
+main{
+  width: 505px;
+  min-height: 600px;
+  background-color: white;
+  box-shadow: 0 0 12px rgba(0,0,0,0.2);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  .bottom{
+
+    img{
+      height: 130px;
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+
+  .top{
+    padding: 40px 20px 20px 20px;
+
+    .title{
+      text-align: center;
+      a{
+        color: #808595;
+        font-weight: bold;
+        font-size: 18px;
+      }
+      a.active{
+        color: #407df3;
+      }
+    }
+
+    .login_form{
+      margin-top: 20px;
+      margin-bottom: 30px;
+      display: flex;
+      flex-direction: column;
+
+       input {
+        margin-bottom: 20px;
+        height: 40px;
+        border-radius: 5px;
+        outline: none;
+        border: 1px solid lavender;
+        padding-left: 20px;
+        font-size: 15px;
+        transition: all 0.3s;
+
+        &:focus{
+          border: 2px solid cornflowerblue;
+        }
+      }
+
+       input.register_input{
+          margin-bottom: 10px;
+       }
+
+      .validation{
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        input{
+          width: 60%;
+        }
+
+        img{
+          width: 30%;
+          height: 42px;
+          cursor: pointer;
+          border-radius: 5px;
+          border: 1px solid #f0eeee;
+        }
+      }
+      > button{
+        height: 40px;
+        color: white;
+        background-color: darkseagreen;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
+
+    .other_login{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+
+      >p {
+        font-size: 15px;
+        color: #808595;
+      }
+       &::before{
+          position: absolute;
+          content: '';
+          display: block;
+          width: 160px;
+          height: 1px;
+          background-color: lightgray;
+          left: 0;
+          top: 8px;
+        }
+
+       &::after{
+          position: absolute;
+          content: '';
+          display: block;
+          width: 160px;
+          height: 1px;
+          background-color: lightgray;
+          right: 0;
+          top: 8px;
+        }
+
+       > div{
+         margin: 20px ;
+         img{
+           width: 35px;
+           margin-right: 12px;
+
+           &:last-child{
+             margin-right: 0;
+           }
+         }
+       }
+    }
+
+  }
+}
