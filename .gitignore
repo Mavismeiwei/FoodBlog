@@ -2,3 +2,6 @@
 /.idea/
 
 /*venv/
+
+# 忽略 settings.py 文件
+settings.py
