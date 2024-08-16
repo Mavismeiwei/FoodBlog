@@ -106,9 +106,9 @@ DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'foodblog',
-        'USER': 'foodblog',
-        'PASSWORD': 'saAPtLyrSAJEJY6Y',
-        'HOST': '127.0.0.1',
+        'USER': 'root',
+        'PASSWORD': '123456',
+        'HOST': '106.15.191.244',
         'PORT': 3306
     }
 }
