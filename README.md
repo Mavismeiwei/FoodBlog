@@ -1,80 +1,72 @@
-* User login and register
+# Mimi's Food Blog Website
 
-![image-20240805184029108](/Users/meiwei/Library/Application Support/typora-user-images/image-20240805184029108.png)
+## 1. Introduction
 
-* Home page
+The **Food Blog** project is a web-based platform where users can register, log in, post articles, and interact through comments. The blog focuses on food-related content, featuring dynamic image carousels, article collections, and responsive design elements.
 
-![IMG_1998](/Users/meiwei/Desktop/截图/1.JPG)
+## 2. Techniques
 
-* Article detail page
+- **Frontend:** Vue.js, ElementUI, jQuery, Bootstrap, SCSS, Node.js
+- **Web:** Ajax requests using Axios
+- **Dynamic Effects:** wow.js
+- **Backend:** Django, SimpleUI
+- **Database:** MySQL
 
-![image-20240805181140549](/Users/meiwei/Desktop/截图/2.png)
+## 3. Project Screenshots
 
-![image-20240805181402768](/Users/meiwei/Library/Application Support/typora-user-images/image-20240805181402768.png)
+### User Login
+![image-20240805184029108.png](..%2F..%2F..%2F..%2FLibrary%2FApplication%20Support%2Ftypora-user-images%2Fimage-20240805184029108.png)
 
-* Hot Search Page
+### Home Page
+![1.JPG](..%2F..%2F..%2F%E6%88%AA%E5%9B%BE%2F1.JPG)
 
-![IMG_2004](/Users/meiwei/Desktop/截图/3.JPG)
+### Article Detail Page
+![2.png](..%2F..%2F..%2F%E6%88%AA%E5%9B%BE%2F2.png)
 
-* Search page
+![image-20240805181402768.png](..%2F..%2F..%2F..%2FLibrary%2FApplication%20Support%2Ftypora-user-images%2Fimage-20240805181402768.png)
 
-![image-20240805182736505](/Users/meiwei/Library/Application Support/typora-user-images/image-20240805182736505.png)
+### Hot Search Page
+![3.JPG](..%2F..%2F..%2F%E6%88%AA%E5%9B%BE%2F3.JPG)
 
-* Communication Area
+### Search Page
+![image-20240805182736505.png](..%2F..%2F..%2F..%2FLibrary%2FApplication%20Support%2Ftypora-user-images%2Fimage-20240805182736505.png)
 
-![IMG_2193](/Users/meiwei/Desktop/IMG_2193.JPG)
+### Communication Area
+![IMG_2193.JPG](..%2F..%2F..%2F..%2FDownloads%2FIMG_2193.JPG)
 
-* User post new article
+### User post new article
+![image-20240807125101977.png](..%2F..%2F..%2F..%2FLibrary%2FApplication%20Support%2Ftypora-user-images%2Fimage-20240807125101977.png)
 
-![image-20240807125101977](/Users/meiwei/Library/Application Support/typora-user-images/image-20240807125101977.png)
+### User edit avatar
+![image-20240807124737759.png](..%2F..%2F..%2F..%2FLibrary%2FApplication%20Support%2Ftypora-user-images%2Fimage-20240807124737759.png)
 
-* User edit avatar
+### User center
+![image-20240807124959548.png](..%2F..%2F..%2F..%2FLibrary%2FApplication%20Support%2Ftypora-user-images%2Fimage-20240807124959548.png)
 
-![image-20240807124737759](/Users/meiwei/Library/Application Support/typora-user-images/image-20240807124737759.png)
-
-* User center
-
-![image-20240807124959548](/Users/meiwei/Library/Application Support/typora-user-images/image-20240807124959548.png)
-
-* Users can bind their email
-
-![image-20240807125502252](/Users/meiwei/Library/Application Support/typora-user-images/image-20240807125502252.png)
+### Users can bind their email
+![image-20240807125502252.png](..%2F..%2F..%2F..%2FLibrary%2FApplication%20Support%2Ftypora-user-images%2Fimage-20240807125502252.png)
 
 Send verification code to the email:
-
-![image-20240807125526434](/Users/meiwei/Library/Application Support/typora-user-images/image-20240807125526434.png)
+![image-20240807125526434.png](..%2F..%2F..%2F..%2FLibrary%2FApplication%20Support%2Ftypora-user-images%2Fimage-20240807125526434.png)
 
 Receive the code:
+![image-20240807125547443.png](..%2F..%2F..%2F..%2FLibrary%2FApplication%20Support%2Ftypora-user-images%2Fimage-20240807125547443.png)
 
-![image-20240807125547443](/Users/meiwei/Library/Application Support/typora-user-images/image-20240807125547443.png)
+### Admin Edit Article:
+![image-20240813101328767.png](..%2F..%2F..%2F..%2FLibrary%2FApplication%20Support%2Ftypora-user-images%2Fimage-20240813101328767.png)
+![image-20240813101436240.png](..%2F..%2F..%2F..%2FLibrary%2FApplication%20Support%2Ftypora-user-images%2Fimage-20240813101436240.png)
 
- Admin Edit Article:
+### Admin update the memory page
+![image-20240813105624479.png](..%2F..%2F..%2F..%2FLibrary%2FApplication%20Support%2Ftypora-user-images%2Fimage-20240813105624479.png)
 
-![image-20240813101328767](/Users/meiwei/Library/Application Support/typora-user-images/image-20240813101328767.png)
+### Admin upload avatars
+![image-20240813101033403.png](..%2F..%2F..%2F..%2FLibrary%2FApplication%20Support%2Ftypora-user-images%2Fimage-20240813101033403.png)
 
-![image-20240813101436240](/Users/meiwei/Library/Application Support/typora-user-images/image-20240813101436240.png)
+### Admin upload cover
+![image-20240813101220229.png](..%2F..%2F..%2F..%2FLibrary%2FApplication%20Support%2Ftypora-user-images%2Fimage-20240813101220229.png)
 
-Admin update the memory page:
+### Admin Django backend system
+![image-20240805173811390.png](..%2F..%2F..%2F..%2FLibrary%2FApplication%20Support%2Ftypora-user-images%2Fimage-20240805173811390.png)
 
-![image-20240813105624479](/Users/meiwei/Library/Application Support/typora-user-images/image-20240813105624479.png)
-
-Admin Center
-
-* Admin upload avatars
-
-![image-20240813101033403](/Users/meiwei/Library/Application Support/typora-user-images/image-20240813101033403.png)
-
-* Admin upload cover
-
-![image-20240813101220229](/Users/meiwei/Library/Application Support/typora-user-images/image-20240813101220229.png)
-
-* Admin Django backend system
-
-![image-20240805173811390](/Users/meiwei/Library/Application Support/typora-user-images/image-20240805173811390.png)
-
-* Backend Dashboard
-
-![image-20240813110456490](/Users/meiwei/Library/Application Support/typora-user-images/image-20240813110456490.png)
-
-
-
+### Backend Dashboard
+![image-20240813110456490.png](..%2F..%2F..%2F..%2FLibrary%2FApplication%20Support%2Ftypora-user-images%2Fimage-20240813110456490.png)
