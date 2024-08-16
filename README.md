@@ -67,6 +67,3 @@ Receive the code:
 
 ### Admin Django backend system
 ![image-20240805173811390.png](..%2F..%2F..%2F..%2FLibrary%2FApplication%20Support%2Ftypora-user-images%2Fimage-20240805173811390.png)
-
-### Backend Dashboard
-![image-20240813110456490.png](..%2F..%2F..%2F..%2FLibrary%2FApplication%20Support%2Ftypora-user-images%2Fimage-20240813110456490.png)
