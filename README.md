@@ -15,7 +15,8 @@ The **Food Blog** project is a web-based platform where users can register, log 
 ## 3. Project Screenshots
 
 ### User Login
-![image-202408051![](/Users/meiwei/Desktop/project/BlogProject/blog_01/screenshots/1.png)84029108.png](..%2F..%2F..%2F..%2FLibrary%2FApplication%20Support%2Ftypora-user-images%2Fimage-20240805184029108.png)
+<img width="508" alt="image" src="https://github.com/user-attachments/assets/46f999b6-6170-48cd-9aa8-a1a73299b741">
+
 
 ### Home Page
 ![1.JPG](..%2F..%2F..%2F%E6%88%AA%E5%9B%BE%2F1.JPG)
