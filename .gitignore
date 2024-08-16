@@ -3,5 +3,5 @@
 
 /*venv/
 
-# 忽略 settings.py 文件
-settings.py
+# 忽略 blog_01/blog_01/ 下的 settings.py 文件
+blog_01/blog_01/settings.py
